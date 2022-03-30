@@ -27,16 +27,17 @@ def MergingIntoSystem(CODEs,System_Name,Folder_Main,Folder_Systems,Folder_Databa
     
     # Importing Modules
     import os
+    import shutil
+    import sys
     from Merging2Models import Merging2Models
     from ReplaceTemporaryLineCode import ReplaceTemporaryLineCode
     from ReorderLines import ReorderLines
+    sys.path.append(str(Folder_Main+Folder_Merging_Create_x_file))
+    from FromType1toType2 import FromType1toType2
 
     # Creating TemporaryFolder
-    TemporaryFolder = Folder_Merging_Funtions+"\\temp_"+System_Name
-    os.mkdir(Folder_Main+TemporaryFolder)
-
-    # Deleting TemporaryFolder
-    os.rmdir(Folder_Main+TemporaryFolder)    
+    Folder_Temporary = Folder_Merging_Funtions+"\\temp_"+System_Name
+    os.mkdir(Folder_Main+Folder_Temporary)   
 
     # From SystemName to SXXXX_a_SystemName
     List = []
@@ -59,31 +60,51 @@ def MergingIntoSystem(CODEs,System_Name,Folder_Main,Folder_Systems,Folder_Databa
     
     # CODEs
     N = len(CODEs)
+    PYs = []
+    CSVs = []
+    MODELs = []
+    TEMPOs = []
 
-    PYs = CODEs
-    CSVs = CODEs
-    MODELs = CODEs
-    TEMPOs = CODEs
     file = os.listdir(Folder_Main+Folder_Database)
-    print(file)
     for i in range(0,N):
         for name in file:
-            if name.startswith(CODEs[i]):
-                if name.endswith(".m"):
-                    PYs[i]=name 
-                if name.endswith(".csv"):
-                    CSVs[i]=name
-                    MODELs[i]=name[:-4]
-    print(CODEs)            
-    print(PYs)
-    print(CSVs)
-    print(MODELs)
-
+            if name.startswith(CODEs[i]) and name.endswith(".py"):
+                PYs.append(name)        
+            if name.startswith(CODEs[i]) and name.endswith(".csv"):
+                CSVs.append(name)
+                MODELs.append(name[:-4])
+        TEMPOs.append("TXXX_a_Temporary"+str(i+1))
+        shutil.copyfile(Folder_Main+Folder_Database+"\\"+PYs[i],Folder_Main+Folder_Temporary+"\\"+PYs[i])
+        shutil.copyfile(Folder_Main+Folder_Database+"\\"+CSVs[i],Folder_Main+Folder_Temporary+"\\"+CSVs[i])
     
+    # Explanation in DSM Paper or Nicky's master thesis
+    Merging2Models(MODELs[0],MODELs[1],TEMPOs[0],Folder_Main,Folder_Temporary,Folder_Merging_Funtions,
+                            Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
+    if N>2:
+        for i in range(2,N):
+            if i==N-1:
+                TEMPOs[N-1] = SystemName_a_ThisForm
+            [InputVariables,IntermediateVariables,OutputVariables] = Merging2Models(TEMPOs[i-2],MODELs[i],TEMPOs[i-1],Folder_Main,
+            Folder_Temporary,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
+            ReplaceTemporaryLineCode(TEMPOs[i-2],MODELs[i],TEMPOs[i-1],Folder_Main,
+            Folder_Temporary,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
 
+    # Here Reorder
+    ReorderLines(SystemName_a_ThisForm,InputVariables,IntermediateVariables,OutputVariables,Folder_Main,
+    Folder_Temporary,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
 
+    # Remane with _f_
+    CSVFinal = SystemName_a_ThisForm+".csv"
+    PYFinal = FromType1toType2(CSVFinal,".csv",".m","f")
+
+    # Copying Final files to Systems
+    shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+PYFinal,Folder_Main+Folder_Systems+"\\"+PYFinal)
+    shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
+
+    # Deleting TemporaryFolder
+    shutil.rmtree(Folder_Main+Folder_Temporary)
 
 
     # Final Output
-    CSVFinal = "Not yet done"
+    
     return CSVFinal
