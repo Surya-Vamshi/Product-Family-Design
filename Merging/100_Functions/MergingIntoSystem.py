@@ -48,26 +48,42 @@ def MergingIntoSystem(CODEs,System_Name,Folder_Main,Folder_Systems,Folder_Databa
     for x in List:
         List2.append(int(x[1:5]))
     List2.append(int(4))
-    print(List2)
+
     # Loop to find the empty number that is going to be used which is "i"
     for i in range(1, max(List2)):
         if i not in  List2: break
-    print(i)
+    
     # Add the zeros
     Number = f"{i:04}"
     SystemName_a_ThisForm = "S"+Number+"_a_"+System_Name
-    print(SystemName_a_ThisForm)
-
+    
     # CODEs
     N = len(CODEs)
+
     PYs = CODEs
     CSVs = CODEs
     MODELs = CODEs
     TEMPOs = CODEs
+    file = os.listdir(Folder_Main+Folder_Database)
+    print(file)
+    for i in range(0,N):
+        for name in file:
+            if name.startswith(CODEs[i]):
+                if name.endswith(".m"):
+                    PYs[i]=name 
+                if name.endswith(".csv"):
+                    CSVs[i]=name
+                    MODELs[i]=name[:-4]
+    print(CODEs)            
+    print(PYs)
+    print(CSVs)
+    print(MODELs)
+
+    
 
 
 
 
-
+    # Final Output
     CSVFinal = "Not yet done"
     return CSVFinal
