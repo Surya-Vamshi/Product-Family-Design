@@ -98,8 +98,8 @@ def MergingIntoSystem(CODEs,System_Name,Folder_Main,Folder_Systems,Folder_Databa
     PYFinal = FromType1toType2(CSVFinal,".csv",".m","f")
 
     # Copying Final files to Systems
-    shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+PYFinal,Folder_Main+Folder_Systems+"\\"+PYFinal)
-    shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
+    #shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+PYFinal,Folder_Main+Folder_Systems+"\\"+PYFinal)
+    #shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
 
     # Deleting TemporaryFolder
     shutil.rmtree(Folder_Main+Folder_Temporary)
