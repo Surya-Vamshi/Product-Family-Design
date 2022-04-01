@@ -13,8 +13,8 @@ System_Name = 'Simple_Transmission'
 SampleSize = 300 #Default
 
 # IMPORT MODULES
-#from PySide6.QtGui import QGuiApplication
-#from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlApplicationEngine
 
 import os
 os.chdir("../../")
@@ -33,9 +33,9 @@ Folder_Merging_Create_x_file = r"\Merging\100_Functions\02_Create_x_file"
 os.chdir(Folder_Main+Folder_Merging_Funtions)
 path = os.getcwd()
 
-#from System_XRay_From_Models import *
+from System_XRay_From_Models import *
 
-#CSVFinal,Pythonx = System_XRay_From_Models(CODEs,System_Name,SampleSize,Folder_Main,Folder_Design_Problems,Folder_Systems,Folder_Database,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
+CSVFinal,Pythonx = System_XRay_From_Models(CODEs,System_Name,SampleSize,Folder_Main,Folder_Design_Problems,Folder_Systems,Folder_Database,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
 
-#print("CSV file after Merging is saved as "+CSVFinal)
-#print("Python file after Merging is saved as "+Pythonx)
+print("CSV file after Merging is saved as "+CSVFinal)
+print("Python file after Merging is saved as "+Pythonx)
