@@ -1,6 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./Merging/02_System_Model/100_Functions",
-        "./Merging/100_Functions"
-    ]
-}

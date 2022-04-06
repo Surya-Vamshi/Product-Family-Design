@@ -8,17 +8,15 @@ Number of sample point should be 300 by default.
 """
 
 # GUI Interface will be used for these inputs
-CODEs = ['M0001','M0002','M0003','M0004']
+CODEs = ['M0001', 'M0002', 'M0003', 'M0004']
 System_Name = 'Simple_Transmission'
-SampleSize = 300 #Default
+SampleSize = 300  # Default
 
 # IMPORT MODULES
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
-
 import os
 os.chdir("../../")
 Folder_Main = os.getcwd()
+
 
 # User can change these directories location if needed.
 Folder_Design_Problems = r"\Optimization\Design_Problems"
@@ -30,12 +28,14 @@ Folder_Merging_Create_x_file = r"\Merging\100_Functions\02_Create_x_file"
 
 # Do not touch
 
-os.chdir(Folder_Main+Folder_Merging_Funtions)
-path = os.getcwd()
+# os.chdir(Folder_Main+Folder_Merging_Funtions)
+# print(os.getcwd())
+from System_XRay_From_Models import System_XRay_From_Models
 
-from System_XRay_From_Models import *
+CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Design_Problems,
+                                            Folder_Systems, Folder_Database, Folder_Merging_Funtions,
+                                            Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
 
-CSVFinal,Pythonx = System_XRay_From_Models(CODEs,System_Name,SampleSize,Folder_Main,Folder_Design_Problems,Folder_Systems,Folder_Database,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
+print("CSV file after Merging is saved as " + CSVFinal)
+print("Python file after Merging is saved as " + Pythonx)
 
-print("CSV file after Merging is saved as "+CSVFinal)
-print("Python file after Merging is saved as "+Pythonx)
