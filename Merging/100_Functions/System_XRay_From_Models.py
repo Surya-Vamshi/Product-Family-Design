@@ -1,5 +1,6 @@
-def System_XRay_From_Models(CODEs,System_Name,SampleSize,Folder_Main,Folder_Design_Problems,Folder_Systems,
-        Folder_Database,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file):
+def System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Design_Problems, Folder_Systems,
+                            Folder_Database, Folder_Merging_Funtions, Folder_Merging_Sequencing,
+                            Folder_Merging_Create_x_file):
     """
     Description :
     Merging of models into a global system with a Sequenced DSM in a CSV file + function of the system
@@ -27,14 +28,16 @@ def System_XRay_From_Models(CODEs,System_Name,SampleSize,Folder_Main,Folder_Desi
     Pythonx : Name of the final Python file for the XRay tool 
     """
 
-	#Importing Modules
+    # Importing Modules
     from MergingIntoSystem import MergingIntoSystem
     from CreatxFile import CreatxFile
-    
-    #Merging
-    CSVFinal = MergingIntoSystem(CODEs,System_Name,Folder_Main,Folder_Systems,Folder_Database,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
-    
-    #Creation of the file for the XRay tool
-    Pythonx = CreatxFile(CSVFinal,SampleSize,Folder_Main,Folder_Design_Problems,Folder_Systems,Folder_Database,Folder_Merging_Funtions,Folder_Merging_Sequencing,Folder_Merging_Create_x_file)
-    
-    return CSVFinal,Pythonx
+
+    # Merging
+    CSVFinal = MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Database,
+                                 Folder_Merging_Funtions, Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+
+    # Creation of the file for the XRay tool
+    Pythonx = CreatxFile(CSVFinal, SampleSize, Folder_Main, Folder_Design_Problems, Folder_Systems, Folder_Database,
+                         Folder_Merging_Funtions, Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+
+    return CSVFinal, Pythonx

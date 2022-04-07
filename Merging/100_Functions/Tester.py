@@ -1,10 +1,6 @@
 """
-Create GUI to interact with User
-The function should provide a user interface with two callbacks:
-1. List of Modular Models which should be merged (M0001,...)
-2. Name of the System model (which the algorithm will generate)
-
-Number of sample point should be 300 by default.
+This File is to test the code at development stage.
+It will be removed once the Merging Codes are Completed.
 """
 
 # GUI Interface will be used for these inputs
@@ -16,7 +12,6 @@ SampleSize = 300  # Default
 import os
 os.chdir("../../")
 Folder_Main = os.getcwd()
-
 
 # User can change these directories location if needed.
 Folder_Design_Problems = r"\Optimization\Design_Problems"

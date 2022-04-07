@@ -35,7 +35,6 @@ for name in files:
     if name.startswith("M") and name.endswith(".csv"):
         available_Models.append(name[:-4])
 
-
 class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
