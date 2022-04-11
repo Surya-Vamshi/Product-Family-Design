@@ -78,6 +78,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # Explanation in DSM Paper or Nicky's master thesis
     Merging2Models(MODELs[0], MODELs[1], TEMPOs[0], Folder_Main, Folder_Temporary, Folder_Merging_Funtions,
                    Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+    '''
     if N > 2:
         for i in range(2, N):
             if i == N - 1:
@@ -95,7 +96,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # Here Reorder
     ReorderLines(SystemName_a_ThisForm, InputVariables, IntermediateVariables, OutputVariables, Folder_Main,
                  Folder_Temporary, Folder_Merging_Funtions, Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
-
+    '''
     # Rename with _f_
     CSVFinal = SystemName_a_ThisForm + ".csv"
     PYFinal = FromType1toType2(CSVFinal, ".csv", ".m", "f")

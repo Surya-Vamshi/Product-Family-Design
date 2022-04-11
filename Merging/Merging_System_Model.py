@@ -12,9 +12,10 @@ from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import Qt
-from Functions.System_XRay_From_Models import System_XRay_From_Models
 import sys
 import os
+
+from Functions.System_XRay_From_Models import System_XRay_From_Models
 
 # User can change these directories' location if needed.
 Folder_Design_Problems = r"\Optimization\Design_Problems"

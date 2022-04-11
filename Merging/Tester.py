@@ -9,7 +9,7 @@ System_Name = 'Simple_Transmission'
 SampleSize = 300  # Default
 
 # IMPORT MODULES
-from Functions.System_XRay_From_Models import System_XRay_From_Models
+# from Functions.System_XRay_From_Models import System_XRay_From_Models
 import os
 os.chdir("../")
 Folder_Main = os.getcwd()
@@ -23,12 +23,10 @@ Folder_Merging_Sequencing = r"\Merging\Functions\Sequencing"
 Folder_Merging_Create_x_file = r"\Merging\Functions\Create_x_file"
 
 # Do not touch
+from System_Model.importTester import importTester
 
-
-CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Design_Problems,
+importTester(CODEs, System_Name, SampleSize, Folder_Main, Folder_Design_Problems,
                                             Folder_Systems, Folder_Database, Folder_Merging_Funtions,
                                             Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
 
-print("CSV file after Merging is saved as " + CSVFinal)
-print("Python file after Merging is saved as " + Pythonx)
 
