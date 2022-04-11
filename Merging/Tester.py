@@ -9,23 +9,21 @@ System_Name = 'Simple_Transmission'
 SampleSize = 300  # Default
 
 # IMPORT MODULES
+from Functions.System_XRay_From_Models import System_XRay_From_Models
 import os
-os.chdir("../../")
+os.chdir("../")
 Folder_Main = os.getcwd()
 
 # User can change these directories location if needed.
 Folder_Design_Problems = r"\Optimization\Design_Problems"
-Folder_Systems = r"\Merging\01_Systems"
+Folder_Systems = r"\Merging\Systems"
 Folder_Database = r"\Database"
-Folder_Merging_Funtions = r"\Merging\100_Functions"
-Folder_Merging_Sequencing = r"\Merging\100_Functions\01_Sequencing"
-Folder_Merging_Create_x_file = r"\Merging\100_Functions\02_Create_x_file"
+Folder_Merging_Funtions = r"\Merging\Functions"
+Folder_Merging_Sequencing = r"\Merging\Functions\Sequencing"
+Folder_Merging_Create_x_file = r"\Merging\Functions\Create_x_file"
 
 # Do not touch
 
-# os.chdir(Folder_Main+Folder_Merging_Funtions)
-# print(os.getcwd())
-from System_XRay_From_Models import System_XRay_From_Models
 
 CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Design_Problems,
                                             Folder_Systems, Folder_Database, Folder_Merging_Funtions,

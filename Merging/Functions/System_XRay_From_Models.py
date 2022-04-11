@@ -29,8 +29,8 @@ def System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_
     """
 
     # Importing Modules
-    from MergingIntoSystem import MergingIntoSystem
-    from CreatxFile import CreatxFile
+    from Functions.MergingIntoSystem import MergingIntoSystem
+    from Functions.CreatxFile import CreatxFile
 
     # Merging
     CSVFinal = MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Database,

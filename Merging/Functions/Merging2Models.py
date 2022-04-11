@@ -20,8 +20,8 @@ def Merging2Models(Model1, Model2, MergedModel, Folder_Main, Folder_Temporary, F
     OutputVariables : list of the output varialbes of the new merged model
     """
     # Importing Modules
-    from Sequencing.Merging2CSV import Merging2CSV
-    from Create_x_file.Merging2Matlab import Merging2Matlab
+    from Functions.Sequencing.Merging2CSV import Merging2CSV
+    from Functions.Create_x_file.Merging2Matlab import Merging2Matlab
 
     CSV1 = Model1 + ".csv"
     CSV2 = Model2 + ".csv"

@@ -28,11 +28,10 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # Importing Modules
     import os
     import shutil
-    import sys
-    from Merging2Models import Merging2Models
-    from ReplaceTemporaryLineCode import ReplaceTemporaryLineCode
-    from ReorderLines import ReorderLines
-    from Create_x_file.FromType1toType2 import FromType1toType2
+    from Functions.Merging2Models import Merging2Models
+    from Functions.ReplaceTemporaryLineCode import ReplaceTemporaryLineCode
+    from Functions.ReorderLines import ReorderLines
+    from Functions.Create_x_file.FromType1toType2 import FromType1toType2
 
     # Creating TemporaryFolder
     Folder_Temporary = Folder_Merging_Funtions + "\\temp_" + System_Name
@@ -100,7 +99,6 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # Rename with _f_
     CSVFinal = SystemName_a_ThisForm + ".csv"
     PYFinal = FromType1toType2(CSVFinal, ".csv", ".m", "f")
-    print(PYFinal)
 
     # Copying Final files to Systems
     # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+PYFinal,Folder_Main+Folder_Systems+"\\"+PYFinal)

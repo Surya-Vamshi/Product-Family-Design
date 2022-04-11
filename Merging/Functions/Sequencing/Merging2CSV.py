@@ -16,7 +16,7 @@ def Merging2CSV(CSV1, CSV2, MergedModel, Folder_Main, Folder_Temporary, Folder_M
     Output variables :
     CSV3 : path of the merged CSV file with '.csv'
     """
-    #from CSV2MatrixAndTables import CSV2MatrixAndTables
-    #[PyVar1, PyType1, PyColor1, Mat1] = CSV2MatrixAndTables(CSV1, Folder_Main + Folder_Temporary)
+    from Functions.Sequencing.CSV2MatrixAndTables import CSV2MatrixAndTables
+    [PyVar1, PyType1, PyColor1, Mat1] = CSV2MatrixAndTables(CSV1, Folder_Main + Folder_Temporary)
     Pythonx = "Not yet done"
     return Pythonx
