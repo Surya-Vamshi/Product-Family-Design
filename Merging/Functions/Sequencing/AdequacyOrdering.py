@@ -17,7 +17,14 @@ def AdequacyOrdering(PyVar1, PyVar2, PyType2, PyColor2, Mat2):
     """
     # Importing Modules
 
+    # Code
+    N1 = len(PyVar1)
+    N2 = len(PyVar2)
+    Step2 = 0
+    for i in range(N1,0,-1):
 
 
 
-    return PyVar2, PyType2, PyColor2, Mat2
+
+    #return PyVar2, PyType2, PyColor2, Mat2
+    return

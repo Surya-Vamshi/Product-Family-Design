@@ -26,5 +26,6 @@ def CSV2MatrixAndTables(CSV, Path):
     PyType = listAll[1]
     PyColor = listAll[2]
     Matrix = listAll[3:]
+    print(Matrix)
 
     return PyVar, PyType, PyColor, Matrix
