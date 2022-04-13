@@ -18,11 +18,16 @@ def Merging2CSV(CSV1, CSV2, MergedModel, Folder_Main, Folder_Temporary, Folder_M
     """
     # Importing Modules
     from Functions.Sequencing.CSV2MatrixAndTables import CSV2MatrixAndTables
-
+    from Functions.Sequencing.AdequacyOrdering import AdequacyOrdering
     # Code
     [PyVar1, PyType1, PyColor1, Mat1] = CSV2MatrixAndTables(CSV1, Folder_Main + Folder_Temporary)
     [PyVar2, PyType2, PyColor2, Mat2] = CSV2MatrixAndTables(CSV2, Folder_Main + Folder_Temporary)
+    [PyVar2, PyType2, PyColor2, Mat2] = AdequacyOrdering(PyVar1, PyVar2, PyType2, PyColor2, Mat2)
 
+    print(PyVar2)
+    print(PyType2)
+    print(PyColor2)
+    print(Mat2)
 
     Pythonx = "Not yet done"
     return Pythonx

@@ -19,9 +19,9 @@ def P1toP2Tables(OldVar, OldType, OldColor, P1, P2):
 
     # Variables
     N = len(OldVar)
-    NewVar = OldVar
-    NewType = OldType
-    NewColor = OldColor
+    NewVar = OldVar[:]
+    NewType = OldType[:]
+    NewColor = OldColor[:]
 
     # First part : variable in P1 go to position P2
     NewVar[P2] = OldVar[P1]  # 1 for variable name
@@ -30,19 +30,19 @@ def P1toP2Tables(OldVar, OldType, OldColor, P1, P2):
 
     # Second part : variables before P1 don't move
     if P1 != 0:
-        NewVar[0:P1 - 1] = OldVar[0:P1 - 1]  # 2 for variable name
-        NewType[0:P1 - 1] = OldType[0:P1 - 1]  # 2 for variable type
-        NewColor[0:P1 - 1] = OldColor[0:P1 - 1]  # 2 for variable color
+        NewVar[0:P1] = OldVar[0:P1]  # 2 for variable name
+        NewType[0:P1] = OldType[0:P1]  # 2 for variable type
+        NewColor[0:P1] = OldColor[0:P1]  # 2 for variable color
 
     # Third part : variables after P2 don't move
     if P2 != N-1:
-        NewVar[P2 + 0:N-1] = OldVar[P2 + 0:N-1]  # 3 for variable name
-        NewType[P2 + 0:N-1] = OldType[P2 + 0:N-1]  # 3 for variable type
-        NewColor[P2 + 0:N-1] = OldColor[P2 + 0:N-1]  # 3 for variable color
+        NewVar[P2 + 1:N] = OldVar[P2 + 1:N]  # 3 for variable name
+        NewType[P2 + 1:N] = OldType[P2 + 1:N]  # 3 for variable type
+        NewColor[P2 + 1:N] = OldColor[P2 + 1:N]  # 3 for variable color
 
     # Last part : variable between P1 and P2 move one position on the left
-    NewVar[P1:P2 - 1] = OldVar[P1 + 1:P2]  # 4 for variable name
-    NewType[P1:P2 - 1] = OldType[P1 + 1:P2]  # 4 for variable type
-    NewColor[P1:P2 - 1] = OldColor[P1 + 1:P2]  # 4 for variable color
+    NewVar[P1:P2] = OldVar[P1 + 1:P2 + 1]  # 4 for variable name
+    NewType[P1:P2] = OldType[P1 + 1:P2 + 1]  # 4 for variable type
+    NewColor[P1:P2] = OldColor[P1 + 1:P2 + 1]  # 4 for variable color
 
     return NewVar, NewType, NewColor
