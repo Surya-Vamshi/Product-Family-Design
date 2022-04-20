@@ -15,6 +15,7 @@ def CSV2MatrixAndTables(CSV, Path):
     """
     # Importing Modules
     import csv
+    import numpy as np
 
     # Reading CSV Files
     with open(Path+'\\'+CSV, newline='') as f:
@@ -26,6 +27,6 @@ def CSV2MatrixAndTables(CSV, Path):
     PyType = listAll[1]
     PyColor = listAll[2]
     Matrix = listAll[3:]
-
+    Matrix = np.array(Matrix)
 
     return PyVar, PyType, PyColor, Matrix

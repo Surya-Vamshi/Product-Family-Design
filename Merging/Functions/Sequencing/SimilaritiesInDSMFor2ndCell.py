@@ -17,7 +17,7 @@ def SimilaritiesInDSMFor2ndCell(Var1, Var2):  # Positions in Cell2
     for i in range(0, len(Var2)):
         Detector = 0
         for j in range(0, len(Var1)):
-            if Var2(i) == Var1(j):
+            if Var2[i] == Var1[j]:
                 VarDb.append(i)
                 Detector = 1
 

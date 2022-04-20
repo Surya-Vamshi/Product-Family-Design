@@ -1,4 +1,4 @@
-def Merging2DSM(PyVar1,PyType1,PyColor1,Matrix1,PyVar2,PyType2,PyColor2,Matrix2):
+def Merging2DSM(PyVar1, PyType1, PyColor1, Matrix1, PyVar2, PyType2, PyColor2, Matrix2):
     """
     Description : Merging 2DSM into a new DSM -> only the tables and matrices,
     the creation of the CSV file and rename file is done in another algorithm.
@@ -16,11 +16,36 @@ def Merging2DSM(PyVar1,PyType1,PyColor1,Matrix1,PyVar2,PyType2,PyColor2,Matrix2)
     Matrix : DSM of merged DSM
     """
     # Importing Modules
+    import numpy as np
     from Functions.Sequencing.SimilarityInDSM import SimilarityInDSM
-    from Functions.Sequencing.AdequacyOrdering import AdequacyOrdering
 
     # Code
     NbVar1 = len(PyVar1)
+    [PositionDouble1, PositionUnique1, PositionDouble2, PositionUnique2] = SimilarityInDSM(PyVar1, PyVar2)
+    # Adding unique variables of 2nd DSM to the variables of 1st DSM
+    PyVar = PyVar1 + [e for i, e in enumerate(PyVar2) if i in PositionUnique2]
+    PyType = PyType1 + [e for i, e in enumerate(PyType2) if i in PositionUnique2]
+    PyColor = PyColor1 + [e for i, e in enumerate(PyColor2) if i in PositionUnique2]
 
+    NbVar = len(PyVar)
+    # Start of merging the matrix
+    Matrix = np.zeros((NbVar, NbVar))  # Creating the new matrix full of zeros
+    # First Part
+    # Copy first DSM into new DSM
+    Matrix[PositionUnique1, 0:NbVar1] = Matrix1[PositionUnique1, 0:NbVar1]
+    # Step 1.a. line of Variable which are only in matrix 1
+    Matrix[0:NbVar1, PositionUnique1] = Matrix1[0:NbVar1, PositionUnique1]
+    # Step 1.b. Column of Variable which are only in matrix 1
+    # If input and output variables are in both DSM : take max -> 1 if there is a dependency in one of the 2 matrices
+    Matrix[PositionDouble1, PositionDouble1] = max(int(Matrix1[PositionDouble1, PositionDouble1]),
+                                                   int(Matrix2[PositionDouble2, PositionDouble2]))
+    # Second Part
+    Matrix[NbVar1: NbVar, NbVar1: NbVar] = Matrix2[PositionUnique2, PositionUnique2]
+    # Third Part
+    # Input variables are only in 2nd DSM and Output variables are in both
+    Matrix[range(NbVar1, NbVar), PositionDouble1] = Matrix2[PositionUnique2, PositionDouble2]
+    # Fourth Part
+    # Output variables are only in 2nd DSM and Input variables are in both
+    Matrix[PositionDouble1, range(NbVar1, NbVar)] = Matrix2[PositionDouble2, PositionUnique2]
 
-    return
+    return PyVar, PyType, PyColor, Matrix
