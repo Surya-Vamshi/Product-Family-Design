@@ -29,7 +29,7 @@ def Merging2CSV(CSV1, CSV2, MergedModel, Folder_Main, Folder_Temporary, Folder_M
     [MatVar, MatType, MatColor, Mat] = Merging2DSM(MatVar1, MatType1, MatColor1, Mat1, MatVar2, MatType2, MatColor2,
                                                    Mat2)
     print(Mat)
-    #[MatVar, MatType, MatColor, Mat] = DSMSequencing(MatVar, MatType, MatColor, Mat)
-
+    [MatVar, MatType, MatColor, Mat] = DSMSequencing(MatVar, MatType, MatColor, Mat)
+    print(Mat)
     Pythonx = "Not yet done"
     return Pythonx
