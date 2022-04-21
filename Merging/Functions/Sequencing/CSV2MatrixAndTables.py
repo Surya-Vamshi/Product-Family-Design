@@ -8,9 +8,9 @@ def CSV2MatrixAndTables(CSV, Path):
     Path : folder where the csv file is saved
 
     Output variables :
-    PyVar : List with variable name
-    PyType : List with variable type
-    PyColor : List with variable color
+    MatVar : List with variable name
+    MatType : List with variable type
+    MatColor : List with variable color
     Matrix : Matrix of the DSM
     """
     # Importing Modules
@@ -23,10 +23,10 @@ def CSV2MatrixAndTables(CSV, Path):
         listAll = list(reader)
 
     # Assigning Values
-    PyVar = listAll[0]
-    PyType = listAll[1]
-    PyColor = listAll[2]
+    MatVar = listAll[0]
+    MatType = listAll[1]
+    MatColor = listAll[2]
     Matrix = listAll[3:]
     Matrix = np.array(Matrix)
 
-    return PyVar, PyType, PyColor, Matrix
+    return MatVar, MatType, MatColor, Matrix

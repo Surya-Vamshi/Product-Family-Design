@@ -1,4 +1,4 @@
-def Merging2DSM(PyVar1, PyType1, PyColor1, Matrix1, PyVar2, PyType2, PyColor2, Matrix2):
+def Merging2DSM(MatVar1, MatType1, MatColor1, Matrix1, MatVar2, MatType2, MatColor2, Matrix2):
     """
     Description : Merging 2DSM into a new DSM -> only the tables and matrices,
     the creation of the CSV file and rename file is done in another algorithm.
@@ -20,14 +20,14 @@ def Merging2DSM(PyVar1, PyType1, PyColor1, Matrix1, PyVar2, PyType2, PyColor2, M
     from Functions.Sequencing.SimilarityInDSM import SimilarityInDSM
 
     # Code
-    NbVar1 = len(PyVar1)
-    [PositionDouble1, PositionUnique1, PositionDouble2, PositionUnique2] = SimilarityInDSM(PyVar1, PyVar2)
+    NbVar1 = len(MatVar1)
+    [PositionDouble1, PositionUnique1, PositionDouble2, PositionUnique2] = SimilarityInDSM(MatVar1, MatVar2)
     # Adding unique variables of 2nd DSM to the variables of 1st DSM
-    PyVar = PyVar1 + [e for i, e in enumerate(PyVar2) if i in PositionUnique2]
-    PyType = PyType1 + [e for i, e in enumerate(PyType2) if i in PositionUnique2]
-    PyColor = PyColor1 + [e for i, e in enumerate(PyColor2) if i in PositionUnique2]
+    MatVar = MatVar1 + [e for i, e in enumerate(MatVar2) if i in PositionUnique2]
+    MatType = MatType1 + [e for i, e in enumerate(MatType2) if i in PositionUnique2]
+    MatColor = MatColor1 + [e for i, e in enumerate(MatColor2) if i in PositionUnique2]
 
-    NbVar = len(PyVar)
+    NbVar = len(MatVar)
     # Start of merging the matrix
     Matrix = np.zeros((NbVar, NbVar))  # Creating the new matrix full of zeros
     # First Part
@@ -48,4 +48,4 @@ def Merging2DSM(PyVar1, PyType1, PyColor1, Matrix1, PyVar2, PyType2, PyColor2, M
     # Output variables are only in 2nd DSM and Input variables are in both
     Matrix[PositionDouble1, range(NbVar1, NbVar)] = Matrix2[PositionDouble2, PositionUnique2]
 
-    return PyVar, PyType, PyColor, Matrix
+    return MatVar, MatType, MatColor, Matrix

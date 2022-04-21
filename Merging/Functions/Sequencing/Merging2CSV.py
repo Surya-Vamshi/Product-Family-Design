@@ -20,14 +20,16 @@ def Merging2CSV(CSV1, CSV2, MergedModel, Folder_Main, Folder_Temporary, Folder_M
     from Functions.Sequencing.CSV2MatrixAndTables import CSV2MatrixAndTables
     from Functions.Sequencing.AdequacyOrdering import AdequacyOrdering
     from Functions.Sequencing.Merging2DSM import Merging2DSM
+    from Functions.Sequencing.DSMSequencing import DSMSequencing
 
     # Code
-    [PyVar1, PyType1, PyColor1, Mat1] = CSV2MatrixAndTables(CSV1, Folder_Main + Folder_Temporary)
-    [PyVar2, PyType2, PyColor2, Mat2] = CSV2MatrixAndTables(CSV2, Folder_Main + Folder_Temporary)
-    [PyVar2, PyType2, PyColor2, Mat2] = AdequacyOrdering(PyVar1, PyVar2, PyType2, PyColor2, Mat2)
-    [PyVar, PyType, PyColor, Mat] = Merging2DSM(PyVar1, PyType1, PyColor1, Mat1, PyVar2, PyType2, PyColor2,
-                                                Mat2)
-
+    [MatVar1, MatType1, MatColor1, Mat1] = CSV2MatrixAndTables(CSV1, Folder_Main + Folder_Temporary)
+    [MatVar2, MatType2, MatColor2, Mat2] = CSV2MatrixAndTables(CSV2, Folder_Main + Folder_Temporary)
+    [MatVar2, MatType2, MatColor2, Mat2] = AdequacyOrdering(MatVar1, MatVar2, MatType2, MatColor2, Mat2)
+    [MatVar, MatType, MatColor, Mat] = Merging2DSM(MatVar1, MatType1, MatColor1, Mat1, MatVar2, MatType2, MatColor2,
+                                                   Mat2)
+    print(Mat)
+    #[MatVar, MatType, MatColor, Mat] = DSMSequencing(MatVar, MatType, MatColor, Mat)
 
     Pythonx = "Not yet done"
     return Pythonx
