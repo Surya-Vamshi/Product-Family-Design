@@ -21,7 +21,7 @@ def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merg
     from Functions.Sequencing.AdequacyOrdering import AdequacyOrdering
     from Functions.Sequencing.Merging2DSM import Merging2DSM
     from Functions.Sequencing.DSMSequencing import DSMSequencing
-    from Functions.Sequencing.CombineTablesInCells import CombineTablesInCells
+    from Functions.Sequencing.WritingList2CSV import WritingList2CSV
     from Functions.Sequencing.NameOfNewFileMerge import NameOfNewFileMerge
 
     # Code
@@ -31,8 +31,8 @@ def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merg
     [MatVar, MatType, MatColor, Mat] = Merging2DSM(MatVar1, MatType1, MatColor1, Mat1, MatVar2, MatType2, MatColor2,
                                                    Mat2)
     [MatVar, MatType, MatColor, Mat] = DSMSequencing(MatVar, MatType, MatColor, Mat)
-    #FinalMat = CombineTablesInCells(MatVar, MatType, MatColor, Mat)
-    CSV3 = NameOfNewFileMerge(CSV1,CSV2,FileName,'.csv')
-    print(CSV3)
-    Pythonx = "Not yet done"
-    return Pythonx
+    CSV3 = NameOfNewFileMerge(CSV1, CSV2, FileName, '.csv')
+    CSV3 = Folder_Main + Folder_Temporary + "\\" + CSV3
+    WritingList2CSV(MatVar, MatType, MatColor, Mat, CSV3)
+
+    return CSV3

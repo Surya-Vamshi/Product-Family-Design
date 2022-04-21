@@ -21,13 +21,16 @@ def Merging2Models(Model1, Model2, MergedModel, Folder_Main, Folder_Temporary, F
     """
     # Importing Modules
     from Functions.Sequencing.Merging2CSV import Merging2CSV
+    from Functions.Sequencing.CSVSequencing import CSVSequencing
     from Functions.Create_x_file.Merging2Matlab import Merging2Matlab
 
     CSV1 = Model1 + ".csv"
     CSV2 = Model2 + ".csv"
     # Reorder CSV inputs in case it's not ordered
-    # CSVSequencing(CSV1,"",DataFolder,FunctionsFolder)
-    # CSVSequencing(CSV2,"",DataFolder,FunctionsFolder)
+    # CSVSequencing(CSV1,"",Folder_Temporary, Folder_Merging_Funtions,
+    #               Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+    # CSVSequencing(CSV2,"",Folder_Temporary, Folder_Merging_Funtions,
+    #               Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
 
     # Merging 2 CSV in a 3rd one with name of it. Nothing more
     CSV3 = Merging2CSV(CSV1, CSV2, MergedModel, Folder_Main, Folder_Temporary, Folder_Merging_Funtions,
