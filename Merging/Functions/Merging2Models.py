@@ -22,8 +22,9 @@ def Merging2Models(Model1, Model2, MergedModel, Folder_Main, Folder_Temporary, F
     # Importing Modules
     from Functions.Sequencing.Merging2CSV import Merging2CSV
     from Functions.Sequencing.CSVSequencing import CSVSequencing
-    from Functions.Create_x_file.Merging2Matlab import Merging2Matlab
+    from Functions.Create_x_file.Merging2Python import Merging2Python
 
+    # Code
     CSV1 = Model1 + ".csv"
     CSV2 = Model2 + ".csv"
     # Reorder CSV inputs in case it's not ordered
@@ -38,7 +39,8 @@ def Merging2Models(Model1, Model2, MergedModel, Folder_Main, Folder_Temporary, F
 
     # Merging 2 matlab files in 3rd one. You need the CSV of final model
     Model3 = CSV3[:-4]
-    [InputVariables, IntermediateVariables, OutputVariables] = Merging2Matlab(Model1, Model2, Model3, Folder_Main,
+    [InputVariables, IntermediateVariables, OutputVariables] = Merging2Python(Model1, Model2, Model3, Folder_Main,
+                                                                              Folder_Temporary,
                                                                               Folder_Merging_Funtions,
                                                                               Folder_Merging_Sequencing,
                                                                               Folder_Merging_Create_x_file)

@@ -32,7 +32,7 @@ def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merg
                                                    Mat2)
     [MatVar, MatType, MatColor, Mat] = DSMSequencing(MatVar, MatType, MatColor, Mat)
     CSV3 = NameOfNewFileMerge(CSV1, CSV2, FileName, '.csv')
-    CSV3 = Folder_Main + Folder_Temporary + "\\" + CSV3
-    WritingList2CSV(MatVar, MatType, MatColor, Mat, CSV3)
+    Fullpath = Folder_Main + Folder_Temporary + "\\" + CSV3
+    WritingList2CSV(MatVar, MatType, MatColor, Mat, Fullpath)
 
     return CSV3
