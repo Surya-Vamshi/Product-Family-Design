@@ -1,7 +1,7 @@
 """
 M0004_f_Worm_gear.m
 
-Discription:
+Description:
   This function calculates the gear ratio of a worm gear pair depending on
   the number of teeth of the two gears.
 
@@ -12,7 +12,7 @@ Input:
 Intermediate:
 
 Output:
-  i_2 = Transmision ratio stage 2 [-]
+  i_2 = Transmission ratio stage 2 [-]
 
 Example:
   [i_2] = M0004_f_Worm_gear ([2,4],[50,80])
@@ -23,6 +23,8 @@ Formula:
 """
 #  Code:
 import numpy as np
-def  M0004_f_Worm_gear(z_21,z_22):
-    i_2 = np.multiply(z_22, z_21) 
+
+
+def M0004_f_Worm_gear(z_21, z_22):
+    i_2 = np.multiply(z_22, z_21)
     return i_2

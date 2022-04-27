@@ -1,7 +1,7 @@
 """
 M0003_f_Spur_gear.m
 
-Discription:
+Description:
   This function calculates the gear ratio of a spur gear pair depending on
   the number of teeth of the two gears.
 
@@ -13,7 +13,7 @@ Input:
 Intermediate:
 
 Output:
-  i1 = Transmision ratio stage 1 [-]
+  i1 = Transmission ratio stage 1 [-]
 
 Example:
   [i_1] = M0003_f_Spur_gear ([5,10],[100,90])
@@ -24,6 +24,8 @@ Formula:
 """
 #  Code:
 import numpy as np
-def  M0003_f_Spur_gear(z_11,z_12):
-    i_1 = np.multiply(z_12,z_11) 
+
+
+def M0003_f_Spur_gear(z_11, z_12):
+    i_1 = np.multiply(z_12, z_11)
     return i_1

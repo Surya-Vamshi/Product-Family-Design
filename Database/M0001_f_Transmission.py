@@ -1,7 +1,7 @@
 """
 M0001_f_Transmission.m
 
-Discription:
+Description:
   This function calculates the output torque and rotational speed of a gearbox.
 
 Input:
@@ -25,7 +25,9 @@ Formula:
 """
 #  Code:
 import numpy as np
-def  M0001_f_Transmission(T_in,n_in,i):
-    T_out = np.multiply(i, T_in) 
+
+
+def M0001_f_Transmission(T_in, n_in, i):
+    T_out = np.multiply(i, T_in)
     n_out = np.multiply(n_in, i)
-    return T_out,n_out
+    return T_out, n_out

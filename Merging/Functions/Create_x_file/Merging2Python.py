@@ -17,6 +17,10 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     from Functions.Sequencing.CSV2MatrixAndTables import CSV2MatrixAndTables
     from Functions.Create_x_file.TypeOfVariables import TypeOfVariables
     from Functions.Create_x_file.OneVarIn2ndList import OneVarIn2ndList
+    from Functions.Create_x_file.FromType1toType2 import FromType1toType2
+    from Functions.Create_x_file.VariablesOfList2inList1orNot import VariablesOfList2inList1orNot
+    from Functions.Create_x_file.WriteVariableDescription import WriteVariableDescription
+
     # Code
     CSV1 = Model1 + ".csv"
     CSV2 = Model2 + ".csv"
@@ -31,10 +35,95 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
 
     VerifVar = OneVarIn2ndList(Input1, Intermediate3)
     # if in 1st CSV file Inputs are Intermediate variables of the final system. Then need to change position of both matrix by inverse them and the files
-    if VerifVar == 1: #That is when VerifVar = 1
+    if VerifVar == 1:  # That is when VerifVar = 1
+        MatVarA = MatVar2
+        MatVar2 = MatVar1
+        MatVar1 = MatVarA
+        CSVA = CSV2
+        CSV2 = CSV1
+        CSV1 = CSVA
+    # Now File1/CSV1 is first!
+    # Creating.py file name from .csv
+    Python1 = FromType1toType2(CSV1, '.csv', '.py', 'f')  # FileName
+    Python2 = FromType1toType2(CSV2, '.csv', '.py', 'f')  # FileName
+    # TXT3 = FromType1toType2(CSV3, '.csv', '.txt', 'f'); # FileName
+    Python3 = FromType1toType2(CSV3, '.csv', '.py', 'f')
+    Text1 = open(Folder_Main + Folder_Temporary + "\\" + Python1, "r")
+    Text2 = open(Folder_Main + Folder_Temporary + "\\" + Python2, "r")
+    Python3Writer = open(Folder_Main + Folder_Temporary + "\\" + Python3, 'w+')
 
+    # START OF WRITING THE NEW FILE
+    Python3Writer.write('"""\n')  # Commenting
+    Python3Writer.write(Python3)  # Title
+    Python3Writer.write('\n\nDescription:\n')  # Description
 
-    Input3 = "Not yet done"
-    Intermediate3 = "Not yet done"
-    Output3 = "Not yet done"
+    [x, UnikInMatVar2] = VariablesOfList2inList1orNot(MatVar1, MatVar2)
+    VariableList = [MatVar1, UnikInMatVar2]
+
+    # Input
+    Text_input = WriteVariableDescription(Text1, Text2, '', Python3Writer, VariableList, Input3, 'Input',
+                                          'Intermediate')
+    # Intermediate
+    WriteVariableDescription(Text1, Text2, Text_input, Python3Writer, VariableList, Intermediate3, 'Intermediate',
+                             'Output')
+    # Output
+    WriteVariableDescription(Text1, Text2, '', Python3Writer, VariableList, Output3, 'Output', 'Example')
+
+    # Example
+    Python3Writer.write('\nExample:\n')
+    # Formula
+    Python3Writer.write('\nFormula:\n\n')
+    # Code
+    Python3Writer.write('"""\n#  Code:\n')
+
+    # Import line
+    Python3Writer.write('\nimport numpy as np\n\n')
+    # Function line
+    Python3Writer.write('\ndef ')
+    Python3Writer.write(Python3[0:-3] + '(')
+
+    Input3 = ['i_1', 'i_2', 'n_in', 'T_in']  # Should be removed
+    Output3 = ['T_out', 'n_out']  # Should be removed
+    for i in Input3:
+        Python3Writer.write(i)
+        if i == Input3[-1]:
+            Python3Writer.write('):\n')
+        else:
+            Python3Writer.write(', ')
+
+    # Need to import modules to run the code
+    Python3Writer.write('\tfrom Database.' + Python1[0:-3])
+    Python3Writer.write(' import ' + Python1[0:-3] + '\n')
+    Python3Writer.write('\tfrom Database.' + Python2[0:-3])
+    Python3Writer.write(' import ' + Python2[0:-3] + '\n')
+
+    # Functions and Main part
+    for line in Text1:
+        if line.startswith("    return"):
+            Text1_functionline_p1 = line[11:-1]
+        if line.startswith("def"):
+            Text1_functionline_p2 = line[4:-2]
+    for line in Text2:
+        if line.startswith("    return"):
+            Text2_functionline_p1 = line[11:-1]
+        if line.startswith("def"):
+            Text2_functionline_p2 = line[4:-2]
+    Python3Writer.write('\t# Code\n')
+    Python3Writer.write('\t[' + Text1_functionline_p1 + '] = ')
+    Python3Writer.write(Text1_functionline_p2)
+    Python3Writer.write('\n\t[' + Text2_functionline_p1 + '] = ')
+    Python3Writer.write(Text2_functionline_p2)
+
+    # Return Statement along with output variables
+    Python3Writer.write('\n\treturn ')
+    for i in Output3:
+        Python3Writer.write(i)
+        if i == Output3[-1]:
+            Python3Writer.write('\n')
+        else:
+            Python3Writer.write(', ')
+
+    # Closing the python files which are opened
+    Text1.close()
+    Text2.close()
     return Input3, Intermediate3, Output3

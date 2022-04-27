@@ -71,7 +71,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
             if name.startswith(CODEs[i]) and name.endswith(".csv"):
                 CSVs.append(name)
                 MODELs.append(name[:-4])
-        TEMPOs.append("TXXX_a_Temporary" + str(i + 1))
+        TEMPOs.append("TXXXX_a_Temporary" + str(i + 1))
         shutil.copyfile(Folder_Main + Folder_Database + "\\" + PYs[i], Folder_Main + Folder_Temporary + "\\" + PYs[i])
         shutil.copyfile(Folder_Main + Folder_Database + "\\" + CSVs[i], Folder_Main + Folder_Temporary + "\\" + CSVs[i])
 
@@ -106,7 +106,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
 
     # Deleting TemporaryFolder
-    shutil.rmtree(Folder_Main + Folder_Temporary)
+    #shutil.rmtree(Folder_Main + Folder_Temporary)
 
     # Final Output
 
