@@ -33,8 +33,13 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     [Input1, Intermediate1, Output1] = TypeOfVariables(MatVar1, Matrix1)
     [Input3, Intermediate3, Output3] = TypeOfVariables(MatVar3, Matrix3)
 
+    print(Input3)
+    print(Intermediate3)
+    print(Output3)
+
     VerifVar = OneVarIn2ndList(Input1, Intermediate3)
-    # if in 1st CSV file Inputs are Intermediate variables of the final system. Then need to change position of both matrix by inverse them and the files
+    # if in 1st CSV file Inputs are Intermediate variables of the final system. Then need to change position of both
+    # matrix by inverse them and the files
     if VerifVar == 1:  # That is when VerifVar = 1
         MatVarA = MatVar2
         MatVar2 = MatVar1
@@ -98,6 +103,10 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     Python3Writer.write(' import ' + Python2[0:-3] + '\n')
 
     # Functions and Main part
+    Text1_functionline_p1 = ""
+    Text1_functionline_p2 = ""
+    Text2_functionline_p1 = ""
+    Text2_functionline_p2 = ""
     for line in Text1:
         if line.startswith("    return"):
             Text1_functionline_p1 = line[11:-1]
