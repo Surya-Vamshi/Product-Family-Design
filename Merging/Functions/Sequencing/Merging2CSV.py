@@ -1,4 +1,4 @@
-def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merging_Funtions,
+def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merging_Functions,
                 Folder_Merging_Sequencing, Folder_Merging_Create_x_file):
     """
     Description : Merging of 2 DSM saved  in 2 CSV file into a new CSV file (it is regrouping the different
@@ -9,7 +9,7 @@ def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merg
     CSV2 : name of the second csv file with '.csv'
     FileName : Name of the new merged csv file without '.csv'
     Folder_Database : Folder with all modular models
-    Folder_Merging_Funtions : Folder with all the merging algorithms
+    Folder_Merging_Functions : Folder with all the merging algorithms
     Folder_Merging_Sequencing : Folder with all the Sequencing algorithms
     Folder_Merging_Create_x_file :Folder with all the Create_x_file algorithms
 

@@ -1,4 +1,4 @@
-def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder_Merging_Funtions,
+def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder_Merging_Functions,
                    Folder_Merging_Sequencing, Folder_Merging_Create_x_file):
     """
     Description : Merging 2 Python file of 2 models into a merged file (no ordering system)

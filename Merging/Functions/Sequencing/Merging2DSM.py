@@ -37,8 +37,8 @@ def Merging2DSM(MatVar1, MatType1, MatColor1, Matrix1, MatVar2, MatType2, MatCol
     Matrix[0:NbVar1, PositionUnique1] = Matrix1[0:NbVar1, PositionUnique1]
     # Step 1.b. Column of Variable which are only in matrix 1
     # If input and output variables are in both DSM : take max -> 1 if there is a dependency in one of the 2 matrices
-    Matrix[PositionDouble1, PositionDouble1] = max(int(Matrix1[PositionDouble1, PositionDouble1]),
-                                                   int(Matrix2[PositionDouble2, PositionDouble2]))
+    Matrix[PositionDouble1, PositionDouble1] = max(float(Matrix1[PositionDouble1, PositionDouble1]),
+                                                   float(Matrix2[PositionDouble2, PositionDouble2]))
     # Second Part
     Matrix[NbVar1: NbVar, NbVar1: NbVar] = Matrix2[PositionUnique2, PositionUnique2]
     # Third Part
