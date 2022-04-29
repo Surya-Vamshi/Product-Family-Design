@@ -33,9 +33,12 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     [Input1, Intermediate1, Output1] = TypeOfVariables(MatVar1, Matrix1)
     [Input3, Intermediate3, Output3] = TypeOfVariables(MatVar3, Matrix3)
 
-    print(Input3)
-    print(Intermediate3)
-    print(Output3)
+    # Should remove code from here to
+    Input1 = ['T_in', 'n_in', 'i']
+    Input3 = ['i_1', 'i_2', 'n_in', 'T_in']
+    Intermediate3 = ['i']
+    Output3 = ['T_out', 'n_out']
+    # Till here
 
     VerifVar = OneVarIn2ndList(Input1, Intermediate3)
 
@@ -54,14 +57,14 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     Python2 = FromType1toType2(CSV2, '.csv', '.py', 'f')  # FileName
     # TXT3 = FromType1toType2(CSV3, '.csv', '.txt', 'f'); # FileName
     Python3 = FromType1toType2(CSV3, '.csv', '.py', 'f')
-    Text1 = open(Folder_Main + Folder_Temporary + "\\" + Python1, "r")
-    Text2 = open(Folder_Main + Folder_Temporary + "\\" + Python2, "r")
+    Text1 = open(Folder_Main + Folder_Temporary + "\\" + Python1, "r").read()
+    Text2 = open(Folder_Main + Folder_Temporary + "\\" + Python2, "r").read()
     Python3Writer = open(Folder_Main + Folder_Temporary + "\\" + Python3, 'w+')
 
     # START OF WRITING THE NEW FILE
     Python3Writer.write('"""\n')  # Commenting
     Python3Writer.write(Python3)  # Title
-    Python3Writer.write('\n\nDescription:\n')  # Description
+    Python3Writer.write('\n\nDescription:')  # Description
 
     [x, UnikInMatVar2] = VariablesOfList2inList1orNot(MatVar1, MatVar2)
     VariableList = MatVar1 + UnikInMatVar2
@@ -76,7 +79,7 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     WriteVariableDescription(Text1, Text2, '', Python3Writer, VariableList, Output3, 'Output', 'Example')
 
     # Example
-    Python3Writer.write('\nExample:\n')
+    Python3Writer.write('\n\nExample:\n')
     # Formula
     Python3Writer.write('\nFormula:\n\n')
     # Code
@@ -108,16 +111,16 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     Text1_functionline_p2 = ""
     Text2_functionline_p1 = ""
     Text2_functionline_p2 = ""
-    for line in Text1:
+    for line in Text1.splitlines():
         if line.startswith("    return"):
-            Text1_functionline_p1 = line[11:-1]
+            Text1_functionline_p1 = line[11:]
         if line.startswith("def"):
-            Text1_functionline_p2 = line[4:-2]
-    for line in Text2:
+            Text1_functionline_p2 = line[4:-1]
+    for line in Text2.splitlines():
         if line.startswith("    return"):
-            Text2_functionline_p1 = line[11:-1]
+            Text2_functionline_p1 = line[11:]
         if line.startswith("def"):
-            Text2_functionline_p2 = line[4:-2]
+            Text2_functionline_p2 = line[4:-1]
     Python3Writer.write('\t# Code\n')
     Python3Writer.write('\t[' + Text1_functionline_p1 + '] = ')
     Python3Writer.write(Text1_functionline_p2)
@@ -133,7 +136,4 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
         else:
             Python3Writer.write(', ')
 
-    # Closing the python files which are opened
-    Text1.close()
-    Text2.close()
     return Input3, Intermediate3, Output3

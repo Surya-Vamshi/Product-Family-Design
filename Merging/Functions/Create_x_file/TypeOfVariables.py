@@ -40,3 +40,4 @@ def TypeOfVariables(MatVar, Matrix):
             Intermediate.append(MatVar[i])
 
     return Input, Intermediate, Output
+
