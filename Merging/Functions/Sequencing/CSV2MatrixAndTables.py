@@ -1,11 +1,11 @@
-def CSV2MatrixAndTables(CSV, Path):
+def CSV2MatrixAndTables(CSV, path):
     """
     Descirption : From csv file to 3 lines (variable name, variable type and
     variable color) + matrix of DSM
 
     Input variables :
     CSV : csv file with '.csv'
-    Path : folder where the csv file is saved
+    path : folder where the csv file is saved
 
     Output variables :
     MatVar : List with variable name
@@ -16,9 +16,10 @@ def CSV2MatrixAndTables(CSV, Path):
     # Importing Modules
     import csv
     import numpy as np
+    from pathlib import Path
 
     # Reading CSV Files
-    with open(Path+'\\'+CSV, newline='') as f:
+    with open(str(Path(path+'/'+CSV)), newline='') as f:
         reader = csv.reader(f)
         listAll = list(reader)
 

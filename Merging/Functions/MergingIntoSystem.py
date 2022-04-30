@@ -11,7 +11,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     Folder_Main : Main Folder containing all the code files
     Folder_Systems : Folder with CSV and Python files of the systems
     Folder_Database : Folder with all modular models
-    Folder_Merging_Funtions : Folder with all the merging algorithms
+    Folder_Merging_Functions : Folder with all the merging algorithms
     Folder_Merging_Sequencing : Folder with all the Sequencing algorithms
     Folder_Merging_Create_x_file :Folder with all the Create_x_file algorithms
 
@@ -28,14 +28,15 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # Importing Modules
     import os
     import shutil
+    from pathlib import Path
     from Functions.Merging2Models import Merging2Models
     from Functions.ReplaceTemporaryLineCode import ReplaceTemporaryLineCode
     from Functions.ReorderLines import ReorderLines
     from Functions.Create_x_file.FromType1toType2 import FromType1toType2
 
     # Creating TemporaryFolder
-    Folder_Temporary = Folder_Merging_Functions + "\\temp_" + System_Name
-    os.mkdir(Folder_Main + Folder_Temporary)
+    Folder_Temporary = str(Path(Folder_Merging_Functions + "/temp_" + System_Name))
+    os.mkdir(Folder_Main+Folder_Temporary)
 
     # From SystemName to SXXXX_a_SystemName
     List = []
@@ -72,8 +73,8 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
                 CSVs.append(name)
                 MODELs.append(name[:-4])
         TEMPOs.append("TXXXX_a_Temporary" + str(i + 1))
-        shutil.copyfile(Folder_Main + Folder_Database + "\\" + PYs[i], Folder_Main + Folder_Temporary + "\\" + PYs[i])
-        shutil.copyfile(Folder_Main + Folder_Database + "\\" + CSVs[i], Folder_Main + Folder_Temporary + "\\" + CSVs[i])
+        shutil.copyfile(str(Path(Folder_Main + Folder_Database + "/" + PYs[i])), str(Path(Folder_Main + Folder_Temporary + "/" + PYs[i])))
+        shutil.copyfile(str(Path(Folder_Main + Folder_Database + "/" + CSVs[i])), str(Path(Folder_Main + Folder_Temporary + "/" + CSVs[i])))
 
     # Explanation in DSM Paper or Nicky's master thesis
     Merging2Models(MODELs[0], MODELs[1], TEMPOs[0], Folder_Main, Folder_Temporary, Folder_Merging_Functions,
@@ -106,7 +107,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
 
     # Deleting TemporaryFolder
-    shutil.rmtree(Folder_Main + Folder_Temporary)
+    # shutil.rmtree(Folder_Main + Folder_Temporary)
 
     # Final Output
 

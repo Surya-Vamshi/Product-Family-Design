@@ -17,6 +17,7 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
     """
     # Importing Modules
     import re
+    from pathlib import Path
     from Functions.Create_x_file.FromType1toType2 import FromType1toType2
 
     # Code
@@ -26,9 +27,9 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
     OldV = FromType1toType2(OldV, '.csv', '.py', 'f')
     ActualV = FromType1toType2(ActualV, '.csv', '.py', 'f')
     ModelV = FromType1toType2(ModelV, '.csv', '.py', 'f')
-    OldT = open(Folder_Main + Folder_Temporary + "\\" + OldV, "r").read()
-    ActualT = open(Folder_Main + Folder_Temporary + "\\" + ActualV, "r").read()
-    NewFile = open(Folder_Main + Folder_Temporary + "\\" + ActualV, 'w+')
+    OldT = open(str(Path(Folder_Main + Folder_Temporary + "/" + OldV)), "r").read()
+    ActualT = open(str(Path(Folder_Main + Folder_Temporary + "/" + ActualV)), "r").read()
+    NewFile = open(str(Path(Folder_Main + Folder_Temporary + "/" + ActualV)), 'w+')
 
     FunctionDelimiter1 = re.search("def ", ActualT).start()
     FunctionDelimiter2 = re.search(':', ActualT[FunctionDelimiter1:]).end()

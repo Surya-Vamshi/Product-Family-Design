@@ -14,6 +14,7 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     Output3 : list of output variables of the merged model
     """
     # Importing Modules
+    from pathlib import Path
     from Functions.Sequencing.CSV2MatrixAndTables import CSV2MatrixAndTables
     from Functions.Create_x_file.TypeOfVariables import TypeOfVariables
     from Functions.Create_x_file.OneVarIn2ndList import OneVarIn2ndList
@@ -57,9 +58,9 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     Python2 = FromType1toType2(CSV2, '.csv', '.py', 'f')  # FileName
     # TXT3 = FromType1toType2(CSV3, '.csv', '.txt', 'f'); # FileName
     Python3 = FromType1toType2(CSV3, '.csv', '.py', 'f')
-    Text1 = open(Folder_Main + Folder_Temporary + "\\" + Python1, "r").read()
-    Text2 = open(Folder_Main + Folder_Temporary + "\\" + Python2, "r").read()
-    Python3Writer = open(Folder_Main + Folder_Temporary + "\\" + Python3, 'w+')
+    Text1 = open(str(Path(Folder_Main + Folder_Temporary + "/" + Python1)), "r").read()
+    Text2 = open(str(Path(Folder_Main + Folder_Temporary + "/" + Python2)), "r").read()
+    Python3Writer = open(str(Path(Folder_Main + Folder_Temporary + "/" + Python3)), 'w+')
 
     # START OF WRITING THE NEW FILE
     Python3Writer.write('"""\n')  # Commenting

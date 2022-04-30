@@ -17,6 +17,7 @@ def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merg
     CSV3 : path of the merged CSV file with '.csv'
     """
     # Importing Modules
+    from pathlib import Path
     from Functions.Sequencing.CSV2MatrixAndTables import CSV2MatrixAndTables
     from Functions.Sequencing.AdequacyOrdering import AdequacyOrdering
     from Functions.Sequencing.Merging2DSM import Merging2DSM
@@ -32,7 +33,7 @@ def Merging2CSV(CSV1, CSV2, FileName, Folder_Main, Folder_Temporary, Folder_Merg
                                                    Mat2)
     [MatVar, MatType, MatColor, Mat] = DSMSequencing(MatVar, MatType, MatColor, Mat)
     CSV3 = NameOfNewFileMerge(CSV1, CSV2, FileName, '.csv')
-    Fullpath = Folder_Main + Folder_Temporary + "\\" + CSV3
+    Fullpath = str(Path(Folder_Main + Folder_Temporary + "/" + CSV3))
     WritingList2CSV(MatVar, MatType, MatColor, Mat, Fullpath)
 
     return CSV3
