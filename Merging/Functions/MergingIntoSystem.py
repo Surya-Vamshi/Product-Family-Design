@@ -81,7 +81,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
                    Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
 
     if N > 2:
-        for i in range(2, 3):   # Change 3 to N
+        for i in range(2, N):   # Change 3 to N
             if i == N - 1:
                 TEMPOs[N - 1] = SystemName_a_ThisForm
             [InputVariables, IntermediateVariables, OutputVariables] = Merging2Models(TEMPOs[i - 2], MODELs[i],
@@ -107,7 +107,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
 
     # Deleting TemporaryFolder
-    # shutil.rmtree(Folder_Main + Folder_Temporary)
+    shutil.rmtree(Folder_Main + Folder_Temporary)
 
     # Final Output
 

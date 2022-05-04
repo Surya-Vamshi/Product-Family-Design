@@ -14,28 +14,30 @@ from PySide6.QtGui import QIcon
 from PySide6.QtCore import Qt
 import sys
 import os
+from pathlib import Path
 
 from Functions.System_XRay_From_Models import System_XRay_From_Models
 
 # User can change these directories' location if needed.
-Folder_Design_Problems = r"\Optimization\Design_Problems"
-Folder_Systems = r"\Merging\Systems"
-Folder_Database = r"\Database"
-Folder_Merging_Funtions = r"\Merging\Functions"
-Folder_Merging_Sequencing = r"\Merging\Functions\Sequencing"
-Folder_Merging_Create_x_file = r"\Merging\Functions\Create_x_file"
+Folder_Design_Problems = str(Path("/Optimization/Design_Problems"))
+Folder_Systems = str(Path("/Merging/Systems"))
+Folder_Database = str(Path("/Database"))
+Folder_Merging_Functions = str(Path("/Merging/Functions"))
+Folder_Merging_Sequencing = str(Path("/Merging/Functions/Sequencing"))
+Folder_Merging_Create_x_file = str(Path("/Merging/Functions/Create_x_file"))
 
 SampleSize = 300  # Default
 
 # Do not touch
 # Getting available models from database
-path = os.getcwd()
-Folder_Main = os.path.dirname(path)
+os.chdir("../")
+Folder_Main = str(Path(os.getcwd()))
 files = os.listdir(Folder_Main + Folder_Database)
 available_Models = []
 for name in files:
     if name.startswith("M") and name.endswith(".csv"):
         available_Models.append(name[:-4])
+available_Models.sort()
 
 class MainWindow(QDialog):
     def __init__(self):
@@ -118,7 +120,7 @@ class MainWindow(QDialog):
             self.error2.setHidden(True)
             CSVFinal, Pythonx = System_XRay_From_Models(CODEs, system_name, SampleSize, Folder_Main,
                                                         Folder_Design_Problems,
-                                                        Folder_Systems, Folder_Database, Folder_Merging_Funtions,
+                                                        Folder_Systems, Folder_Database, Folder_Merging_Functions,
                                                         Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
             print("CSV file after Merging is saved as " + CSVFinal)
             print("Python file after Merging is saved as " + Pythonx)
