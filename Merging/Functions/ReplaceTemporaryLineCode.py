@@ -29,12 +29,13 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
     ModelV = FromType1toType2(ModelV, '.csv', '.py', 'f')
     OldT = open(str(Path(Folder_Main + Folder_Temporary + "/" + OldV)), "r").read()
     ActualT = open(str(Path(Folder_Main + Folder_Temporary + "/" + ActualV)), "r").read()
+    ModelT = open(str(Path(Folder_Main + Folder_Temporary + "/" + ModelV)), "r").read()
     NewFile = open(str(Path(Folder_Main + Folder_Temporary + "/" + ActualV)), 'w+')
 
     FunctionDelimiter1 = re.search("def ", ActualT).start()
     FunctionDelimiter2 = re.search(':', ActualT[FunctionDelimiter1:]).end()
     FirstPart = ActualT[0:FunctionDelimiter1 + FunctionDelimiter2]
-    SecondPart = ActualT[FunctionDelimiter1 + FunctionDelimiter2:]
+
 
     NewFile.write(FirstPart)
 
@@ -42,20 +43,40 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
 
     EndOldT = OldT[TemporarysearchList:]
 
+    # Writing imports from Old file to the New file
     TemporaryBeginImports = re.search(":", EndOldT).end()
-    TemporaryFinishImports = re.search("# Code", EndOldT).end()
+    TemporaryFinishImports = re.search("# Code", EndOldT).start()
     NewFile.write(EndOldT[TemporaryBeginImports:TemporaryFinishImports])
 
+    # Importing Model File
+    NewFile.write('from Database.' + ModelV[0:-3])
+    NewFile.write(' import ' + ModelV[0:-3] + '\n')
+
+    # Main Code: Function calls
+    NewFile.write('\t# Code')
+    # Function calls in Old file
     TemporaryBeginList = [match.start() for match in re.finditer(r'\[', EndOldT)]
     TemporaryFinishList = [match.end() for match in re.finditer(r'\)', EndOldT)]
-    # Need to add one extra import before going to code
 
     N = len(TemporaryBeginList)
     for i in range(0, N):
         line = EndOldT[TemporaryBeginList[i]:TemporaryFinishList[i+1]]
         NewFile.write('\n\t' + line)
-    # Need to add second code as well
-    # Need to make sure to keep return
 
-    ActualV = 0
+    # Function call from Model File
+    Model_functionline_p1 = ""
+    Model_functionline_p2 = ""
+    for line in ModelT.splitlines():
+        if line.startswith("    return"):
+            Model_functionline_p1 = line[11:]
+        if line.startswith("def"):
+            Model_functionline_p2 = line[4:-1]
+    NewFile.write('\n\t[' + Model_functionline_p1 + '] = ')
+    NewFile.write(Model_functionline_p2)
+
+    # Writing Return Statement
+    FunctionDelimiter3 = re.search("return", ActualT).start()
+    ReturnPart = ActualT[FunctionDelimiter3:]
+    NewFile.write("\n\t" + ReturnPart)
+
     return ActualV
