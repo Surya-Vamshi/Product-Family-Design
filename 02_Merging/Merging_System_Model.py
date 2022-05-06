@@ -20,11 +20,11 @@ from Functions.System_XRay_From_Models import System_XRay_From_Models
 
 # User can change these directories' location if needed.
 Folder_Design_Problems = str(Path("/Optimization/Design_Problems"))
-Folder_Systems = str(Path("/Merging/Systems"))
-Folder_Database = str(Path("/Database"))
-Folder_Merging_Functions = str(Path("/Merging/Functions"))
-Folder_Merging_Sequencing = str(Path("/Merging/Functions/Sequencing"))
-Folder_Merging_Create_x_file = str(Path("/Merging/Functions/Create_x_file"))
+Folder_Systems = str(Path("/02_Merging/Systems"))
+Folder_Database = str(Path("/01_Database"))
+Folder_Merging_Functions = str(Path("/02_Merging/Functions"))
+Folder_Merging_Sequencing = str(Path("/02_Merging/Functions/Sequencing"))
+Folder_Merging_Create_x_file = str(Path("/02_Merging/Functions/Create_x_file"))
 
 SampleSize = 300  # Default
 

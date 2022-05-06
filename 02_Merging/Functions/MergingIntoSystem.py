@@ -107,7 +107,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
 
     # Deleting TemporaryFolder
-    shutil.rmtree(Folder_Main + Folder_Temporary)
+    # shutil.rmtree(Folder_Main + Folder_Temporary)
 
     # Final Output
 
