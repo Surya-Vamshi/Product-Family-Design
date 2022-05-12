@@ -14,6 +14,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtCore import Qt
 import sys
 import os
+import string
 from pathlib import Path
 
 from Functions.System_XRay_From_Models import System_XRay_From_Models
@@ -94,7 +95,8 @@ class MainWindow(QDialog):
         for item in selected_list:
             CODEs.append(item.text()[:5])
         System_Name = self.name.text()
-        System_Name = "".join(x for x in System_Name if x.isalnum())
+        valid_chars = "-_.%s%s" % (string.ascii_letters, string.digits)
+        System_Name = "".join(x for x in System_Name if x in valid_chars)
 
         if not CODEs or not System_Name:
             if not CODEs:
@@ -112,8 +114,6 @@ class MainWindow(QDialog):
             else:
                 self.error2.setHidden(True)
         else:
-            # print(CODEs)
-            # print(system_name)
             self.error1.setHidden(True)
             self.error2.setHidden(True)
             CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Database,
@@ -126,3 +126,4 @@ app = QApplication(sys.argv)
 w = MainWindow()
 w.show()
 sys.exit(app.exec())
+
