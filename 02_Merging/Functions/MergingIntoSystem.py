@@ -79,20 +79,20 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Database, Folder_M
     Merging2Models(MODELs[0], MODELs[1], TEMPOs[0], Folder_Main, Folder_Temporary, Folder_Merging)
 
     if N > 2:
-        for i in range(2, N):  # Change 3 to N
-            if i == N - 1:
-                TEMPOs[N - 1] = SystemName_a_ThisForm
+        for i in range(2, N):
+            if i == (N - 1):
+                TEMPOs[i - 1] = SystemName_a_ThisForm
             [InputVariables, IntermediateVariables, OutputVariables] = Merging2Models(TEMPOs[i - 2], MODELs[i],
                                                                                       TEMPOs[i - 1], Folder_Main,
                                                                                       Folder_Temporary,
                                                                                       Folder_Merging)
             ReplaceTemporaryLineCode(TEMPOs[i - 2], MODELs[i], TEMPOs[i - 1], Folder_Main,
                                      Folder_Temporary, Folder_Merging)
-    '''
+
     # Here Reorder
     ReorderLines(SystemName_a_ThisForm, InputVariables, IntermediateVariables, OutputVariables, Folder_Main,
                  Folder_Temporary, Folder_Merging)
-    '''
+
     # Rename with _f_
     CSVFinal = SystemName_a_ThisForm + ".csv"
     PYFinal = FromType1toType2(CSVFinal, ".csv", ".m", "f")
@@ -102,7 +102,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Database, Folder_M
     # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
 
     # Deleting TemporaryFolder
-    shutil.rmtree(Folder_Main + Folder_Temporary)
+    # shutil.rmtree(Folder_Main + Folder_Temporary)
 
     # Final Output
 
