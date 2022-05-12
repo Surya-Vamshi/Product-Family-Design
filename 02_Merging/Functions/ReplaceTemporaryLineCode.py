@@ -1,5 +1,4 @@
-def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Main, Folder_Temporary,
-                             Folder_Merging_Functions, Folder_Merging_Sequencing, Folder_Merging_Create_x_file):
+def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Main, Folder_Temporary, Folder_Merging):
     """
     Description: Inside the actual temporary file the function temporary file
     of previous temporary file need to replace what is inside (functions of
@@ -9,8 +8,9 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
     OldTempoFile : CSV file without '.csv' of the previous Temporary file
     ModelFile : CSV file without '.csv' of the added model
     ActualFile : CSV file without '.csv' of the actual temporary file
-    Folder_Database : Position of the csv file
-    Folder_Merging_Algorithms : Folder with all the algorithms
+    Folder_Main : Main Folder containing all the code files
+    Folder_Temporary : Folder with all the Temporary files
+    Folder_Merging : Folder with all the merging algorithms
 
     Output variables : output is useless in our algorithm. Can be changed
     ActualV : ActualFile with '.csv'

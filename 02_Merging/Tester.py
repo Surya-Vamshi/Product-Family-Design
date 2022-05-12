@@ -22,14 +22,10 @@ Folder_Main = str(Path(os.getcwd()))
 Folder_Design_Problems = str(Path("/Optimization/Design_Problems"))
 Folder_Systems = str(Path("/02_Merging/Systems"))
 Folder_Database = str(Path("/01_Database"))
-Folder_Merging_Functions = str(Path("/02_Merging"))
-Folder_Merging_Sequencing = str(Path("/02_Merging/Functions/Sequencing"))
-Folder_Merging_Create_x_file = str(Path("/02_Merging/Functions/Create_x_file"))
+Folder_Merging = str(Path("/02_Merging"))
 
 # Do not touch
-CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main,
-                                            Folder_Design_Problems,
-                                            Folder_Systems, Folder_Database, Folder_Merging_Functions,
-                                            Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Database,
+                                            Folder_Merging, Folder_Design_Problems, Folder_Systems)
 print("CSV file after Merging is saved as " + CSVFinal)
 print("Python file after Merging is saved as " + Pythonx)

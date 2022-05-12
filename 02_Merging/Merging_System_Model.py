@@ -19,12 +19,10 @@ from pathlib import Path
 from Functions.System_XRay_From_Models import System_XRay_From_Models
 
 # User can change these directories' location if needed.
-Folder_Design_Problems = str(Path("/Optimization/Design_Problems"))
+Folder_Design_Problems = str(Path("/03_Design_Problems"))
 Folder_Systems = str(Path("/02_Merging/Systems"))
 Folder_Database = str(Path("/01_Database"))
-Folder_Merging_Functions = str(Path("/02_Merging/Functions"))
-Folder_Merging_Sequencing = str(Path("/02_Merging/Functions/Sequencing"))
-Folder_Merging_Create_x_file = str(Path("/02_Merging/Functions/Create_x_file"))
+Folder_Merging = str(Path("/02_Merging"))
 
 SampleSize = 300  # Default
 
@@ -95,10 +93,10 @@ class MainWindow(QDialog):
         CODEs = []
         for item in selected_list:
             CODEs.append(item.text()[:5])
-        system_name = self.name.text()
-        system_name = "".join(x for x in system_name if x.isalnum())
+        System_Name = self.name.text()
+        System_Name = "".join(x for x in System_Name if x.isalnum())
 
-        if not CODEs or not system_name:
+        if not CODEs or not System_Name:
             if not CODEs:
                 self.error1.setText("Please Select Models")
                 self.error1.setGeometry(20, 400, 175, 30)
@@ -106,7 +104,7 @@ class MainWindow(QDialog):
                 self.error1.setAlignment(Qt.AlignCenter)
             else:
                 self.error1.setHidden(True)
-            if not system_name:
+            if not System_Name:
                 self.error2.setText("Please Enter a System Name")
                 self.error2.setGeometry(205, 400, 175, 30)
                 self.error2.setStyleSheet("border-radius: 5px; background-color: #D92000")
@@ -118,10 +116,8 @@ class MainWindow(QDialog):
             # print(system_name)
             self.error1.setHidden(True)
             self.error2.setHidden(True)
-            CSVFinal, Pythonx = System_XRay_From_Models(CODEs, system_name, SampleSize, Folder_Main,
-                                                        Folder_Design_Problems,
-                                                        Folder_Systems, Folder_Database, Folder_Merging_Functions,
-                                                        Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+            CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Database,
+                                                        Folder_Merging, Folder_Design_Problems, Folder_Systems)
             print("CSV file after Merging is saved as " + CSVFinal)
             print("Python file after Merging is saved as " + Pythonx)
 

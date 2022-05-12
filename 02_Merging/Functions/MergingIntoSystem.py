@@ -1,19 +1,16 @@
-def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Database, Folder_Merging_Functions,
-                      Folder_Merging_Sequencing, Folder_Merging_Create_x_file):
+def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Database, Folder_Merging, Folder_Systems):
     """
     Description : Merging models into the global system with DSM Sequencing and
-    system function depending of the models function in a python file
+    system function depending on the models function in a python file
     
     Input variables :
     CODEs : list of code of the modular models used in the system (which are going to be merged.)
     THE FORMAT SHOULD BE : [{'MXXXX'},{'MXXXX'},{'MXXXX'},{'MXXXX'}]
     System_Name : name of the system (without "SXXXX_a_" and ".csv")
     Folder_Main : Main Folder containing all the code files
-    Folder_Systems : Folder with CSV and Python files of the systems
     Folder_Database : Folder with all modular models
-    Folder_Merging_Functions : Folder with all the merging algorithms
-    Folder_Merging_Sequencing : Folder with all the Sequencing algorithms
-    Folder_Merging_Create_x_file :Folder with all the Create_x_file algorithms
+    Folder_Merging : Folder with all the merging algorithms
+    Folder_Systems : Folder with CSV and Python files of the systems
 
     TemporaryFolder : name of the folder for the algorithm. Can be a random name 
     (will be creat and deleted in the algorithm was important for the programming work)
@@ -35,8 +32,8 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     from Functions.Create_x_file.FromType1toType2 import FromType1toType2
 
     # Creating TemporaryFolder
-    Folder_Temporary = str(Path(Folder_Merging_Functions + "/temp_" + System_Name))
-    os.mkdir(Folder_Main+Folder_Temporary)
+    Folder_Temporary = str(Path(Folder_Merging + "/temp_" + System_Name))
+    os.mkdir(Folder_Main + Folder_Temporary)
 
     # From SystemName to SXXXX_a_SystemName
     List = []
@@ -73,30 +70,28 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
                 CSVs.append(name)
                 MODELs.append(name[:-4])
         TEMPOs.append("TXXXX_a_Temporary" + str(i + 1))
-        shutil.copyfile(str(Path(Folder_Main + Folder_Database + "/" + PYs[i])), str(Path(Folder_Main + Folder_Temporary + "/" + PYs[i])))
-        shutil.copyfile(str(Path(Folder_Main + Folder_Database + "/" + CSVs[i])), str(Path(Folder_Main + Folder_Temporary + "/" + CSVs[i])))
+        shutil.copyfile(str(Path(Folder_Main + Folder_Database + "/" + PYs[i])),
+                        str(Path(Folder_Main + Folder_Temporary + "/" + PYs[i])))
+        shutil.copyfile(str(Path(Folder_Main + Folder_Database + "/" + CSVs[i])),
+                        str(Path(Folder_Main + Folder_Temporary + "/" + CSVs[i])))
 
     # Explanation in DSM Paper or Nicky's master thesis
-    Merging2Models(MODELs[0], MODELs[1], TEMPOs[0], Folder_Main, Folder_Temporary, Folder_Merging_Functions,
-                   Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+    Merging2Models(MODELs[0], MODELs[1], TEMPOs[0], Folder_Main, Folder_Temporary, Folder_Merging)
 
     if N > 2:
-        for i in range(2, N):   # Change 3 to N
+        for i in range(2, N):  # Change 3 to N
             if i == N - 1:
                 TEMPOs[N - 1] = SystemName_a_ThisForm
             [InputVariables, IntermediateVariables, OutputVariables] = Merging2Models(TEMPOs[i - 2], MODELs[i],
                                                                                       TEMPOs[i - 1], Folder_Main,
                                                                                       Folder_Temporary,
-                                                                                      Folder_Merging_Functions,
-                                                                                      Folder_Merging_Sequencing,
-                                                                                      Folder_Merging_Create_x_file)
+                                                                                      Folder_Merging)
             ReplaceTemporaryLineCode(TEMPOs[i - 2], MODELs[i], TEMPOs[i - 1], Folder_Main,
-                                     Folder_Temporary, Folder_Merging_Functions, Folder_Merging_Sequencing,
-                                     Folder_Merging_Create_x_file)
+                                     Folder_Temporary, Folder_Merging)
     '''
     # Here Reorder
     ReorderLines(SystemName_a_ThisForm, InputVariables, IntermediateVariables, OutputVariables, Folder_Main,
-                 Folder_Temporary, Folder_Merging_Functions, Folder_Merging_Sequencing, Folder_Merging_Create_x_file)
+                 Folder_Temporary, Folder_Merging)
     '''
     # Rename with _f_
     CSVFinal = SystemName_a_ThisForm + ".csv"
@@ -107,7 +102,7 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Systems, Folder_Da
     # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
 
     # Deleting TemporaryFolder
-    # shutil.rmtree(Folder_Main + Folder_Temporary)
+    shutil.rmtree(Folder_Main + Folder_Temporary)
 
     # Final Output
 

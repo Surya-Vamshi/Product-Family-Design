@@ -1,5 +1,4 @@
-def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder_Merging_Functions,
-                   Folder_Merging_Sequencing, Folder_Merging_Create_x_file):
+def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder_Merging):
     """
     Description : Merging 2 Python file of 2 models into a merged file (no ordering system)
 
@@ -7,6 +6,9 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
     Model1 : CSV file of first model without '.csv'
     Model2 : CSV file of second model without '.csv'
     Model3 : CSV file of merged model without '.csv'
+    Folder_Main : Main Folder containing all the code files
+    Folder_Temporary : Folder with all the Temporary files
+    Folder_Merging : Folder with all the merging algorithms
 
     Output variables :
     Input3 : list of input variables of the merged model

@@ -1,13 +1,13 @@
-def CSVSequencing(CSV, Suffix, Folder_Main, Folder_Temporary, Folder_Merging_Funtions,
-                  Folder_Merging_Sequencing, Folder_Merging_Create_x_file):
+def CSVSequencing(CSV, Suffix, Folder_Main, Folder_Temporary, Folder_Merging):
     """
     Description : Reorganize a CSV file
 
     Input variables :
     CSV : csv file name with '.csv'
     Suffix : name of the new file is the name of the old file + suffix or if suffix empty replace file
-    Folder_Database : Position of the csv file
-    Folder_Merging_Algorithms : Folder with all the algorithms
+    Folder_Main : Main Folder containing all the code files
+    Folder_Temporary : Folder with all the Temporary files
+    Folder_Merging : Folder with all the merging algorithms
 
     Output variables :
     NewFile : reordered csv file name with '.csv'

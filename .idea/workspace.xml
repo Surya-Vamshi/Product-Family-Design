@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="de7cc1f9-8edb-4e33-8a92-95d117e666c1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/Create_x_file/Merging2Python.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/Create_x_file/Merging2Python.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/CreatxFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/CreatxFile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/Merging2Models.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/Merging2Models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/MergingIntoSystem.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/MergingIntoSystem.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/ReorderLines.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/ReorderLines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/ReplaceTemporaryLineCode.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/ReplaceTemporaryLineCode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/Sequencing/CSVSequencing.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/Sequencing/CSVSequencing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/Sequencing/Merging2CSV.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/Sequencing/Merging2CSV.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Functions/System_XRay_From_Models.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Functions/System_XRay_From_Models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Merging_System_Model.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Merging_System_Model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/02_Merging/Tester.py" beforeDir="false" afterPath="$PROJECT_DIR$/02_Merging/Tester.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="28Vi9ZPpEk0Pywhy3n6EelMwYGS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/home/surya/HiWi_Work/Python_code",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/06_PFD_CDS/test" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.Merging_System_Model">
+    <configuration name="Merging_System_Model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Product-Family-Design" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/02_Merging" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/02_Merging/Merging_System_Model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Tester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Product-Family-Design" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/02_Merging" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/02_Merging/Tester.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Tester_Main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Product-Family-Design" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/06_PFD_CDS" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/06_PFD_CDS/test/Tester_Main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.Merging_System_Model" />
+        <item itemvalue="Python.Tester" />
+        <item itemvalue="Python.Tester_Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="de7cc1f9-8edb-4e33-8a92-95d117e666c1" name="Changes" comment="" />
+      <created>1651308003395</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651308003395</updated>
+      <workItem from="1651308005733" duration="6262000" />
+      <workItem from="1651543469518" duration="1653000" />
+      <workItem from="1651583619869" duration="261000" />
+      <workItem from="1651659454125" duration="963000" />
+      <workItem from="1651660621185" duration="6847000" />
+      <workItem from="1651823055552" duration="3557000" />
+      <workItem from="1652002925509" duration="5000" />
+      <workItem from="1652282069764" duration="4013000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Product_Family_Design$Tester.coverage" NAME="Tester Coverage Results" MODIFIED="1652285208952" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/02_Merging" />
+    <SUITE FILE_PATH="coverage/Product_Family_Design$Merging_System_Model.coverage" NAME="Merging_System_Model Coverage Results" MODIFIED="1652285945302" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/02_Merging" />
+    <SUITE FILE_PATH="coverage/Product_Family_Design$Tester_Main.coverage" NAME="Tester_Main Coverage Results" MODIFIED="1651826212394" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/06_PFD_CDS" />
+  </component>
+</project>
