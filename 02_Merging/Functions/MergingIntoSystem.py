@@ -95,15 +95,13 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Database, Folder_M
 
     # Rename with _f_
     CSVFinal = SystemName_a_ThisForm + ".csv"
-    PYFinal = FromType1toType2(CSVFinal, ".csv", ".m", "f")
+    PYFinal = FromType1toType2(CSVFinal, ".csv", ".py", "f")
 
     # Copying Final files to Systems
-    # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+PYFinal,Folder_Main+Folder_Systems+"\\"+PYFinal)
-    # shutil.copyfile(Folder_Main+Folder_Temporary+"\\"+CSVFinal,Folder_Main+Folder_Systems+"\\"+CSVFinal)
+    shutil.copyfile(Path(Folder_Main+Folder_Temporary +"/"+ PYFinal), Path(Folder_Main+Folder_Systems +"/"+ PYFinal))
+    shutil.copyfile(Path(Folder_Main+Folder_Temporary +"/"+ CSVFinal), Path(Folder_Main+Folder_Systems +"/"+ CSVFinal))
 
     # Deleting TemporaryFolder
-    # shutil.rmtree(Folder_Main + Folder_Temporary)
-
-    # Final Output
+    shutil.rmtree(Folder_Main + Folder_Temporary)
 
     return CSVFinal

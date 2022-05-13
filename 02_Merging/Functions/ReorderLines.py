@@ -1,4 +1,4 @@
-def ReorderLines(CSVFileName,FunctionInputVariables,IntermediateVariables,OutputVariables,Folder_Main,
+def ReorderLines(CSVFileName, FunctionInputVariables, IntermediateVariables, OutputVariables, Folder_Main,
                  Folder_Temporary, Folder_Merging):
     """
     Description : Put the models functions inside the global system Python file in the good order
@@ -28,8 +28,8 @@ def ReorderLines(CSVFileName,FunctionInputVariables,IntermediateVariables,Output
 
     Delimiter1 = re.search('(?s:.*)' + FileV[0:-3], FileT).end()
     Delimiter2 = re.search("Code", FileT[Delimiter1:]).end()
-    FirstPart = FileT[0:Delimiter1+Delimiter2]
-    SecondPart = FileT[Delimiter1+Delimiter2:]
+    FirstPart = FileT[0:Delimiter1 + Delimiter2]
+    SecondPart = FileT[Delimiter1 + Delimiter2:]
 
     NewFile.write(FirstPart)
 
@@ -56,26 +56,37 @@ def ReorderLines(CSVFileName,FunctionInputVariables,IntermediateVariables,Output
     # output variables of each function that are intermediate variables of the global system.
     InputAndIntermediateVariables = FunctionInputVariables
 
+    h = 0
+    while h < Nline - 1:
+        i = 0
+        while i < Nline - h:
+            ListInputi = LineList[1][i]
+            Ni = len(ListInputi)
+            Autorize = 0
+            for j in range(0, Ni):
+                # looking if the Input-variable taken is already existing in the FunctionInputVariables
+                if any(x in ListInputi[j] for x in InputAndIntermediateVariables):
+                    Autorize = Autorize + 1
 
-    print(LineList)
+            # If all Input-variables of function are existing in the FunctionInputVariables than we have this equality
+            if Autorize == Ni:
+                NewFile.write("\n\t" + LineList[0][i])
+                InputAndIntermediateVariables = InputAndIntermediateVariables + LineList[2][i]
+                [j.pop(i) for j in LineList]
+                h = h + 1
+                # Need this to ignore the last line to copy (last line to copy will be done outside the while loop)
+                if Nline - h == 1:
+                    i = i + 1
 
+            else:
+                i = i + 1
 
+    NewFile.write("\n\t" + LineList[0][0])
 
+    Delimiter3 = re.search("return", SecondPart).start()
+    ReturnPart = SecondPart[Delimiter3:]
+    NewFile.write("\n\t" + ReturnPart)
 
+    NewFile.close()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    M = 0
     return None
