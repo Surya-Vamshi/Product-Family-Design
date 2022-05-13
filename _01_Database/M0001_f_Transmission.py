@@ -28,6 +28,6 @@ import numpy as np
 
 
 def M0001_f_Transmission(T_in, n_in, i):
-    T_out = np.multiply(i, T_in)
-    n_out = np.multiply(n_in, i)
-    return T_out, n_out
+    T_out = np.multiply(i, T_in).tolist()
+    n_out = np.multiply(n_in, i).tolist()
+    return [T_out, n_out]

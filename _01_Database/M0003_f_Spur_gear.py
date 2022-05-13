@@ -27,5 +27,5 @@ import numpy as np
 
 
 def M0003_f_Spur_gear(z_11, z_12):
-    i_1 = np.multiply(z_12, z_11)
-    return i_1
+    i_1 = np.multiply(z_12, z_11).tolist()
+    return [i_1]

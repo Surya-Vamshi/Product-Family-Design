@@ -19,13 +19,13 @@ os.chdir("../")
 Folder_Main = str(Path(os.getcwd()))
 
 # User can change these directories' location if needed.
-Folder_Design_Problems = str(Path("/Optimization/Design_Problems"))
-Folder_Systems = str(Path("/02_Merging/Systems"))
-Folder_Database = str(Path("/01_Database"))
-Folder_Merging = str(Path("/02_Merging"))
+Folder_Design_Problems = str(Path("/_03_Design_Problems"))
+Folder_Systems = str(Path("/_02_Merging/Systems"))
+Folder_Database = str(Path("/_01_Database"))
+Folder_Merging = str(Path("/_02_Merging"))
 
 # Do not touch
 CSVFinal, Pythonx = System_XRay_From_Models(CODEs, System_Name, SampleSize, Folder_Main, Folder_Database,
                                             Folder_Merging, Folder_Design_Problems, Folder_Systems)
 print("CSV file after Merging is saved as " + CSVFinal)
-print("Python file after Merging is saved as " + Pythonx)
+print("Python X file after Merging is saved as " + Pythonx)

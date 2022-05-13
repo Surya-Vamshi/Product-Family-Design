@@ -116,17 +116,17 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
         if line.startswith("def"):
             Text2_functionline_p2 = line[4:-1]
     Python3Writer.write('\t# Code\n')
-    Python3Writer.write('\t[' + Text1_functionline_p1 + '] = ')
+    Python3Writer.write('\t' + Text1_functionline_p1 + ' = ')
     Python3Writer.write(Text1_functionline_p2)
-    Python3Writer.write('\n\t[' + Text2_functionline_p1 + '] = ')
+    Python3Writer.write('\n\t' + Text2_functionline_p1 + ' = ')
     Python3Writer.write(Text2_functionline_p2)
 
     # Return Statement along with output variables
-    Python3Writer.write('\n\treturn ')
+    Python3Writer.write('\n\treturn [')
     for i in Output3:
         Python3Writer.write(i)
         if i == Output3[-1]:
-            Python3Writer.write('\n')
+            Python3Writer.write(']\n')
         else:
             Python3Writer.write(', ')
 

@@ -1,0 +1,43 @@
+"""
+S0002_f_Simple_Transmission.py
+
+Description:
+
+Input:
+	z_22 = Numer of teeth driven gear [-]
+	z_21 = Numer of teeth driving gear [-]
+	z_11 = Numer of teeth driving gear [-]
+	z_12 = Numer of teeth driven gear [-]
+	n_in = Incoming rotational speed of the shaft [rad/s]
+	T_in = Incoming torque [Nm]
+
+Intermediate:
+	i_2 = Transmission ratio stage 2 [-]
+	i_1 = Transmission ratio stage 1 [-]
+	i = Transmision ratio [-]
+
+Output:
+	T_out = Output tourque [Nm]
+	n_out = Output rotational speed [rad/s]
+
+Example:
+
+Formula:
+
+"""
+#  Code:
+
+import numpy as np
+
+
+def S0002_f_Simple_Transmission(z_22, z_21, z_11, z_12, n_in, T_in):
+	from Database.M0002_f_Two_stage_gear import M0002_f_Two_stage_gear
+	from Database.M0001_f_Transmission import M0001_f_Transmission
+	from Database.M0003_f_Spur_gear import M0003_f_Spur_gear
+	from Database.M0004_f_Worm_gear import M0004_f_Worm_gear
+	# Code
+	[i_1] = M0003_f_Spur_gear(z_11, z_12)
+	[i_2] = M0004_f_Worm_gear(z_21, z_22)
+	[i] = M0002_f_Two_stage_gear(i_1, i_2)
+	[T_out, n_out] = M0001_f_Transmission(T_in, n_in, i)
+	return [T_out, n_out]

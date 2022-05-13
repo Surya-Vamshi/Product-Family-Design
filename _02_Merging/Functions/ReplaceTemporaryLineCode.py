@@ -59,7 +59,7 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
     TemporaryFinishList = [match.end() for match in re.finditer(r'\)', EndOldT)]
 
     N = len(TemporaryBeginList)
-    for i in range(0, N):
+    for i in range(0, N-1):
         line = EndOldT[TemporaryBeginList[i]:TemporaryFinishList[i+1]]
         NewFile.write('\n\t' + line)
 
@@ -71,7 +71,7 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
             Model_functionline_p1 = line[11:]
         if line.startswith("def"):
             Model_functionline_p2 = line[4:-1]
-    NewFile.write('\n\t[' + Model_functionline_p1 + '] = ')
+    NewFile.write('\n\t' + Model_functionline_p1 + ' = ')
     NewFile.write(Model_functionline_p2)
 
     # Writing Return Statement

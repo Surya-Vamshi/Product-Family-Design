@@ -26,5 +26,5 @@ import numpy as np
 
 
 def M0004_f_Worm_gear(z_21, z_22):
-    i_2 = np.multiply(z_22, z_21)
-    return i_2
+    i_2 = np.multiply(z_22, z_21).tolist()
+    return [i_2]

@@ -20,10 +20,10 @@ from pathlib import Path
 from Functions.System_XRay_From_Models import System_XRay_From_Models
 
 # User can change these directories' location if needed.
-Folder_Design_Problems = str(Path("/03_Design_Problems"))
-Folder_Systems = str(Path("/02_Merging/Systems"))
-Folder_Database = str(Path("/01_Database"))
-Folder_Merging = str(Path("/02_Merging"))
+Folder_Design_Problems = str(Path("/_03_Design_Problems"))
+Folder_Systems = str(Path("/_02_Merging/Systems"))
+Folder_Database = str(Path("/_01_Database"))
+Folder_Merging = str(Path("/_02_Merging"))
 
 SampleSize = 300  # Default
 

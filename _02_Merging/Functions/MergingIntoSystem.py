@@ -44,11 +44,12 @@ def MergingIntoSystem(CODEs, System_Name, Folder_Main, Folder_Database, Folder_M
     List2 = []
     for x in List:
         List2.append(int(x[1:5]))
-    List2.append(int(4))
+    List2.sort()
 
     # Loop to find the empty number that is going to be used which is "i"
-    for i in range(1, max(List2)):
-        if i not in List2: break
+    for i in range(1, max(List2, default=0)+2):
+        if i not in List2:
+            break
 
     # Add the zeros
     Number = f"{i:04}"

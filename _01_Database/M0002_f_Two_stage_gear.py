@@ -26,5 +26,5 @@ import numpy as np
 
 
 def M0002_f_Two_stage_gear(i_1, i_2):
-    i = np.multiply(i_1, i_2)
-    return i
+    i = np.multiply(i_1, i_2).tolist()
+    return [i]
