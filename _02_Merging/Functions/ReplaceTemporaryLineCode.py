@@ -49,7 +49,7 @@ def ReplaceTemporaryLineCode(OldTempoFile, ModelFile, ActualTempoFile, Folder_Ma
     NewFile.write(EndOldT[TemporaryBeginImports:TemporaryFinishImports])
 
     # Importing Model File
-    NewFile.write('from Database.' + ModelV[0:-3])
+    NewFile.write('from _01_Database.' + ModelV[0:-3])
     NewFile.write(' import ' + ModelV[0:-3] + '\n')
 
     # Main Code: Function calls

@@ -95,9 +95,9 @@ def Merging2Python(Model1, Model2, Model3, Folder_Main, Folder_Temporary, Folder
             Python3Writer.write(', ')
 
     # Need to import modules to run the code
-    Python3Writer.write('\tfrom Database.' + Python1[0:-3])
+    Python3Writer.write('\tfrom _01_Database.' + Python1[0:-3])
     Python3Writer.write(' import ' + Python1[0:-3] + '\n')
-    Python3Writer.write('\tfrom Database.' + Python2[0:-3])
+    Python3Writer.write('\tfrom _01_Database.' + Python2[0:-3])
     Python3Writer.write(' import ' + Python2[0:-3] + '\n')
 
     # Functions and Main part
