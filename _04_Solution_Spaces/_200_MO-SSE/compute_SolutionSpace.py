@@ -60,3 +60,36 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
 # a[:] = np.nan
 # dim = np.argwhere(~np.isnan(a[0, :]))
 # print(dim)
+# x = [{}, {}]
+# # x[0] = {}
+# x[0]["name"] = "xyz"
+# x[0]["unit"] = "-"
+# x[0]["dsl"] = [0, 1, 6]
+# x[1]["name"] = "hotdog"
+# x[1]["unit"] = "-"
+# x[1]["dsl"] = [0, 1, 6]
+# x[0].append({"name": [0, 2, 8]})
+# x[0].append({"unit": "-"})
+# x = [{}, {}, {}, {}, {}, {}]
+# design_variables = [
+# 			['z_{11}', '-', 0, 100],
+# 			['z_{12}', '-', 0, 100],
+# 			['z_{21}', '-', 0, 100],
+# 			['z_{22}', '-', 0, 100],
+# 			['n_{in}', '-', 0, 100],
+# 			['T_{in}', '-', 0, 100]
+# 		]
+# # Design variables 2
+# for i in range(0, len(design_variables)):
+# 		x[i]["name"] = design_variables[i][0]
+# 		x[i]["unit"] = design_variables[i][1]
+# 		x[i]["dsl"] = design_variables[i][2]
+# 		x[i]["dsu"] = design_variables[i][3]
+# 		x[i]["l"] = design_variables[i][2]
+# 		x[i]["u"] = design_variables[i][3]
+# print(len(x))
+
+p = [
+			# Text parameters %'Name','Unit',15.6
+		]
+print(max(len(p)))
