@@ -8,8 +8,8 @@ class S0001_x_Simple_Transmission:
 		#            Definitions of variables
 		# --------------------------------------------------
 		self.x = [{}, {}, {}, {}, {}, {}]  # Design variables
-		self.y = [{}, {}, {}, {}, {}, {}, {}]  # Quantities of interest
-		self.p = [{}, {}, {}]
+		self.y = [{}, {}]  # Quantities of interest
+		self.p = []
 		self.index = {}
 		self.samples = {{}}
 		
@@ -57,7 +57,7 @@ class S0001_x_Simple_Transmission:
 
 		# Design variables 2
 		for i in range(0, len(design_variables)):
-			self.x[i]["name"] = design_variables[i][0]
+			self.x[i]['name'] = design_variables[i][0]
 			self.x[i]["unit"] = design_variables[i][1]
 			self.x[i]["dsl"] = design_variables[i][2]
 			self.x[i]["dsu"] = design_variables[i][3]
@@ -67,7 +67,7 @@ class S0001_x_Simple_Transmission:
 		# Quantities of interest
 		quantities_of_interest = [
 			['T_{out}', '-', [0, 0, 1], 0, 200, 1],
-			['n_{out}', '-', [0, 0, 1], 0, 200, 1],
+			['n_{out}', '-', [1, 0, 0], 0, 200, 1]
 		]
 
 		# Quantities of interest 2
@@ -84,7 +84,7 @@ class S0001_x_Simple_Transmission:
 		parameters = [
 			# Text parameters %'Name','Unit',15.6
 		]
-
+		self.p = []
 		# Parameters 2
 		for i in range(0, len(parameters)):
 			self.p[i]["name"] = parameters[i][0]
@@ -115,7 +115,7 @@ class S0001_x_Simple_Transmission:
 
 	def CreateLegend(self, y):
 		legend = ["{\color{green} \ bullet }Good design"]
-		for i in range(0,self.m):
+		for i in range(0, self.m):
 			if self.y[i]["active"] == 1:
 				legend.append("{\color[rgb]{" + self.y[i]["color"] + "]} \ bullet }" + self.y[i]["condition"])
 		return legend

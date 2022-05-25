@@ -16,7 +16,7 @@ def CreatxFile(System_Name_CSV, SampleSize, Folder_Main, Folder_Database, Folder
     Matlabx : Name of the final Matlab file for the XRay tool
     """
     # Importing Modules
-    import re
+    import shutil
     from pathlib import Path
     from Functions.Sequencing.CSV2MatrixAndTables import CSV2MatrixAndTables
     from Functions.Create_x_file.TypeOfVariables import TypeOfVariables
@@ -37,7 +37,7 @@ def CreatxFile(System_Name_CSV, SampleSize, Folder_Main, Folder_Database, Folder
     NDiagram = round(NOutput / 2)
     DiagramList = "["
     for i in range(1, NDiagram + 1):
-        DiagramList = DiagramList + str(i*2-1) + " " + str(i*2)
+        DiagramList = DiagramList + str(i*2-1) + ", " + str(i*2)
     DiagramList = DiagramList + "]"
 
     # Beginning
@@ -48,11 +48,17 @@ def CreatxFile(System_Name_CSV, SampleSize, Folder_Main, Folder_Database, Folder
     PythonWriter.write("\n\t\t# --------------------------------------------------")
     PythonWriter.write("\n\t\t#            Definitions of variables")
     PythonWriter.write("\n\t\t# --------------------------------------------------")
-    PythonWriter.write("\n\t\tself.x = {}  # Design variables")
-    PythonWriter.write("\n\t\tself.y = {}  # Quantities of interest")
-    PythonWriter.write("\n\t\tself.p = {}")
+    PythonWriter.write("\n\t\tself.x = [{}")
+    for i in range(0, len(Input)-1):
+        PythonWriter.write(", {}")
+    PythonWriter.write("]  # Design variables")
+    PythonWriter.write("\n\t\tself.y = [{}")
+    for i in range(0, len(Output)-1):
+        PythonWriter.write(", {}")
+    PythonWriter.write("]  # Quantities of interest")
+    PythonWriter.write("\n\t\tself.p = []")
     PythonWriter.write("\n\t\tself.index = {}")
-    PythonWriter.write("\n\t\tself.samples = {}")
+    PythonWriter.write("\n\t\tself.samples = {{}}")
     PythonWriter.write("\n\t\t")
     PythonWriter.write("\n\t\t# --------------------------------------------------")
     PythonWriter.write("\n\t\t#            Input variables")
@@ -75,18 +81,143 @@ def CreatxFile(System_Name_CSV, SampleSize, Folder_Main, Folder_Database, Folder
     PythonWriter.write("\n\t\t")
     PythonWriter.write("\n\t\tself.legend = ''  # Legend text")
     PythonWriter.write("\n\t\t")
+    # ------------------------ Need to edit this save data------------------------------
     PythonWriter.write("\n\t\tself.save_as = '" + Pythons + "'  # Filename of saved file")
     PythonWriter.write("\n\t\t")
 
-    # Methods
+    # Methods/ Functions
+    PythonWriter.write("\n\t# --------------------------------------------------")
+    PythonWriter.write("\n\t#            Functions")
+    PythonWriter.write("\n\t# --------------------------------------------------")
+    PythonWriter.write("\n\tdef " + Pythonx[:-3] + "(self):")
+    # ------------------------ Need to try loading saved data ----------------------------------
+    PythonWriter.write("\n\t\tself.sampleSize = " + str(SampleSize))
+    PythonWriter.write("\n\t\t")
+    PythonWriter.write("\n\t\tself.diagram = " + DiagramList + "  # Choosing variables to be shown in the diagrams")
+    PythonWriter.write("\n\t\t")
+    PythonWriter.write("\n\t\t# Design Variables")
+    PythonWriter.write("\n\t\tdesign_variables = [")
+    for i in range(0, NInput):
+        for j in range(0, len(MatVar)):
+            if Input[i] == MatVar[j]:
+                TypeOfTheVar = MatType[j]
+        PythonWriter.write("\n\t\t\t['" + Input[i] + "', '" + TypeOfTheVar + "',  0, 100]")
+        if i != NInput-1:
+            PythonWriter.write(",")
+    PythonWriter.write("\n\t\t]")
+    PythonWriter.write("\n\t\t")
+    # Design variables
+    PythonWriter.write("\n\t\t# Design variables 2")
+    PythonWriter.write("\n\t\tfor i in range(0, len(design_variables)):")
+    PythonWriter.write('\n\t\t\tself.x[i]["name"] = design_variables[i][0]')
+    PythonWriter.write('\n\t\t\tself.x[i]["unit"] = design_variables[i][1]')
+    PythonWriter.write('\n\t\t\tself.x[i]["dsl"] = design_variables[i][2]')
+    PythonWriter.write('\n\t\t\tself.x[i]["dsu"] = design_variables[i][3]')
+    PythonWriter.write('\n\t\t\tself.x[i]["l"] = design_variables[i][2]')
+    PythonWriter.write('\n\t\t\tself.x[i]["u"] = design_variables[i][3]')
+    PythonWriter.write("\n\t\t")
+    PythonWriter.write("\n\t\t# Quantities of interest")
+    PythonWriter.write("\n\t\tquantities_of_interest = [")
+    for i in range(0, NOutput):
+        for j in range(0, len(MatVar)):
+            if Output[i] == MatVar[j]:
+                TypeOfTheVar = MatType[j]
+                ColorOfTheVar = MatColor[j]
+        rgb = [1, 0, 0]
+        # ------------------------ Need to try getting RGB colours list ----------------------------------
+        PythonWriter.write("\n\t\t\t['" + Output[i] + "', '" + TypeOfTheVar + "', " + str(rgb) + ",  0, 200, 1]")
+        if i != NOutput-1:
+            PythonWriter.write(",")
+    PythonWriter.write("\n\t\t]")
+    PythonWriter.write("\n\t\t")
+    # Quantities of interest
+    PythonWriter.write("\n\t\t# Quantities of interest 2")
+    PythonWriter.write("\n\t\tfor i in range(0, len(quantities_of_interest)):")
+    PythonWriter.write('\n\t\t\tself.y[i]["name"] = quantities_of_interest[i][0]')
+    PythonWriter.write('\n\t\t\tself.y[i]["unit"] = quantities_of_interest[i][1]')
+    PythonWriter.write('\n\t\t\tself.y[i]["color"] = quantities_of_interest[i][2]')
+    PythonWriter.write('\n\t\t\tself.y[i]["l"] = quantities_of_interest[i][3]')
+    PythonWriter.write('\n\t\t\tself.y[i]["u"] = quantities_of_interest[i][4]')
+    PythonWriter.write('\n\t\t\tself.y[i]["active"] = quantities_of_interest[i][5]')
+    PythonWriter.write('\n\t\t\tself.y[i]["condition"] = "Violating " + quantities_of_interest[i][0]')
+    PythonWriter.write("\n\t\t")
+    # Parameters
+    PythonWriter.write("\n\t\t# Parameters")
+    PythonWriter.write("\n\t\tparameters = [")
+    PythonWriter.write("\n\t\t\t# Text parameters %'Name','Unit',15.6")
+    # For now this is empty
+    parameters = []
+    PythonWriter.write("\n\t\t]")
+    PythonWriter.write("\n\t\tself.p = [")
+    for i in range(0, len(parameters)-1):
+        PythonWriter.write("{}, ")
+    if len(parameters) > 0:
+        print("{}")
+    PythonWriter.write("]")
+    PythonWriter.write("\n\t\t# Parameters 2")
+    PythonWriter.write("\n\t\tfor i in range(0, len(parameters)):")
+    PythonWriter.write('\n\t\t\tself.p[i]["name"] = parameters[i][0]')
+    PythonWriter.write('\n\t\t\tself.p[i]["unit"] = parameters[i][1]')
+    PythonWriter.write('\n\t\t\tself.p[i]["value"] = parameters[i][2]')
+    PythonWriter.write("\n\t\t")
 
+    # Marker size
+    PythonWriter.write("\n\t\t# Marker size of samples")
+    PythonWriter.write('\n\t\tself.samples["marker"]["size"] = 10')
+    PythonWriter.write('\n\t\tself.samples["marker"]["type"] = "."')
+    PythonWriter.write("\n\t\tself.m = len(self.y)")
+    PythonWriter.write("\n\t\tself.d = len(self.x)")
+    PythonWriter.write("\n\t\tself.np = len(self.p)")
+    PythonWriter.write("\n\t\t")
+    PythonWriter.write("\n\t\tself.legend = self.CreateLegend(self.y)  # Legende erstellen vereinfacht durch Steger")
+    PythonWriter.write("\n\t\t")
+    PythonWriter.write("\n\t\tself.k = 0")
+    PythonWriter.write("\n\t\tself.b = 0")
+    PythonWriter.write("\n\t\t")
 
+    # System response Function
+    PythonWriter.write("\n\t# Calculates system response")
+    PythonWriter.write("\n\tdef SystemResponse(self, x):")
+    PythonWriter.write("\n\t\t# Importing modules")
+    PythonWriter.write("\n\t\tfrom " + Folder_Merging[1:] + ".Systems.")
+    PythonWriter.write(Pythonf[:-3] + " import " + Pythonf[:-3])
+    PythonWriter.write("\n\t\t")
+    PythonWriter.write("\n\t\t# Function:")
+    PythonWriter.write("\n\t\ty = [[]")
+    for i in range(0, len(Output)-1):
+        PythonWriter.write(", []")
+    PythonWriter.write("]")
+    PythonWriter.write("\n\t\t[y[")
+    for i in range(0, len(Output)):
+        PythonWriter.write(str(i))
+        if i == len(Output)-1:
+            PythonWriter.write("]] = ")
+        else:
+            PythonWriter.write("], y[")
+    PythonWriter.write(Pythonf[:-3])
+    PythonWriter.write("(x[")
+    for i in range(0, len(Input)):
+        PythonWriter.write(str(i))
+        if i == len(Input) - 1:
+            PythonWriter.write("])")
+        else:
+            PythonWriter.write("], x[")
+    PythonWriter.write("\n\t\treturn y")
 
-
-
-
+    # CreateLegend Function
+    PythonWriter.write("\n\t")
+    PythonWriter.write("\n\tdef CreateLegend(self, y):")
+    PythonWriter.write('\n\t\tlegend = ["{\color{green} \ bullet }Good design"]')
+    PythonWriter.write('\n\t\tfor i in range(0, self.m):')
+    PythonWriter.write('\n\t\t\tif self.y[i]["active"] == 1:')
+    PythonWriter.write('\n\t\t\t\tlegend.append("{\color[rgb]{" + self.y[i]["color"]')
+    PythonWriter.write(' + "]} \ bullet }" + self.y[i]["condition"])')
+    PythonWriter.write('\n\t\treturn legend')
+    PythonWriter.write('\n\t\t')
 
     PythonWriter.close()
-    Pythonx = "Not yet done"
+
+    # Moving the x file to Design Problems Folder
+    shutil.move(Path(Folder_Main+Folder_Systems +"/"+ Pythonx), Path(Folder_Main+Folder_Design_Problems +"/"+ Pythonx))
 
     return Pythonx
