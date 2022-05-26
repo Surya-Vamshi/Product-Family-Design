@@ -3,43 +3,43 @@
 
 # Code:
 class S0001_x_Simple_Transmission:
-	def __init__(self):
-		# --------------------------------------------------
-		#            Definitions of variables
-		# --------------------------------------------------
-		self.x = [{}, {}, {}, {}, {}, {}]  # Design variables
-		self.y = [{}, {}]  # Quantities of interest
-		self.p = []
-		self.index = {}
-		self.samples = {{}}
-		
-		# --------------------------------------------------
-		#            Input variables
-		# --------------------------------------------------
-		self.sampleSize = 0  # Number of samples
-		self.diagram = []  # Diagram list
-		
-		self.m = 0  # Number of quantities of interest
-		self.d = 0  # Number of design variables
-		self.np = 0  # Number of parameters
-		self.k = 0  # necessary for plot_m_x
-		self.b = 0  # necessary for writeInputOutput
-		
-		self.good_design_color = 'green'  # Color of good designs
-		
-		# Line definition for solution spaces
-		self.solutionspace_line_color = 'black'
-		self.solutionspace_line_width = 2
-		self.solutionspace_line_type = '--'
-		
-		self.legend = ''  # Legend text
-		
-		self.save_as = 'S0001_s_Simple_Transmission.py'  # Filename of saved file
+
+	# --------------------------------------------------
+	#            Definitions of variables
+	# --------------------------------------------------
+	x = [{}, {}, {}, {}, {}, {}]  # Design variables
+	y = [{}, {}]  # Quantities of interest
+	p = []
+	index = {}
+	samples = {"marker": {}}
+
+	# --------------------------------------------------
+	#            Input variables
+	# --------------------------------------------------
+	sampleSize = 0  # Number of samples
+	diagram = []  # Diagram list
+
+	m = 0  # Number of quantities of interest
+	d = 0  # Number of design variables
+	np = 0  # Number of parameters
+	k = 0  # necessary for plot_m_x
+	b = 0  # necessary for writeInputOutput
+
+	good_design_color = 'green'  # Color of good designs
+
+	# Line definition for solution spaces
+	solutionspace_line_color = 'black'
+	solutionspace_line_width = 2
+	solutionspace_line_type = '--'
+
+	legend = ''  # Legend text
+
+	save_as = 'S0002_s_Simple_Transmission.py'  # Filename of saved file
 
 	# --------------------------------------------------
 	#            Functions
 	# --------------------------------------------------
-	def S0001_x_Simple_Transmission(self):
+	def __init__(self):
 		# Try to load saved data
 		self.sampleSize = 3000
 
@@ -119,8 +119,6 @@ class S0001_x_Simple_Transmission:
 			if self.y[i]["active"] == 1:
 				legend.append("{\color[rgb]{" + self.y[i]["color"] + "]} \ bullet }" + self.y[i]["condition"])
 		return legend
-
-
 
 
 

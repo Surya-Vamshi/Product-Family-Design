@@ -1,3 +1,6 @@
+import importlib
+
+
 def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameters, slider_value):
     """
     Description : This function computes the maximal box shaped solution space of an
@@ -23,9 +26,14 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     """
     # Importing Modules
     from pathlib import Path
+    # import importlib
     import time
     import numpy as np
 
+    module = importlib.import_module("_03_Design_Problems." + problem)
+    problem = getattr(module, problem)
+    p = problem()
+    print(p.x)
     # Converting list to numpy array
     dsl = np.array(dsl)
     dsu = np.array(dsu)
@@ -65,7 +73,7 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
 
 import numpy as np
 NaN = np.nan
-problem_call = 0  # S0002_x_Simple_Transmission Class as variable
+problem_call = "S0002_x_Simple_Transmission"  # S0002_x_Simple_Transmission Class as variable
 weight_call = [1.667, 1.667, 1.667, 1.667, 1.667, 1.667]
 dsl_call = [0, 0, 0, 0, 0, 0]
 dsu_call = [100, 100, 100, 100, 100, 100]
