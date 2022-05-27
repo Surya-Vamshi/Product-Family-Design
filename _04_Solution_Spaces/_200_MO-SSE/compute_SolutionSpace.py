@@ -1,6 +1,3 @@
-import importlib
-
-
 def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameters, slider_value):
     """
     Description : This function computes the maximal box shaped solution space of an
@@ -26,14 +23,14 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     """
     # Importing Modules
     from pathlib import Path
-    # import importlib
+    import importlib
     import time
     import numpy as np
 
     module = importlib.import_module("_03_Design_Problems." + problem)
     problem = getattr(module, problem)
     p = problem()
-    print(p.x)
+
     # Converting list to numpy array
     dsl = np.array(dsl)
     dsu = np.array(dsu)
@@ -42,8 +39,7 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     reqU = np.array(reqU)
     reqL = np.array(reqL)
     weight = np.array(weight)
-
-
+    parameters = np.array(parameters)
 
     # Pre-processing
     dim = sum(np.isnan(parameters[0]))  # Dimension of the problem (number of DVs)
@@ -54,18 +50,51 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     dv_norm = dsu - dsl
     dv_norm_l = dsl
 
-    # # Norming factor for QOIs
-    # qoi_norm = [reqU; reqL]
-    # qoi_norm(qoi_norm == inf) = realmax
-    # qoi_norm(qoi_norm == -inf) = realmax
-    # qoi_norm(qoi_norm == 0) = 1
-    #
-    # # Norming boundaries
-    # l = (l-dv_norm_l)/dv_norm
-    # u = (u-dv_norm_l)/dv_norm
-    # dsl = (dsl-dv_norm_l)/dv_norm
-    # dsu = (dsu-dv_norm_l)/dv_norm
+    # Norming factor for QOIs
+    qoi_norm = np.append(reqU, reqL)
+    for i in range(0, len(qoi_norm)):
+        if qoi_norm[i] == "inf":  # might change based on inf value
+            qoi_norm[i] = np.iinfo(reqL.dtype).max
+        if qoi_norm[i] == "-inf":
+            qoi_norm[i] = - np.iinfo(reqL.dtype).max
+        if qoi_norm[i] == 0:
+            qoi_norm[i] = 1
 
+    # Norming boundaries
+    l = (l-dv_norm_l)/dv_norm
+    u = (u-dv_norm_l)/dv_norm
+    dsl = (dsl-dv_norm_l)/dv_norm
+    dsu = (dsu-dv_norm_l)/dv_norm
+
+    """Set first candidate box"""
+    # Find best starting point x_init by sampling through the DS
+    # Monte Carlo Sampling
+    dv_sample = (u - l)*np.random.rand(1000, dim) + l
+
+    par_sample = np.transpose((parameters[1, :] - parameters[0, :])*np.random.rand(1000, p.d) + parameters[0, :])
+
+    # Evaluate System Response
+    x_sample = dv_sample * dv_norm + dv_norm_l
+    for i in range(0, len(ind_parameters)):  # Need to check for error
+        if ind_parameters[i] > len(x_sample[0, :]):
+            x_sample = np.append(x_sample[:, 0:ind_parameters(i) - 1], par_sample[:, ind_parameters[i]])
+        elif ind_parameters[i] == 1:
+            x_sample = np.append(par_sample[:, ind_parameters(i)], x_sample[:, ind_parameters[i]:])
+        else:
+            x_sample = np.append(x_sample[:, 0:ind_parameters(i) - 1], par_sample[:, ind_parameters[i]], x_sample[:, ind_parameters[i]:])
+
+    y_sample = np.transpose(p.SystemResponse(np.transpose(x_sample)))
+    c = np.append(y_sample - reqU, reqL - y_sample, axis=1)/qoi_norm
+
+    feasible = np.all(c <= 0, axis=1)
+
+    # Get best point of initial sampling to start search for initial good point
+    max_c = np.amax(c, axis=1)
+    ind_c_min = np.argmax(max_c)
+    x_init = dv_sample[ind_c_min, :]
+    print(x_init)
+
+    # End
     [dv_par_box, exitflag] = [0, 0]
     time_taken = time.time() - time_start
 
@@ -74,7 +103,7 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
 import numpy as np
 NaN = np.nan
 problem_call = "S0002_x_Simple_Transmission"  # S0002_x_Simple_Transmission Class as variable
-weight_call = [1.667, 1.667, 1.667, 1.667, 1.667, 1.667]
+weight_call = [0.1667, 0.1667, 0.1667, 0.1667, 0.1667, 0.1667]
 dsl_call = [0, 0, 0, 0, 0, 0]
 dsu_call = [100, 100, 100, 100, 100, 100]
 l_call = [0, 0, 0, 0, 0, 0]
@@ -87,9 +116,9 @@ slider_value_call = 0.5
 [dv_par_box, exitflag, time_taken] = compute_SolutionSpace(problem_call, weight_call, dsl_call, dsu_call, l_call,
                                                            u_call, reqU_call, reqL_call, parameters_call,
                                                            slider_value_call)
-print("dv_par_box = " + str(dv_par_box))
-print("exitflag = " + str(exitflag))
-print("time_taken = " + str(time_taken))
+# print("dv_par_box = " + str(dv_par_box))
+# print("exitflag = " + str(exitflag))
+# print("time_taken = " + str(time_taken))
 # Actual Result:
 # dv_par_box = [[10.5977, 51.0075]
 #               [13.9578, 59.1029]
