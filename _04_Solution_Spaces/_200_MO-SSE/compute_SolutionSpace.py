@@ -92,7 +92,18 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     max_c = np.amax(c, axis=1)
     ind_c_min = np.argmax(max_c)
     x_init = dv_sample[ind_c_min, :]
-    print(x_init)
+
+    """
+    Need to add code from matlab file from line 76 to 91
+    """
+    if not any(feasible):
+        print("Need to add this line of code")
+    else:
+        x0 = x_init
+    x = [[0, 0, 0, 0, 0, 0],
+         [5, 0, 0, 0, 0, 0]]
+    x = np.array(x)
+    print(x[1,0])
 
     # End
     [dv_par_box, exitflag] = [0, 0]
