@@ -15,7 +15,7 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget
 
-from _100_design_space_projection.gui_main import gui_main
+from _100_design_space_projection.gui_main import *
 
 # User can change these directories' location if needed.
 Folder_Design_Problems = str(Path("/_03_Design_Problems"))
@@ -31,7 +31,7 @@ for name in files:
         entries.append(name[:-3])
 entries.sort()
 
-class MainWindow(QDialog):
+class DesignProblems(QDialog):
     def __init__(self):
         super().__init__()
 
@@ -73,13 +73,13 @@ class MainWindow(QDialog):
 
         btn1 = QPushButton("Run", self)
         btn1.setGeometry(200, 340, 80, 40)
-        btn1.clicked.connect(self.run_merge)
+        btn1.clicked.connect(self.run_gui_main)
 
         btn2 = QPushButton("Quit", self)
         btn2.setGeometry(300, 340, 80, 40)
         btn2.clicked.connect(QApplication.instance().quit)
 
-    def run_merge(self):
+    def run_gui_main(self):
         selected_list = self.table1.selectedItems()
         Problem = []
         for item in selected_list:
@@ -92,6 +92,7 @@ class MainWindow(QDialog):
                 self.error1.setGeometry(20, 280, 360, 40)
                 self.error1.setStyleSheet("border-radius: 5px; background-color: #D92000")
                 self.error1.setAlignment(Qt.AlignCenter)
+                self.error1.setHidden(False)
             else:
                 self.error1.setHidden(True)
         elif num != 1:
@@ -99,15 +100,17 @@ class MainWindow(QDialog):
             self.error1.setGeometry(20, 280, 360, 40)
             self.error1.setStyleSheet("border-radius: 5px; background-color: #D92000")
             self.error1.setAlignment(Qt.AlignCenter)
+            self.error1.setHidden(False)
         else:
             self.error1.setHidden(True)
 
             gui_main(Problem)
+
             print("Done")
 
 
 app = QApplication(sys.argv)
-w = MainWindow()
-w.show()
+w1 = DesignProblems()
+w1.show()
 sys.exit(app.exec())
 
