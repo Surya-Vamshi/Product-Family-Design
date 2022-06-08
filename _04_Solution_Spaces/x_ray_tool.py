@@ -73,13 +73,13 @@ class DesignProblems(QDialog):
 
         btn1 = QPushButton("Run", self)
         btn1.setGeometry(200, 340, 80, 40)
-        btn1.clicked.connect(self.run_gui_main)
+        btn1.clicked.connect(self.call_user_interface)
 
         btn2 = QPushButton("Quit", self)
         btn2.setGeometry(300, 340, 80, 40)
         btn2.clicked.connect(QApplication.instance().quit)
 
-    def run_gui_main(self):
+    def call_user_interface(self):
         selected_list = self.table1.selectedItems()
         Problem = []
         for item in selected_list:
@@ -104,7 +104,8 @@ class DesignProblems(QDialog):
         else:
             self.error1.setHidden(True)
 
-            gui_main(Problem)
+            self.w2 = gui_main(Problem[0])
+            self.w2.show()
 
             print("Done")
 

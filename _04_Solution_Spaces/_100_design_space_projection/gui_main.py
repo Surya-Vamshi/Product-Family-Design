@@ -7,41 +7,43 @@ The function should provide a user interface:
 import os
 import string
 import sys
+import importlib
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QPoint
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget
 
 # Do not touch
-class UserInterface(QDialog):
-    def __init__(self):
+class gui_main(QDialog):
+    def __init__(self, problem):
         super().__init__()
 
+        # Importing problem x-ray file
+        module = importlib.import_module("_03_Design_Problems." + problem)
+        problem = getattr(module, problem)
+        self.p = problem()
+
         # window title, icon and geometry
-        self.setGeometry(500, 200, 400, 400)
-        qtRectangle = self.frameGeometry()
-        self.move(qtRectangle.bottomLeft())
-        self.setFixedSize(400, 400)
+        screensize = QGuiApplication.primaryScreen().availableSize()
+        width = screensize.width()
+        height = screensize.height()
+        self.setGeometry(500, 200, width, 250)
+        self.setFixedSize(width, 250)
+        self.move(QPoint(0, height-290))
         self.setWindowTitle("User Interface")
-        print("No window")
-        self.show()
-        btn1 = QPushButton("Run", self)
-        btn1.setGeometry(200, 340, 80, 40)
-        btn1.clicked.connect(self.run_merge)
+        print("GUI is called " + str(problem))
+        print("D = ", self.p.d)
+        print("M = ", self.p.m)
+        print("NP = ", self.p.np)
 
-    def run_merge(self):
-        self.error1.setText("Please a Select Model")
-        self.error1.setGeometry(20, 280, 360, 40)
-        self.error1.setStyleSheet("border-radius: 5px; background-color: #D92000")
-        self.error1.setAlignment(Qt.AlignCenter)
-        self.error1.setHidden(False)
-
+    def run_gui_main(self):
         print("Need to call SolutionSpace")
 
 
-def gui_main(problem):
-    w = UserInterface()
-    w.show()
-    print("GUI is called " + str(problem[0]))
+app = QApplication(sys.argv)
+w2 = gui_main("S0001_x_Simple_Transmission")
+w2.show()
+w2.run_gui_main()
+sys.exit(app.exec())
