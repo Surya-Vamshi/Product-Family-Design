@@ -10,7 +10,7 @@ Number of sample point should be 300 by default.
 # Importing Modules
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtCore import Qt
 import sys
 import os
@@ -29,9 +29,7 @@ SampleSize = 300  # Default
 
 # Do not touch
 # Getting available models from database
-os.chdir("../")
-Folder_Main = str(Path(os.getcwd()))
-files = os.listdir(Folder_Main + Folder_Database)
+files = os.listdir(str(Path(".." + Folder_Database)))
 available_Models = []
 for name in files:
     if name.startswith("M") and name.endswith(".csv"):
@@ -46,7 +44,11 @@ class MainWindow(QDialog):
         self.setGeometry(500, 200, 400, 500)
         self.setFixedSize(400, 500)
         self.setWindowTitle("Merging System Model")
-        self.setWindowIcon(QIcon('icon.png'))
+        self.setWindowIcon(QIcon(str(Path('../icon.png'))))
+        centerPoint = QGuiApplication.primaryScreen().availableGeometry().center()
+        qtRectangle = self.frameGeometry()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
 
         models = available_Models
 
@@ -89,6 +91,8 @@ class MainWindow(QDialog):
         btn2.setGeometry(300, 440, 80, 40)
         btn2.clicked.connect(QApplication.instance().quit)
 
+        self.show()
+
     def run_merge(self):
         selected_list = self.table1.selectedItems()
         CODEs = []
@@ -124,6 +128,5 @@ class MainWindow(QDialog):
 
 app = QApplication(sys.argv)
 w = MainWindow()
-w.show()
 sys.exit(app.exec())
 
