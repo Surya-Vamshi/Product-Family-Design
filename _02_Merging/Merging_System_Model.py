@@ -31,6 +31,7 @@ SampleSize = 300  # Default
 
 # Do not touch
 # Getting available models from database
+Folder_Main = os.path.dirname(os.getcwd())
 files = os.listdir(str(Path(".." + Folder_Database)))
 available_Models = []
 for name in files:

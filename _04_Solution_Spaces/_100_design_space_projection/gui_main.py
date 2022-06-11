@@ -15,7 +15,7 @@ from PySide6.QtCore import Qt, QPoint, QRect
 from PySide6.QtGui import QGuiApplication, QIcon, QFont, QIntValidator
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget, QApplication, QMainWindow, QMenuBar, QSizePolicy,\
-    QStatusBar, QTabWidget, QWidget
+    QStatusBar, QTabWidget, QWidget, QGridLayout, QSlider, QScrollArea
 
 # Do not touch
 class gui_main(QDialog):
@@ -44,6 +44,8 @@ class gui_main(QDialog):
         # Run Button and Sample Size
         self.update_button = QPushButton("Update", self)
         self.update_button.setGeometry(QRect(500, 60, 120, 35))
+        self.update_button.setStyleSheet("border-radius: 5px; background-color : #66CC00; border-style: outset;"
+                                         "border-width: 1px; border-color: black;")
         self.update_button.clicked.connect(self.update_values)
 
         self.label_sample_size = QLabel("Sample Size:", self)
@@ -52,22 +54,64 @@ class gui_main(QDialog):
         font.setPointSize(10)
         self.label_sample_size.setFont(font)
 
-        self.sample_size_input = QLineEdit("300", self)
+        self.sample_size_input = QLineEdit(str(self.sample_size), self)
         self.onlyInt = QIntValidator()
         self.sample_size_input.setValidator(self.onlyInt)
         self.sample_size_input.setGeometry(QRect(500, 20, 120, 30))
 
         # Main Tab Windows
         self.tabWidget = QTabWidget(self)
-        self.tabWidget.setObjectName("tabWidget")
-        self.tabWidget.setGeometry(QRect(10, 100, 0.33*width - 20, 401))
+        self.tabWidget.setGeometry(QRect(10, 100, 0.33*width - 20, 400))
         self.DV = QWidget()
         self.DV.setObjectName("DV")
         self.DV.setEnabled(True)
         self.tabWidget.addTab(self.DV, "Design Variables")
         self.QOI_P = QWidget()
-        self.QOI_P.setObjectName("QOI_P")
-        self.tabWidget.addTab(self.QOI_P, "Quantities of Interest & Parameters")
+        self.tabWidget.addTab(self.QOI_P, "Quantities of Interest and Parameters")
+        self.tabWidget.setFont(font)
+
+        # Design Variables Tab
+        self.DV_scrollArea = QScrollArea(self.DV)
+        # self.DV_scrollArea.setGeometry(QRect(10, 10, 0.33*width - 40, 60))
+        self.DV_scrollArea.move(10, 10)
+        self.DV_scrollArea.setFixedWidth(0.33*width - 40)
+        self.DV_scrollArea.setMaximumHeight(60)
+        self.DV_scrollArea.setWidgetResizable(True)
+        self.DV_scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.DV_scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+        self.DV_Grid = QGridLayout(self.DV_scrollArea)
+        # self.DV_scrollArea.setWidget(self.DV)
+        self.DV_Grid.setContentsMargins(0, 0, 0, 0)
+        font.setBold(True)
+
+        self.DV_Header_1 = QLabel("X", self.DV)
+        self.DV_Header_1.setFont(font)
+        self.DV_Grid.addWidget(self.DV_Header_1, 0, 0, 1, 1)
+        self.DV_Header_2 = QLabel("X", self.DV)
+        self.DV_Header_2.setFont(font)
+        self.DV_Grid.addWidget(self.DV_Header_2, 0, 1, 1, 1)
+        self.DV_Header_3 = QLabel("X", self.DV)
+        self.DV_Header_3.setFont(font)
+        self.DV_Grid.addWidget(self.DV_Header_3, 0, 2, 1, 1)
+
+
+        self.name_1 = QLabel("X", self.DV_scrollArea)
+        self.name_1.setFont(font)
+        self.DV_Grid.addWidget(self.name_1, 1, 1, 1, 1)
+
+        self.pushButton_2 = QPushButton(self.DV_scrollArea)
+        self.DV_Grid.addWidget(self.pushButton_2, 1, 2, 1, 1)
+
+        self.pushButton_3 = QPushButton(self.DV_scrollArea)
+        self.DV_Grid.addWidget(self.pushButton_3, 2, 0, 1, 1)
+
+        self.name_2 = QLabel("Name", self.DV_scrollArea)
+        self.DV_Grid.addWidget(self.name_2, 1, 0, 1, 1)
+
+        self.horizontalSlider = QSlider(self.DV_scrollArea)
+        self.horizontalSlider.setOrientation(Qt.Horizontal)
+        self.DV_Grid.addWidget(self.horizontalSlider, 2, 1, 1, 2)
 
 
 
@@ -91,5 +135,5 @@ myappid = 'mycompany.myproduct.subproduct.version'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 app = QApplication(sys.argv)
-w2 = gui_main("S0001_x_Simple_Transmission")
+w2 = gui_main("S0002_x_Simple_Transmission")
 sys.exit(app.exec())
