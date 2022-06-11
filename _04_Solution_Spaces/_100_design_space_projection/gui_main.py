@@ -11,7 +11,7 @@ import importlib
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QPoint
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget
 
@@ -28,15 +28,21 @@ class gui_main(QDialog):
         # window title, icon and geometry
         screensize = QGuiApplication.primaryScreen().availableSize()
         width = screensize.width()
-        height = screensize.height()
-        self.setGeometry(500, 200, width, 250)
-        self.setFixedSize(width, 250)
-        self.move(QPoint(0, height-290))
+        height = screensize.height() - 40
+        self.setGeometry(500, 200, 0.33*width, height)
+        self.setFixedSize(0.33*width, height)
+        self.move(QPoint(0.67*width, 0))
         self.setWindowTitle("User Interface")
+        self.setWindowIcon(QIcon(str(Path('../../icon.png'))))
+
+
+
         print("GUI is called " + str(problem))
         print("D = ", self.p.d)
         print("M = ", self.p.m)
         print("NP = ", self.p.np)
+
+        self.show()
 
     def run_gui_main(self):
         print("Need to call SolutionSpace")
@@ -44,6 +50,4 @@ class gui_main(QDialog):
 
 app = QApplication(sys.argv)
 w2 = gui_main("S0001_x_Simple_Transmission")
-w2.show()
-w2.run_gui_main()
 sys.exit(app.exec())
