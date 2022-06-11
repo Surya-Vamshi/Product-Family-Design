@@ -8,14 +8,16 @@ Number of sample point should be 300 by default.
 """
 
 # Importing Modules
+import os
+import sys
+import string
+import ctypes
+from pathlib import Path
+
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget
-from PySide6.QtGui import QGuiApplication, QIcon
-from PySide6.QtCore import Qt
-import sys
-import os
-import string
-from pathlib import Path
 
 from Functions.System_XRay_From_Models import System_XRay_From_Models
 
@@ -35,6 +37,7 @@ for name in files:
     if name.startswith("M") and name.endswith(".csv"):
         available_Models.append(name[:-4])
 available_Models.sort()
+
 
 class MainWindow(QDialog):
     def __init__(self):
@@ -126,7 +129,10 @@ class MainWindow(QDialog):
             print("Python file after Merging is saved as " + Pythonx)
 
 
+# Setting up same icon to show on the task bar
+myappid = 'mycompany.myproduct.subproduct.version'
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
 app = QApplication(sys.argv)
 w = MainWindow()
 sys.exit(app.exec())
-

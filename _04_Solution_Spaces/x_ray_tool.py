@@ -6,12 +6,13 @@ The function should provide a user interface with two callbacks:
 """
 # Importing Modules
 import os
-import string
 import sys
+import string
+import ctypes
 from pathlib import Path
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QGuiApplication
+from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget
 
@@ -22,9 +23,7 @@ Folder_Design_Problems = str(Path("/_03_Design_Problems"))
 
 # Do not touch
 # Getting available models from database
-os.chdir("../")
-Folder_Main = str(Path(os.getcwd()))
-files = os.listdir(Folder_Main + Folder_Design_Problems)
+files = os.listdir(str(Path(".." + Folder_Design_Problems)))
 entries = []
 for name in files:
     if name.startswith("S") and name.endswith(".py"):
@@ -43,7 +42,7 @@ class DesignProblems(QDialog):
         self.move(qtRectangle.topLeft())
         self.setFixedSize(400, 400)
         self.setWindowTitle("Choose Design Problem")
-        # self.setWindowIcon(QIcon('icon.png'))
+        self.setWindowIcon(QIcon(str(Path('../icon.png'))))
 
         models = entries
 
@@ -105,10 +104,12 @@ class DesignProblems(QDialog):
             self.error1.setHidden(True)
 
             self.w2 = gui_main(Problem[0])
-            self.w2.show()
 
             print("Done")
 
+# Setting up same icon to show on the task bar
+myappid = 'mycompany.myproduct.subproduct.version'
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 app = QApplication(sys.argv)
 w1 = DesignProblems()
