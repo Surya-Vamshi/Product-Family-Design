@@ -72,14 +72,15 @@ class gui_main(QDialog):
 
         # Design Variables Tab
         self.DV_toolboxmain = QToolBox(self.DV)
-        self.DV_toolboxmain.setGeometry(QRect(10, 10, 0.33*width - 40, 100))
+        DV_Grid_Width = 0.33 * width - 40
+        self.DV_toolboxmain.setGeometry(QRect(10, 10, DV_Grid_Width, 350))
         self.DV_toolbox = QWidget()
 
         self.DV_Grid = QGridLayout(self.DV_toolbox)
         self.DV_Grid.setSpacing(10)
         self.DV_Grid.setObjectName(u"DV_Grid")
         self.DV_Grid.setSizeConstraint(QLayout.SetFixedSize)
-        self.DV_Grid.setContentsMargins(5, 5, 5, 5)
+        # self.DV_Grid.setContentsMargins(5, 5, 25, 25)
         font.setBold(True)
 
         # Headings of the Design variable inputs
@@ -89,39 +90,76 @@ class gui_main(QDialog):
         DV_Header2 = QLabel("Unit", self.DV)
         DV_Header2.setFont(font)
         self.DV_Grid.addWidget(DV_Header2, 0, 1, 1, 1)
-        DV_Header3 = QLabel("DS Lower Limit", self.DV)
+        DV_Header3 = QLabel("DS Lower\nLimit", self.DV)
+        DV_Header3.setAlignment(Qt.AlignCenter)
         DV_Header3.setFont(font)
         self.DV_Grid.addWidget(DV_Header3, 0, 2, 1, 1)
         DV_Header4 = QLabel("Range", self.DV)
         DV_Header4.setFont(font)
         DV_Header4.setAlignment(Qt.AlignCenter)
+        DV_Header4.setFixedWidth(DV_Grid_Width*0.4)
         self.DV_Grid.addWidget(DV_Header4, 0, 3, 1, 2)
-        DV_Header5 = QLabel("DS Upper Limit", self.DV)
+        DV_Header5 = QLabel("DS Upper\nLimit", self.DV)
+        DV_Header5.setAlignment(Qt.AlignCenter)
         DV_Header5.setFont(font)
         self.DV_Grid.addWidget(DV_Header5, 0, 5, 1, 1)
 
 
         # Generating a table with design variables as per X-ray file
-        self.name_1 = QLabel("X", self.DV_toolbox)
-        self.name_1.setFont(font)
-        self.DV_Grid.addWidget(self.name_1, 1, 1, 1, 1)
+        x_size = len(self.p.x)
+        for i in range(0, x_size):
+            DV_name = QLabel(self.p.x[i]["name"])
+            DV_name.setFixedWidth(DV_Grid_Width*0.175)
+            self.DV_Grid.addWidget(DV_name, 2*i+1, 0, 2, 1)
+            setattr(self.DV_Grid, self.p.x[i]["name"], DV_name)
 
-        self.DS_lower_1 = QLineEdit(str(self.p.x[0]["dsl"]), self)
-        self.DS_lower_1.setValidator(self.onlyDouble)
-        # self.DS_lower_1.setMaximumWidth(50)
-        self.DV_Grid.addWidget(self.DS_lower_1, 1, 2, 1, 1)
+        for i in range(0, x_size):
+            DV_unit = QLabel(self.p.x[i]["unit"])
+            DV_unit.setFixedWidth(DV_Grid_Width*0.075)
+            self.DV_Grid.addWidget(DV_unit, 2*i+1, 1, 2, 1)
+            setattr(self.DV_Grid, "unit" + str(i), DV_unit)
 
-        self.horizontalSlider = QSlider(self.DV_toolbox)
-        self.horizontalSlider.setOrientation(Qt.Horizontal)
-        self.DV_Grid.addWidget(self.horizontalSlider, 2, 1, 1, 2)
+        for i in range(0, x_size):
+            DV_dsl = QLineEdit(str(self.p.x[i]["dsl"]))
+            DV_dsl.setMaximumWidth(DV_Grid_Width*0.1)
+            self.DV_Grid.addWidget(DV_dsl, 2*i+1, 2, 2, 1)
+            setattr(self.DV_Grid, "dsl" + str(i), DV_dsl)
 
-        # Testing For loop
-        print(len(self.p.y))
+        for i in range(0, x_size):
+            DV_l = QLineEdit(str(self.p.x[i]["l"]))
+            DV_l.setMaximumWidth(DV_Grid_Width*0.15)
+            self.DV_Grid.addWidget(DV_l, 2*i+1, 3, 1, 1)
+            setattr(self.DV_Grid, "l" + str(i), DV_l)
 
-        # self.DV_Grid.setRowMinimumHeight(0, 50)
-        # self.DV_Grid.setRowMinimumHeight(1, 50)
-        self.DV_Grid.setColumnMinimumWidth(0, 100)
-        self.DV_Grid.setColumnMinimumWidth(1, 50)
+        for i in range(0, x_size):
+            DV_range = QSlider()
+            DV_range.setOrientation(Qt.Horizontal)
+            # DV_range.
+            DV_range.setMaximumWidth(DV_Grid_Width*0.5)
+            self.DV_Grid.addWidget(DV_range, 2*i+2, 3, 1, 2)
+            setattr(self.DV_Grid, "range" + str(i), DV_range)
+
+        for i in range(0, x_size):
+            DV_u = QLineEdit(str(self.p.x[i]["u"]))
+            DV_u.setMaximumWidth(DV_Grid_Width*0.15)
+            self.DV_Grid.addWidget(DV_u, 2*i+1, 4, 1, 1)
+            setattr(self.DV_Grid, "u" + str(i), DV_u)
+
+        for i in range(0, x_size):
+            DV_dsu = QLineEdit(str(self.p.x[i]["dsu"]))
+            DV_dsu.setMaximumWidth(DV_Grid_Width*0.1)
+            self.DV_Grid.addWidget(DV_dsu, 2*i+1, 5, 2, 1)
+            setattr(self.DV_Grid, "dsu" + str(i), DV_dsu)
+
+        test = getattr(self.DV_Grid, self.p.x[0]["name"])
+        test.setText("Z_2222")
+
+        # Setting dimensions for the Design Variable table
+        for i in range(0, len(self.p.x)):
+            self.DV_Grid.setRowMinimumHeight(2*i+1, 25)
+            self.DV_Grid.setRowMinimumHeight(2*i+2, 25)
+
+
 
 
         self.DV_toolboxmain.addItem(self.DV_toolbox, "Select the Design Variable values as per requirement:")
