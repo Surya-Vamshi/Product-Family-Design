@@ -84,11 +84,29 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>571</width>
+          <width>1160</width>
           <height>221</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="DV_Grid">
+        <layout class="QGridLayout" name="DV_Grid" rowminimumheight="50,50" columnminimumwidth="0,0,0">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetFixedSize</enum>
+         </property>
+         <property name="leftMargin">
+          <number>5</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>5</number>
+         </property>
+         <property name="bottomMargin">
+          <number>5</number>
+         </property>
+         <property name="spacing">
+          <number>10</number>
+         </property>
          <item row="0" column="1">
           <widget class="QLineEdit" name="lineEdit_3"/>
          </item>
@@ -125,6 +143,16 @@
      <attribute name="title">
       <string>Tab 2</string>
      </attribute>
+     <widget class="QTableView" name="tableView">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>20</y>
+        <width>351</width>
+        <height>211</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QPushButton" name="pushButton">

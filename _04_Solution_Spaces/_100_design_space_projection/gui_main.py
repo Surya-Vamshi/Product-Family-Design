@@ -12,10 +12,10 @@ import ctypes
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QPoint, QRect
-from PySide6.QtGui import QGuiApplication, QIcon, QFont, QIntValidator
+from PySide6.QtGui import QGuiApplication, QIcon, QFont, QIntValidator, QDoubleValidator
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget, QApplication, QMainWindow, QMenuBar, QSizePolicy,\
-    QStatusBar, QTabWidget, QWidget, QGridLayout, QSlider, QScrollArea
+    QStatusBar, QTabWidget, QWidget, QGridLayout, QSlider, QScrollArea, QLayout, QToolBox
 
 # Do not touch
 class gui_main(QDialog):
@@ -33,7 +33,7 @@ class gui_main(QDialog):
         width = screensize.width()
         height = screensize.height() - 40
         self.setGeometry(500, 200, 0.33*width, height)
-        self.setFixedSize(0.33*width, height)
+        # self.setFixedSize(0.33*width, height)
         self.move(QPoint(0.67*width, 0))
         self.setWindowTitle("User Interface")
         self.setWindowIcon(QIcon(str(Path('../icon.png'))))
@@ -56,6 +56,7 @@ class gui_main(QDialog):
 
         self.sample_size_input = QLineEdit(str(self.sample_size), self)
         self.onlyInt = QIntValidator()
+        self.onlyDouble = QDoubleValidator()
         self.sample_size_input.setValidator(self.onlyInt)
         self.sample_size_input.setGeometry(QRect(500, 20, 120, 30))
 
@@ -63,7 +64,6 @@ class gui_main(QDialog):
         self.tabWidget = QTabWidget(self)
         self.tabWidget.setGeometry(QRect(10, 100, 0.33*width - 20, 400))
         self.DV = QWidget()
-        self.DV.setObjectName("DV")
         self.DV.setEnabled(True)
         self.tabWidget.addTab(self.DV, "Design Variables")
         self.QOI_P = QWidget()
@@ -71,47 +71,61 @@ class gui_main(QDialog):
         self.tabWidget.setFont(font)
 
         # Design Variables Tab
-        self.DV_scrollArea = QScrollArea(self.DV)
-        # self.DV_scrollArea.setGeometry(QRect(10, 10, 0.33*width - 40, 60))
-        self.DV_scrollArea.move(10, 10)
-        self.DV_scrollArea.setFixedWidth(0.33*width - 40)
-        self.DV_scrollArea.setMaximumHeight(60)
-        self.DV_scrollArea.setWidgetResizable(True)
-        self.DV_scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        self.DV_scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.DV_toolboxmain = QToolBox(self.DV)
+        self.DV_toolboxmain.setGeometry(QRect(10, 10, 0.33*width - 40, 100))
+        self.DV_toolbox = QWidget()
 
-        self.DV_Grid = QGridLayout(self.DV_scrollArea)
-        # self.DV_scrollArea.setWidget(self.DV)
-        self.DV_Grid.setContentsMargins(0, 0, 0, 0)
+        self.DV_Grid = QGridLayout(self.DV_toolbox)
+        self.DV_Grid.setSpacing(10)
+        self.DV_Grid.setObjectName(u"DV_Grid")
+        self.DV_Grid.setSizeConstraint(QLayout.SetFixedSize)
+        self.DV_Grid.setContentsMargins(5, 5, 5, 5)
         font.setBold(True)
 
-        self.DV_Header_1 = QLabel("X", self.DV)
-        self.DV_Header_1.setFont(font)
-        self.DV_Grid.addWidget(self.DV_Header_1, 0, 0, 1, 1)
-        self.DV_Header_2 = QLabel("X", self.DV)
-        self.DV_Header_2.setFont(font)
-        self.DV_Grid.addWidget(self.DV_Header_2, 0, 1, 1, 1)
-        self.DV_Header_3 = QLabel("X", self.DV)
-        self.DV_Header_3.setFont(font)
-        self.DV_Grid.addWidget(self.DV_Header_3, 0, 2, 1, 1)
+        # Headings of the Design variable inputs
+        DV_Header1 = QLabel("Name", self.DV)
+        DV_Header1.setFont(font)
+        self.DV_Grid.addWidget(DV_Header1, 0, 0, 1, 1)
+        DV_Header2 = QLabel("Unit", self.DV)
+        DV_Header2.setFont(font)
+        self.DV_Grid.addWidget(DV_Header2, 0, 1, 1, 1)
+        DV_Header3 = QLabel("DS Lower Limit", self.DV)
+        DV_Header3.setFont(font)
+        self.DV_Grid.addWidget(DV_Header3, 0, 2, 1, 1)
+        DV_Header4 = QLabel("Range", self.DV)
+        DV_Header4.setFont(font)
+        DV_Header4.setAlignment(Qt.AlignCenter)
+        self.DV_Grid.addWidget(DV_Header4, 0, 3, 1, 2)
+        DV_Header5 = QLabel("DS Upper Limit", self.DV)
+        DV_Header5.setFont(font)
+        self.DV_Grid.addWidget(DV_Header5, 0, 5, 1, 1)
 
 
-        self.name_1 = QLabel("X", self.DV_scrollArea)
+        # Generating a table with design variables as per X-ray file
+        self.name_1 = QLabel("X", self.DV_toolbox)
         self.name_1.setFont(font)
         self.DV_Grid.addWidget(self.name_1, 1, 1, 1, 1)
 
-        self.pushButton_2 = QPushButton(self.DV_scrollArea)
-        self.DV_Grid.addWidget(self.pushButton_2, 1, 2, 1, 1)
+        self.DS_lower_1 = QLineEdit(str(self.p.x[0]["dsl"]), self)
+        self.DS_lower_1.setValidator(self.onlyDouble)
+        # self.DS_lower_1.setMaximumWidth(50)
+        self.DV_Grid.addWidget(self.DS_lower_1, 1, 2, 1, 1)
 
-        self.pushButton_3 = QPushButton(self.DV_scrollArea)
-        self.DV_Grid.addWidget(self.pushButton_3, 2, 0, 1, 1)
-
-        self.name_2 = QLabel("Name", self.DV_scrollArea)
-        self.DV_Grid.addWidget(self.name_2, 1, 0, 1, 1)
-
-        self.horizontalSlider = QSlider(self.DV_scrollArea)
+        self.horizontalSlider = QSlider(self.DV_toolbox)
         self.horizontalSlider.setOrientation(Qt.Horizontal)
         self.DV_Grid.addWidget(self.horizontalSlider, 2, 1, 1, 2)
+
+        # Testing For loop
+        print(len(self.p.y))
+
+        # self.DV_Grid.setRowMinimumHeight(0, 50)
+        # self.DV_Grid.setRowMinimumHeight(1, 50)
+        self.DV_Grid.setColumnMinimumWidth(0, 100)
+        self.DV_Grid.setColumnMinimumWidth(1, 50)
+
+
+        self.DV_toolboxmain.addItem(self.DV_toolbox, "Select the Design Variable values as per requirement:")
+        ##  Tab thing to make sure
 
 
 
