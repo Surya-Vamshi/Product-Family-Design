@@ -131,8 +131,9 @@ class MainWindow(QDialog):
 
 
 # Setting up same icon to show on the task bar
-myappid = 'mycompany.myproduct.subproduct.version'
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+if sys.platform == "win32":  # Need to check this
+    myappid = 'mycompany.myproduct.subproduct.version'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 app = QApplication(sys.argv)
 w = MainWindow()

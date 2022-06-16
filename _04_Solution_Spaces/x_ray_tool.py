@@ -30,6 +30,7 @@ for name in files:
         entries.append(name[:-3])
 entries.sort()
 
+
 class DesignProblems(QDialog):
     def __init__(self):
         super().__init__()
@@ -107,12 +108,13 @@ class DesignProblems(QDialog):
 
             print("Done")
 
+
 # Setting up same icon to show on the task bar
-myappid = 'mycompany.myproduct.subproduct.version'
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+if sys.platform == "win32":  # Need to check this
+    myappid = 'mycompany.myproduct.subproduct.version'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 app = QApplication(sys.argv)
 w1 = DesignProblems()
 w1.show()
 sys.exit(app.exec())
-
