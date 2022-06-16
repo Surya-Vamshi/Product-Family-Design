@@ -242,15 +242,13 @@ class gui_main(QDialog):
             setattr(self.QOI_P_Grid1, "u" + str(i), QOI_P_u)
 
         for i in range(0, y_size):
-            QOI_P_range = QSlider()
-            dlg = QColorDialog(self)
-            # dlg.exec_()
-            # QOI_P_range.setOrientation(Qt.Horizontal)
-            # # QOI_P_range.
-            # QOI_P_range.setMaximumWidth(QOI_P_Grid_Width * 0.5)
-            # self.QOI_P_Grid1.addWidget(QOI_P_range, i + 1, 3, 1, 2)
-            # setattr(self.QOI_P_Grid1, "range" + str(i), QOI_P_range)
-
+            [r, b, g] = self.p.y[i]["color"]
+            text = "#%02x%02x%02x" % (r, g, b)
+            QOI_P_colorbtn = QPushButton(text)
+            QOI_P_colorbtn.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
+            QOI_P_colorbtn.clicked.connect(self.selectColor)
+            self.QOI_P_Grid1.addWidget(QOI_P_colorbtn, i + 1, 6, 1, 1)
+            setattr(self.QOI_P_Grid1, "color" + str(i), QOI_P_colorbtn)
 
         # Setting dimensions for the Design Variable table
         for i in range(0, y_size):
@@ -277,10 +275,14 @@ class gui_main(QDialog):
         self.show()
 
     def update_values(self):
-        self.sample_size = self.sample_size_input.text()
-        print(self.sample_size)
-        test = getattr(self.DV_Grid, "u1")
-        print(test.text())
+        # self.sample_size = self.sample_size_input.text()
+        # print(self.sample_size)
+        # test = getattr(self.DV_Grid, "u1")
+        # print(test.text())
+        # test = getattr(self.QOI_P_Grid1, "color0")
+        # print(test)
+        print(self.p.y[0]["color"])
+        print(self.p.y[1]["color"])
 
     def run_gui_main(self):
         print("Need to call SolutionSpace")
@@ -290,11 +292,23 @@ class gui_main(QDialog):
         Show color-picker dialog to select color.
         '''
         dlg = QColorDialog(self)
-        if self._color:
-            dlg.setCurrentColor(QColor(self._color))
-
-        if dlg.exec_():
-            self.setColor(dlg.currentColor().name())
+        dlg.exec()
+        # dlg = QColorDialog(self)
+        # if self._color:
+        #     dlg.setCurrentColor(QColor(self._color))
+        #
+        if dlg.exec():
+            for i in range(0, len(self.p.y)):
+                print(i)
+                QOI_color = getattr(self.QOI_P_Grid1, "color"+str(i))
+                [r, g, b] = self.p.y[i]["color"]
+                text = "#%02x%02x%02x" % (r, g, b)
+                if(QOI_color.text() == text):
+                    QOI_color.setText(dlg.currentColor().name())
+                    h = dlg.currentColor().name().lstrip("#")
+                    (r, g, b) = tuple(int(h[k:k + 2], 16) for k in (0, 2, 4))
+                    self.p.y[i]["color"] = [r, g, b]
+                    QOI_color.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
 
 
 # Setting up same icon to show on the task bar

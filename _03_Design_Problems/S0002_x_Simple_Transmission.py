@@ -65,8 +65,8 @@ class S0002_x_Simple_Transmission:
 		
 		# Quantities of interest
 		quantities_of_interest = [
-			['T_out', '-', [1, 0, 0],  0, 200, 1],
-			['n_out', '-', [1, 0, 0],  0, 200, 1]
+			['T_out', '-', [255, 0, 0],  0, 200, 1],
+			['n_out', '-', [0, 0, 255],  0, 200, 1]
 		]
 		
 		# Quantities of interest 2
