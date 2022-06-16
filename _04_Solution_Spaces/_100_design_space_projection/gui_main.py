@@ -201,7 +201,7 @@ class gui_main(QDialog):
         QOI_P_Header7.setFont(font)
         self.QOI_P_Grid1.addWidget(QOI_P_Header7, 0, 6, 1, 1)
 
-        # Generating a table with design variables as per X-ray file
+        # Generating a table with Quantities of Interest as per X-ray file
         y_size = len(self.p.y)
 
         for i in range(0, y_size):
@@ -250,11 +250,9 @@ class gui_main(QDialog):
             self.QOI_P_Grid1.addWidget(QOI_P_colorbtn, i + 1, 6, 1, 1)
             setattr(self.QOI_P_Grid1, "color" + str(i), QOI_P_colorbtn)
 
-        # Setting dimensions for the Design Variable table
+        # Setting dimensions for the Quantities of Interest table
         for i in range(0, y_size):
             self.QOI_P_Grid1.setRowMinimumHeight(i + 1, 25)
-
-
 
         # Creating Parameters Tab2
         self.QOI_P_Grid2 = QGridLayout(self.QOI_P_toolbox2)
@@ -262,10 +260,49 @@ class gui_main(QDialog):
         self.QOI_P_Grid2.setSizeConstraint(QLayout.SetFixedSize)
         font.setBold(True)
 
-        self.QOI_P_toolboxmain.addItem(self.QOI_P_toolbox1, "Select the Quantities of Interest values as per requirement:")
+        # Headings of the Design variable inputs
+        QOI_P_Header1 = QLabel("Name", self.QOI_P)
+        QOI_P_Header1.setFixedWidth(QOI_P_Grid_Width * 0.35)
+        QOI_P_Header1.setFont(font)
+        self.QOI_P_Grid2.addWidget(QOI_P_Header1, 0, 0, 1, 1)
+        QOI_P_Header2 = QLabel("Unit", self.QOI_P)
+        QOI_P_Header2.setFixedWidth(QOI_P_Grid_Width * 0.15)
+        QOI_P_Header2.setFont(font)
+        self.QOI_P_Grid2.addWidget(QOI_P_Header2, 0, 1, 1, 1)
+        QOI_P_Header3 = QLabel("Value", self.QOI_P)
+        QOI_P_Header3.setMaximumWidth(DV_Grid_Width * 0.5)
+        QOI_P_Header3.setFont(font)
+        self.QOI_P_Grid2.addWidget(QOI_P_Header3, 0, 2, 1, 1)
+
+        # Generating a table with Parameters as per X-ray file
+        para_size = len(self.p.p)
+
+        for i in range(0, para_size):
+            QOI_P_name = QLabel(self.p.p[i]["name"])
+            QOI_P_name.setFixedWidth(QOI_P_Grid_Width * 0.35)
+            self.QOI_P_Grid2.addWidget(QOI_P_name, i + 1, 0, 1, 1)
+            setattr(self.QOI_P_Grid2, self.p.p[i]["name"], QOI_P_name)
+
+        for i in range(0, para_size):
+            QOI_P_unit = QLabel(self.p.p[i]["unit"])
+            QOI_P_unit.setFixedWidth(QOI_P_Grid_Width * 0.15)
+            self.QOI_P_Grid2.addWidget(QOI_P_unit, i + 1, 1, 1, 1)
+            setattr(self.QOI_P_Grid2, "unit" + str(i), QOI_P_unit)
+
+        for i in range(0, para_size):
+            QOI_P_value = QLineEdit(str(self.p.p[i]["value"]))
+            QOI_P_value.setMaximumWidth(DV_Grid_Width * 0.5)
+            self.QOI_P_Grid2.addWidget(QOI_P_value, i + 1, 2, 1, 1)
+            setattr(self.QOI_P_Grid2, "value" + str(i), QOI_P_value)
+
+        # Setting dimensions for the Parameters table
+        for i in range(0, para_size):
+            self.QOI_P_Grid2.setRowMinimumHeight(i + 1, 25)
+
+        # Adding both toolboxs to the QOI_P main toolbox
+        self.QOI_P_toolboxmain.addItem(self.QOI_P_toolbox1,
+                                       "Select the Quantities of Interest values as per requirement:")
         self.QOI_P_toolboxmain.addItem(self.QOI_P_toolbox2, "Select the Parameters values as per requirement:")
-
-
 
         print("GUI is called " + str(problem))
         print("D = ", self.p.d)
@@ -281,8 +318,8 @@ class gui_main(QDialog):
         # print(test.text())
         # test = getattr(self.QOI_P_Grid1, "color0")
         # print(test)
-        print(self.p.y[0]["color"])
-        print(self.p.y[1]["color"])
+        print(self.printingtest)
+        # print(self.p.y[1]["color"])
 
     def run_gui_main(self):
         print("Need to call SolutionSpace")
@@ -299,11 +336,10 @@ class gui_main(QDialog):
         #
         if dlg.exec():
             for i in range(0, len(self.p.y)):
-                print(i)
-                QOI_color = getattr(self.QOI_P_Grid1, "color"+str(i))
+                QOI_color = getattr(self.QOI_P_Grid1, "color" + str(i))
                 [r, g, b] = self.p.y[i]["color"]
                 text = "#%02x%02x%02x" % (r, g, b)
-                if(QOI_color.text() == text):
+                if (QOI_color.text() == text):
                     QOI_color.setText(dlg.currentColor().name())
                     h = dlg.currentColor().name().lstrip("#")
                     (r, g, b) = tuple(int(h[k:k + 2], 16) for k in (0, 2, 4))
