@@ -323,6 +323,39 @@ class gui_main(QDialog):
         self.QOI_P_toolboxmain.addItem(self.QOI_P_toolbox1,
                                        "Select the Quantities of Interest values as per requirement:")
         self.QOI_P_toolboxmain.addItem(self.QOI_P_toolbox2, "Select the Parameters values as per requirement:")
+
+        # Adding Products Tab to the GUI
+        self.tabWidget2 = QTabWidget(self)
+        self.tabWidget2.setGeometry(QRect(10, 600, 0.33 * width - 20, 400))
+        self.prods = QWidget()
+        self.prods.setEnabled(True)
+        self.tabWidget2.addTab(self.prods, "Product Menu")
+        # self.tabWidget2.setFont(font)
+
+        # Product Tab
+        self.prods_toolboxmain = QToolBox(self.prods)
+        prods_Grid_Width = 0.33 * width - 40
+        self.prods_toolboxmain.setGeometry(QRect(10, 10, prods_Grid_Width, 350))
+        self.prods_toolbox = QWidget()
+
+        self.prods_Grid = QGridLayout(self.prods_toolbox)
+        self.prods_Grid.setSpacing(10)
+        self.prods_Grid.setSizeConstraint(QLayout.SetFixedSize)
+        font.setBold(True)
+
+        # Headings of the Design variable inputs
+        DV_Header1 = QLabel("Name", self.prods)
+        DV_Header1.setFont(font)
+        self.prods_Grid.addWidget(DV_Header1, 0, 0, 1, 1)
+
+        # Setting dimensions for the Design Variable table
+        for i in range(0, x_size):
+            self.DV_Grid.setRowMinimumHeight(2 * i + 1, 25)
+            self.DV_Grid.setRowMinimumHeight(2 * i + 2, 25)
+
+        # Adding DV_toolbox to toolboxmain
+        self.prods_toolboxmain.addItem(self.prods_toolbox, "Select or ADD or Delete Products as per requirement:")
+
         self.show()
 
     def update_values(self):
