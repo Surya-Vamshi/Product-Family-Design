@@ -15,7 +15,8 @@ from PySide6.QtCore import Qt, QPoint, QRect
 from PySide6.QtGui import QGuiApplication, QIcon, QFont, QIntValidator, QDoubleValidator, QColor
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget, QApplication, QMainWindow, QMenuBar, QSizePolicy, \
-    QStatusBar, QTabWidget, QWidget, QGridLayout, QSlider, QScrollArea, QLayout, QToolBox, QCheckBox, QColorDialog
+    QStatusBar, QTabWidget, QWidget, QGridLayout, QSlider, QScrollArea, QLayout, QToolBox, QCheckBox, QColorDialog,\
+    QRadioButton, QListWidget, QListWidgetItem
 
 
 # Do not touch
@@ -29,7 +30,7 @@ class gui_main(QDialog):
         self.p = []
         self.p.append(self.problem())
         self.currentProdNum = 0
-        self.currentProdName = ["Product 1"]
+        self.ProdNames = ["Product 1"]
 
         # window title, icon and geometry
         screensize = QGuiApplication.primaryScreen().availableSize()
@@ -330,28 +331,64 @@ class gui_main(QDialog):
         self.prods = QWidget()
         self.prods.setEnabled(True)
         self.tabWidget2.addTab(self.prods, "Product Menu")
-        # self.tabWidget2.setFont(font)
+        font = QFont()
+        font.setPointSize(10)
+        self.tabWidget2.setFont(font)
 
         # Product Tab
         self.prods_toolboxmain = QToolBox(self.prods)
         prods_Grid_Width = 0.33 * width - 40
-        self.prods_toolboxmain.setGeometry(QRect(10, 10, prods_Grid_Width, 350))
+        self.prods_toolboxmain.setGeometry(QRect(10, 10, prods_Grid_Width, 100))
         self.prods_toolbox = QWidget()
 
         self.prods_Grid = QGridLayout(self.prods_toolbox)
         self.prods_Grid.setSpacing(10)
         self.prods_Grid.setSizeConstraint(QLayout.SetFixedSize)
         font.setBold(True)
+        #
+        # # Headings of the Product Menu
+        # prods_Header1 = QLabel("Name", self.prods)
+        # prods_Header1.setFont(font)
+        # self.prods_Grid.addWidget(prods_Header1, 0, 0, 1, 1)
+        # prods_Header2 = QLabel("Rename", self.prods)
+        # prods_Header2.setFixedWidth(prods_Grid_Width * 0.15)
+        # prods_Header2.setFont(font)
+        # self.QOI_P_Grid2.addWidget(prods_Header2, 0, 1, 1, 1)
+        # prods_Header3 = QLabel("Delete", self.prods)
+        # prods_Header3.setMaximumWidth(prods_Grid_Width * 0.5)
+        # prods_Header3.setFont(font)
+        # self.QOI_P_Grid2.addWidget(prods_Header3, 0, 2, 1, 1)
 
-        # Headings of the Design variable inputs
-        DV_Header1 = QLabel("Name", self.prods)
-        DV_Header1.setFont(font)
-        self.prods_Grid.addWidget(DV_Header1, 0, 0, 1, 1)
+        # Product Menu List
+        self.p.append(self.problem)
+        self.ProdNames.append("Product 2")
+        self.p.append(self.problem)
+        self.ProdNames.append("Product 3")
+        num_pro = len(self.p)
 
-        # Setting dimensions for the Design Variable table
-        for i in range(0, x_size):
-            self.DV_Grid.setRowMinimumHeight(2 * i + 1, 25)
-            self.DV_Grid.setRowMinimumHeight(2 * i + 2, 25)
+        # self.prods_table = QListWidget(self.prods)
+        # self.prods_table.horizontalHeader().setStretchLastSection(True)
+
+        # self.prods_table.setRowCount(nb_row)
+        # self.prods_table.setColumnCount(nb_col)
+        # self.prods_table.setHorizontalHeaderLabels(['Products List'])
+        # for row in range(nb_row):
+        #     item = QListWidgetItem(str(self.ProdNames[row]))
+        #     self.prods_table.setItemWidget(item, QRadioButton("Test"))
+        # # self.prods_table.setEditTriggers(QTableWidget.NoEditTriggers)
+        # self.prods_table.setGeometry(10, 10, 0.33 * width - 40, 350)
+
+        # Testinggggggggg
+        for i in range(0, num_pro):
+            Product_element = QRadioButton(self.ProdNames[i], self)
+            Product_element.toggled.connect(self.change_prod)
+            # Product_element.setFixedWidth(QOI_P_Grid_Width * 0.35)
+            self.prods_Grid.addWidget(Product_element, i + 1, 0, 1, 1)
+            setattr(self.prods_Grid, self.ProdNames[i], Product_element)
+
+
+
+        # Testingggggg Endssssss
 
         # Adding DV_toolbox to toolboxmain
         self.prods_toolboxmain.addItem(self.prods_toolbox, "Select or ADD or Delete Products as per requirement:")
@@ -368,7 +405,7 @@ class gui_main(QDialog):
         # print(self.printingtest)
         # print(self.p[self.currentProdNum].y[1]["color"])
         self.p.append(self.problem())
-        self.currentProdName.append("Product 2")
+        self.ProdNames.append("Product 2")
         self.currentProdNum = 1
         self.p[1].x[0]["dsl"] = 500
         self.p[1].x[1]["u"] = 2000
@@ -376,6 +413,7 @@ class gui_main(QDialog):
         self.change_prod()
 
     def change_prod(self):
+        print("Product Changed")
         # Changing Design Variable values
         for i in range(0, len(self.p[self.currentProdNum].x)):
             DV_dsl = getattr(self.DV_Grid, "dsl" + str(i))

@@ -88,7 +88,7 @@
           <height>221</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="DV_Grid" rowminimumheight="50,50" columnminimumwidth="0,0,0">
+        <layout class="QGridLayout" name="DV_Grid" rowminimumheight="50,50,0" columnminimumwidth="0,0,0">
          <property name="sizeConstraint">
           <enum>QLayout::SetFixedSize</enum>
          </property>
@@ -110,6 +110,16 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="lineEdit_3"/>
          </item>
+         <item row="2" column="1" colspan="2">
+          <widget class="QSlider" name="horizontalSlider">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLineEdit" name="lineEdit_2"/>
+         </item>
          <item row="0" column="2">
           <widget class="QPushButton" name="pushButton_2">
            <property name="text">
@@ -121,16 +131,6 @@
           <widget class="QPushButton" name="pushButton_3">
            <property name="text">
             <string>PushButton</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLineEdit" name="lineEdit_2"/>
-         </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QSlider" name="horizontalSlider">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
@@ -194,6 +194,55 @@
       <width>121</width>
       <height>21</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>65</x>
+      <y>451</y>
+      <width>381</width>
+      <height>241</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>480</y>
+      <width>112</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RadioButton</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_2">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>520</y>
+      <width>112</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RadioButton</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_3">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>560</y>
+      <width>112</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>RadioButton</string>
     </property>
    </widget>
   </widget>
