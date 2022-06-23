@@ -364,6 +364,7 @@ class gui_main(QDialog):
         self.ProdNames.append("Product 2")
         self.p.append(self.problem)
         self.ProdNames.append("Product 3")
+        self.p2 = self.problem()
         num_pro = len(self.p)
 
         # self.prods_table = QListWidget(self.prods)
@@ -381,12 +382,11 @@ class gui_main(QDialog):
         # Testinggggggggg
         for i in range(0, num_pro):
             Product_element = QRadioButton(self.ProdNames[i], self)
+            if i == 0:
+                Product_element.setChecked(True)
             Product_element.toggled.connect(self.change_prod)
-            # Product_element.setFixedWidth(QOI_P_Grid_Width * 0.35)
             self.prods_Grid.addWidget(Product_element, i + 1, 0, 1, 1)
-            setattr(self.prods_Grid, self.ProdNames[i], Product_element)
-
-
+            setattr(self.prods_Grid, str(self.ProdNames[i]), Product_element)
 
         # Testingggggg Endssssss
 
@@ -404,16 +404,25 @@ class gui_main(QDialog):
         # print(test)
         # print(self.printingtest)
         # print(self.p[self.currentProdNum].y[1]["color"])
-        self.p.append(self.problem())
-        self.ProdNames.append("Product 2")
-        self.currentProdNum = 1
+        # self.p.append(self.problem())
+        # self.ProdNames.append("Product 2")
+        # self.currentProdNum = 1
         self.p[1].x[0]["dsl"] = 500
         self.p[1].x[1]["u"] = 2000
+        print("Product 1: ", self.p[0].x[0]["dsl"])
+        print("Product 2: ", self.p[1].x[0]["dsl"])
+        print("Product 3: ", self.p[2].x[0]["dsl"])
+        print("Product P2: ", self.p2.x[0]["dsl"])
 
-        self.change_prod()
+        # self.change_prod()
 
     def change_prod(self):
-        print("Product Changed")
+        for i in range(0, len(self.p)):
+            Product_element = getattr(self.prods_Grid, str(self.ProdNames[i]))
+            if Product_element.isChecked():
+                self.currentProdNum = i
+                # print("Product Changed to ", self.currentProdNum+1)
+
         # Changing Design Variable values
         for i in range(0, len(self.p[self.currentProdNum].x)):
             DV_dsl = getattr(self.DV_Grid, "dsl" + str(i))
@@ -429,6 +438,9 @@ class gui_main(QDialog):
 
             DV_dsu = getattr(self.DV_Grid, "dsu" + str(i))
             DV_dsu.setText(str(self.p[self.currentProdNum].x[i]["dsu"]))
+
+        print("Current Product = ", self.currentProdNum)
+        print("Current Product DSL =", self.p[self.currentProdNum].x[0]["dsl"])
 
         # Changing Quantities of Interest Values
         for i in range(0, len(self.p[self.currentProdNum].y)):
