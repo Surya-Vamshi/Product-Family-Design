@@ -7,6 +7,7 @@ The function should provide a user interface with two callbacks:
 # Importing Modules
 import os
 import sys
+import shutil
 import string
 import ctypes
 from pathlib import Path
@@ -19,11 +20,11 @@ from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
 from _100_design_space_projection.gui_main import *
 
 # User can change these directories' location if needed.
-Folder_Design_Problems = str(Path("/_03_Design_Problems"))
+Folder_Design_Problems = str(Path("../_03_Design_Problems"))
 
 # Do not touch
 # Getting available models from database
-files = os.listdir(str(Path(".." + Folder_Design_Problems)))
+files = os.listdir(Folder_Design_Problems)
 entries = []
 for name in files:
     if name.startswith("S") and name.endswith(".py"):
@@ -104,7 +105,11 @@ class DesignProblems(QDialog):
         else:
             self.error1.setHidden(True)
 
+            # os.mkdir(str(Path("_100_design_space_projection/temp")))
+            # shutil.copyfile(str(Path(".." + Folder_Design_Problems + "/" + Problem[0] + ".py")),
+            #                 str(Path("_100_design_space_projection/temp" + "/" + Problem[0] + ".py")))
             self.w2 = gui_main(Problem[0])
+            # shutil.rmtree("_100_design_space_projection/temp")
 
             print("Done")
 
