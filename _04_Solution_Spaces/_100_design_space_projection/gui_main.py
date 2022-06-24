@@ -32,6 +32,23 @@ class gui_main(QDialog):
         self.currentProdNum = 0
         self.ProdNames = ["Product 1"]
 
+        ## Debugging Start
+        new_module = importlib.import_module("_100_design_space_projection.temp." + problem)
+        self.problem_class = getattr(new_module, problem)
+        self.p.append(self.problem().copy())
+        self.ProdNames.append("Product 2")
+        self.p.append(self.problem_class())
+        self.ProdNames.append("Product 3")
+        p2 = self.problem_class()
+
+        self.p[1].x[0]["dsl"] = 500
+        self.p[1].x[1]["u"] = 2000
+        print("Product 1: ", self.p[0].x[0]["dsl"])
+        print("Product 2: ", self.p[1].x[0]["dsl"])
+        print("Product 3: ", self.p[2].x[0]["dsl"])
+        print("Product P2: ", p2.x[0]["dsl"])
+        ## End
+
         # window title, icon and geometry
         screensize = QGuiApplication.primaryScreen().availableSize()
         width = screensize.width()
@@ -360,11 +377,6 @@ class gui_main(QDialog):
         # self.QOI_P_Grid2.addWidget(prods_Header3, 0, 2, 1, 1)
 
         # Product Menu List
-        self.p.append(self.problem)
-        self.ProdNames.append("Product 2")
-        self.p.append(self.problem)
-        self.ProdNames.append("Product 3")
-        self.p2 = self.problem()
         num_pro = len(self.p)
 
         # self.prods_table = QListWidget(self.prods)
@@ -407,12 +419,6 @@ class gui_main(QDialog):
         # self.p.append(self.problem())
         # self.ProdNames.append("Product 2")
         # self.currentProdNum = 1
-        self.p[1].x[0]["dsl"] = 500
-        self.p[1].x[1]["u"] = 2000
-        print("Product 1: ", self.p[0].x[0]["dsl"])
-        print("Product 2: ", self.p[1].x[0]["dsl"])
-        print("Product 3: ", self.p[2].x[0]["dsl"])
-        print("Product P2: ", self.p2.x[0]["dsl"])
 
         # self.change_prod()
 
@@ -421,7 +427,6 @@ class gui_main(QDialog):
             Product_element = getattr(self.prods_Grid, str(self.ProdNames[i]))
             if Product_element.isChecked():
                 self.currentProdNum = i
-                # print("Product Changed to ", self.currentProdNum+1)
 
         # Changing Design Variable values
         for i in range(0, len(self.p[self.currentProdNum].x)):
@@ -439,8 +444,8 @@ class gui_main(QDialog):
             DV_dsu = getattr(self.DV_Grid, "dsu" + str(i))
             DV_dsu.setText(str(self.p[self.currentProdNum].x[i]["dsu"]))
 
-        print("Current Product = ", self.currentProdNum)
-        print("Current Product DSL =", self.p[self.currentProdNum].x[0]["dsl"])
+        # print("Current Product = ", self.currentProdNum)
+        # print("Current Product DSL =", self.p[self.currentProdNum].x[0]["dsl"])
 
         # Changing Quantities of Interest Values
         for i in range(0, len(self.p[self.currentProdNum].y)):
@@ -498,6 +503,6 @@ if sys.platform == "win32":  # Need to check this
     myappid = 'mycompany.myproduct.subproduct.version'
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-app = QApplication(sys.argv)
-w2 = gui_main("S0002_x_Simple_Transmission")
-sys.exit(app.exec())
+# app = QApplication(sys.argv)
+# w2 = gui_main("S0002_x_Simple_Transmission")
+# sys.exit(app.exec())

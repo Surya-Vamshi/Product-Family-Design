@@ -1,4 +1,7 @@
-from newclass import *
+import importlib
+# from newclass import *
+module = importlib.import_module("newclass")
+newclass = getattr(module, "newclass")
 s = [newclass()]
 s.append(newclass())
 print("Before Change")
