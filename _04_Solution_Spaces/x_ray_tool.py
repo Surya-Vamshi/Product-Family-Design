@@ -15,7 +15,7 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
-    QDialog, QLabel, QLineEdit, QTableWidget
+    QDialog, QLabel, QTableWidget
 
 from _100_design_space_projection.gui_main import *
 

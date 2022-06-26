@@ -15,7 +15,7 @@ from PySide6.QtCore import Qt, QPoint, QRect
 from PySide6.QtGui import QGuiApplication, QIcon, QFont, QIntValidator, QDoubleValidator, QColor
 from PySide6.QtWidgets import QApplication, QPushButton, QTableWidgetItem, \
     QDialog, QLabel, QLineEdit, QTableWidget, QApplication, QMainWindow, QMenuBar, QSizePolicy, \
-    QStatusBar, QTabWidget, QWidget, QGridLayout, QSlider, QScrollArea, QLayout, QToolBox, QCheckBox, QColorDialog,\
+    QStatusBar, QTabWidget, QWidget, QGridLayout, QSlider, QScrollArea, QLayout, QToolBox, QCheckBox, QColorDialog, \
     QRadioButton, QListWidget, QListWidgetItem, QInputDialog
 
 
@@ -56,7 +56,7 @@ class gui_main(QDialog):
         font = QFont()
         font.setPointSize(10)
         self.setGeometry(500, 200, 0.33 * width, height)
-        # self.setFixedSize(0.33*width, height)
+        self.setFixedSize(0.33 * width, height)
         self.move(QPoint(0.67 * width, 0))
         self.setWindowTitle("User Interface")
         self.setWindowIcon(QIcon(str(Path('../icon.png'))))
@@ -344,7 +344,7 @@ class gui_main(QDialog):
 
         # Adding Products Tab to the GUI
         self.tabWidget2 = QTabWidget(self)
-        self.tabWidget2.setGeometry(QRect(10, 600, 0.33 * width - 20, 400))
+        self.tabWidget2.setGeometry(QRect(10, 590, 0.33 * width - 20, 400))
         self.prods = QWidget()
         self.prods.setEnabled(True)
         self.tabWidget2.addTab(self.prods, "Product Menu")
@@ -379,16 +379,16 @@ class gui_main(QDialog):
 
         # Pushbuttons to manipulate products
         self.add_btn = QPushButton("Add", self.prods)
-        self.add_btn.setGeometry(prods_Grid_Width*0.4 - 20, 320, prods_Grid_Width*0.2, 40)
+        self.add_btn.setGeometry(prods_Grid_Width * 0.4 - 20, 320, prods_Grid_Width * 0.2, 40)
         self.add_btn.clicked.connect(self.add_product)
         self.rename_btn = QPushButton("Rename", self.prods)
-        self.rename_btn.setGeometry(prods_Grid_Width*0.6 - 10, 320, prods_Grid_Width*0.2, 40)
+        self.rename_btn.setGeometry(prods_Grid_Width * 0.6 - 10, 320, prods_Grid_Width * 0.2, 40)
         self.rename_btn.clicked.connect(self.rename_product)
         self.delete_btn = QPushButton("Delete", self.prods)
-        self.delete_btn.setGeometry(prods_Grid_Width*0.8, 320, prods_Grid_Width*0.2, 40)
+        self.delete_btn.setGeometry(prods_Grid_Width * 0.8, 320, prods_Grid_Width * 0.2, 40)
         self.delete_btn.clicked.connect(self.delete_product)
         self.productError = QLabel(self.prods)
-        self.productError.setGeometry(10, 320, prods_Grid_Width*0.3, 40)
+        self.productError.setGeometry(10, 320, prods_Grid_Width * 0.3, 40)
         self.productError.setStyleSheet("border-radius: 5px; background-color: #D92000")
         self.productError.setAlignment(Qt.AlignCenter)
         self.productError.setHidden(True)
@@ -397,18 +397,45 @@ class gui_main(QDialog):
 
     def update_values(self):
         self.p[self.currentProdNum].sampleSize = self.sample_size_input.text()
-        print(self.p[self.currentProdNum].sampleSize)
-        # test = getattr(self.DV_Grid, "u1")
-        # print(test.text())
-        # test = getattr(self.QOI_P_Grid1, "color0")
-        # print(test)
-        # print(self.printingtest)
-        # print(self.p[self.currentProdNum].y[1]["color"])
-        # self.p.append(self.problem())
-        # self.ProdNames.append("Product 2")
-        # self.currentProdNum = 1
+        # Updating the Design Variable values from the GUI to the current product details
+        for i in range(0, len(self.p[self.currentProdNum].x)):
+            DV_dsl = getattr(self.DV_Grid, "dsl" + str(i))
+            self.p[self.currentProdNum].x[i]["dsl"] = DV_dsl.text()
 
-        # self.change_prod()
+            DV_l = getattr(self.DV_Grid, "l" + str(i))
+            self.p[self.currentProdNum].x[i]["l"] = DV_l.text()
+
+            # Need to Add Ranger values later
+
+            DV_u = getattr(self.DV_Grid, "u" + str(i))
+            self.p[self.currentProdNum].x[i]["u"] = DV_u.text()
+
+            DV_dsu = getattr(self.DV_Grid, "dsu" + str(i))
+            self.p[self.currentProdNum].x[i]["dsu"] = DV_dsu.text()
+
+        # Updating the Quantities of Interest Values from the GUI to the current product details
+        for i in range(0, len(self.p[self.currentProdNum].y)):
+            QOI_P_visible = getattr(self.QOI_P_Grid1, "visible" + str(i))
+            self.p[self.currentProdNum].y[i]["visible"] = QOI_P_visible.checkState()
+
+            QOI_P_active = getattr(self.QOI_P_Grid1, "active" + str(i))
+            self.p[self.currentProdNum].y[i]["active"] = QOI_P_active.checkState()
+
+            QOI_P_l = getattr(self.QOI_P_Grid1, "l" + str(i))
+            self.p[self.currentProdNum].y[i]["l"] = QOI_P_l.text()
+
+            QOI_P_u = getattr(self.QOI_P_Grid1, "u" + str(i))
+            self.p[self.currentProdNum].y[i]["u"] = QOI_P_u.text()
+
+            QOI_P_colorbtn = getattr(self.QOI_P_Grid1, "color" + str(i))
+            h = QOI_P_colorbtn.text().lstrip("#")
+            (r, g, b) = tuple(int(h[k:k + 2], 16) for k in (0, 2, 4))
+            self.p[self.currentProdNum].y[i]["color"] = [r, g, b]
+
+        # Updating the Parameters Values from the GUI to the current product details
+        for i in range(0, len(self.p[self.currentProdNum].p)):
+            QOI_P_value = getattr(self.QOI_P_Grid2, "value" + str(i))
+            QOI_P_value.setText(str(self.p[self.currentProdNum].p[i]["value"]))
 
     def change_prod(self):
         for i in range(0, len(self.p)):
@@ -473,40 +500,52 @@ class gui_main(QDialog):
                 self.productError.setHidden(True)
                 self.ProdNames.append(name)
                 self.p.append(self.problem())
-                Product_element = QRadioButton(self.ProdNames[len(self.p)-1], self)
+                Product_element = QRadioButton(self.ProdNames[len(self.p) - 1], self)
                 Product_element.toggled.connect(self.change_prod)
                 self.prods_Grid.addWidget(Product_element, len(self.p), 0, 1, 1)
-                setattr(self.prods_Grid, str(self.ProdNames[len(self.p)-1]), Product_element)
+                setattr(self.prods_Grid, str(self.ProdNames[len(self.p) - 1]), Product_element)
 
     def rename_product(self):
-        item, ok = QInputDialog.getItem(self, "Rename a Product", "Please select a product to rename:", self.ProdNames, 0, False)
+        item, ok = QInputDialog.getItem(self, "Rename a Product", "Please select a product to rename:", self.ProdNames,
+                                        0, False)
         if ok:
             name, ok = QInputDialog.getText(self, 'Rename a Product', 'Enter the new name of the selected Product:')
             if ok:
-                rename_index = self.ProdNames.index(item)
-                setattr(self.prods_Grid, str(name), getattr(self.prods_Grid, str(self.ProdNames[rename_index])))
-                delattr(self.prods_Grid, str(self.ProdNames[rename_index]))
-                Product_element = getattr(self.prods_Grid, str(name))
-                Product_element.setText(str(name))
-                self.ProdNames[rename_index] = name
+                if name in self.ProdNames:
+                    self.productError.setText("Product already exists")
+                    self.productError.setHidden(False)
+                else:
+                    self.productError.setHidden(True)
+                    rename_index = self.ProdNames.index(item)
+                    setattr(self.prods_Grid, str(name), getattr(self.prods_Grid, str(self.ProdNames[rename_index])))
+                    delattr(self.prods_Grid, str(self.ProdNames[rename_index]))
+                    Product_element = getattr(self.prods_Grid, str(name))
+                    Product_element.setText(str(name))
+                    self.ProdNames[rename_index] = name
 
     def delete_product(self):
-        item, ok = QInputDialog.getItem(self, "Delete a Product", "Please select a product to Delete:", self.ProdNames, 0, False)
-        if ok:
-            delete_index = self.ProdNames.index(item)
-            Product_element = getattr(self.prods_Grid, str(self.ProdNames[delete_index]))
-            Product_element.setHidden(True)
-            self.prods_Grid.removeWidget(Product_element)
-            self.ProdNames.pop(delete_index)
-            self.p.pop(delete_index)
+        if not self.ProdNames:
+            self.productError.setText("No Products are left to delete")
+            self.productError.setHidden(False)
+        else:
+            self.productError.setHidden(True)
+            item, ok = QInputDialog.getItem(self, "Delete a Product", "Please select a product to Delete:",
+                                            self.ProdNames, 0, False)
+            if ok:
+                delete_index = self.ProdNames.index(item)
+                Product_element = getattr(self.prods_Grid, str(self.ProdNames[delete_index]))
+                Product_element.setHidden(True)
+                self.prods_Grid.removeWidget(Product_element)
+                self.ProdNames.pop(delete_index)
+                self.p.pop(delete_index)
 
     def run_gui_main(self):
         print("Need to call SolutionSpace")
 
     def selectColor(self):
-        '''
+        """
         Show color-picker dialog to select color.
-        '''
+        """
         dlg = QColorDialog(self)
         dlg.exec()
 
@@ -523,40 +562,6 @@ class gui_main(QDialog):
                     (r, g, b) = tuple(int(h[k:k + 2], 16) for k in (0, 2, 4))
                     self.p[self.currentProdNum].y[i]["color"] = [r, g, b]
                     QOI_color.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
-
-# class AddProduct(QDialog):
-#     def __init__(self, product_list, parent):
-#         super().__init__(parent)
-#         self.setGeometry(500, 200, 400, 150)
-#         self.setFixedSize(400, 150)
-#         self.setWindowTitle("Add a new Product")
-#         self.setWindowIcon(QIcon(str(Path('../icon.png'))))
-#         centerPoint = QGuiApplication.primaryScreen().availableGeometry().center()
-#         qtRectangle = self.frameGeometry()
-#         qtRectangle.moveCenter(centerPoint)
-#         self.move(qtRectangle.topLeft())
-#
-#         self.label = QLabel(self)
-#         self.label.setText("Enter the name of the new Product:")
-#         self.label.setGeometry(20, 10, 360, 40)
-#         self.name = QLineEdit(self)
-#         self.name.setPlaceholderText("Simple_Transmission")
-#         self.name.setGeometry(20, 50, 360, 40)
-#
-#         btn1 = QPushButton("Add", self)
-#         btn1.setGeometry(200, 100, 80, 40)
-#         btn1.clicked.connect(self.function)
-#
-#         btn2 = QPushButton("Quit", self)
-#         btn2.setGeometry(300, 100, 80, 40)
-#         btn2.clicked.connect(lambda:self.close())
-#
-#         self.show()
-
-    def function(self):
-        name = self.name.text()
-        # print(text)
-        return name
 
 
 # Setting up same icon to show on the task bar
