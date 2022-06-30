@@ -5,59 +5,58 @@
 class S0001_x_Simple_Transmission:
 
 	# --------------------------------------------------
-	#            Definitions of variables
-	# --------------------------------------------------
-	x = [{}, {}, {}, {}, {}, {}]  # Design variables
-	y = [{}, {}]  # Quantities of interest
-	p = []
-	index = {}
-	samples = {"marker": {}}
-
-	# --------------------------------------------------
-	#            Input variables
-	# --------------------------------------------------
-	sampleSize = 0  # Number of samples
-	diagram = []  # Diagram list
-
-	m = 0  # Number of quantities of interest
-	d = 0  # Number of design variables
-	np = 0  # Number of parameters
-	k = 0  # necessary for plot_m_x
-	b = 0  # necessary for writeInputOutput
-
-	good_design_color = 'green'  # Color of good designs
-
-	# Line definition for solution spaces
-	solutionspace_line_color = 'black'
-	solutionspace_line_width = 2
-	solutionspace_line_type = '--'
-
-	legend = ''  # Legend text
-
-	save_as = 'S0002_s_Simple_Transmission.py'  # Filename of saved file
-
-	# --------------------------------------------------
-	#            Functions
+	#            Initialization
 	# --------------------------------------------------
 	def __init__(self):
-		# Try to load saved data
-		self.sampleSize = 3000
+		# --------------------------------------------------
+		#            Definitions of variables
+		# --------------------------------------------------
+		self.x = [{}, {}, {}, {}, {}, {}]  # Design variables1
+		self.y = [{}, {}]  # Quantities of interest
+		self.p = []
+		self.index = {}
+		self.samples = {"marker": {}}
+
+		# --------------------------------------------------
+		#            Input variables
+		# --------------------------------------------------
+		self.sampleSize = 0  # Number of samples
+		self.diagram = []  # Diagram list
+
+		self.m = 0  # Number of quantities of interest
+		self.d = 0  # Number of design variables
+		self.np = 0  # Number of parameters
+		self.k = 0  # necessary for plot_m_x
+		self.b = 0  # necessary for writeInputOutput
+
+		self.good_design_color = 'green'  # Color of good designs
+
+		# Line definition for solution spaces
+		self.solutionspace_line_color = 'black'
+		self.solutionspace_line_width = 2
+		self.solutionspace_line_type = '--'
+
+		self.legend = ''  # Legend text
+
+		self.save_as = 'S0002_s_Simple_Transmission.py'  # Filename of saved file
+
+		self.sampleSize = 300
 
 		self.diagram = [1, 2]  # Choosing variables to be shown in the diagrams
 
 		# Design Variables
 		design_variables = [
-			['z_{11}', '-', 0, 100],
-			['z_{12}', '-', 0, 100],
-			['z_{21}', '-', 0, 100],
-			['z_{22}', '-', 0, 100],
-			['n_{in}', '-', 0, 100],
-			['T_{in}', '-', 0, 100]
+			['z_22', '-', 0, 100],
+			['z_21', '-', 0, 100],
+			['z_11', '-', 0, 100],
+			['z_12', '-', 0, 100],
+			['n_in', '-', 0, 100],
+			['T_in', '-', 0, 100]
 		]
 
 		# Design variables 2
 		for i in range(0, len(design_variables)):
-			self.x[i]['name'] = design_variables[i][0]
+			self.x[i]["name"] = design_variables[i][0]
 			self.x[i]["unit"] = design_variables[i][1]
 			self.x[i]["dsl"] = design_variables[i][2]
 			self.x[i]["dsu"] = design_variables[i][3]
@@ -66,8 +65,8 @@ class S0001_x_Simple_Transmission:
 
 		# Quantities of interest
 		quantities_of_interest = [
-			['T_{out}', '-', [0, 0, 1], 0, 200, 1],
-			['n_{out}', '-', [1, 0, 0], 0, 200, 1]
+			['T_out', '-', [255, 0, 0], 0, 200, 1],
+			['n_out', '-', [0, 0, 255], 0, 200, 1]
 		]
 
 		# Quantities of interest 2
@@ -78,7 +77,7 @@ class S0001_x_Simple_Transmission:
 			self.y[i]["l"] = quantities_of_interest[i][3]
 			self.y[i]["u"] = quantities_of_interest[i][4]
 			self.y[i]["active"] = quantities_of_interest[i][5]
-			self.y[i]["condition"] = 'Violating ' + quantities_of_interest[i][0]
+			self.y[i]["condition"] = "Violating " + quantities_of_interest[i][0]
 
 		# Parameters
 		parameters = [
@@ -103,6 +102,9 @@ class S0001_x_Simple_Transmission:
 		self.k = 0
 		self.b = 0
 
+	# --------------------------------------------------
+	#            Functions
+	# --------------------------------------------------
 	# Calculates system response
 	def SystemResponse(self, x):
 		# Importing modules

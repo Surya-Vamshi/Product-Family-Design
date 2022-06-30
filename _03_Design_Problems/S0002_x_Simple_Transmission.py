@@ -5,41 +5,32 @@
 class S0002_x_Simple_Transmission:
 	
 	# --------------------------------------------------
-	#            Definitions of variables
-	# --------------------------------------------------
-	x = [{}, {}, {}, {}, {}, {}]  # Design variables
-	y = [{}, {}]  # Quantities of interest
-	p = []
-	index = {}
-	samples = {"marker": {}}
-	
-	# --------------------------------------------------
-	#            Input variables
-	# --------------------------------------------------
-	sampleSize = 0  # Number of samples
-	diagram = []  # Diagram list
-	
-	m = 0  # Number of quantities of interest
-	d = 0  # Number of design variables
-	np = 0  # Number of parameters
-	k = 0  # necessary for plot_m_x
-	b = 0  # necessary for writeInputOutput
-	
-	good_design_color = 'green'  # Color of good designs
-	
-	# Line definition for solution spaces
-	solutionspace_line_color = 'black'
-	solutionspace_line_width = 2
-	solutionspace_line_type = '--'
-	
-	legend = ''  # Legend text
-	
-	save_as = 'S0002_s_Simple_Transmission.py'  # Filename of saved file
-	
-	# --------------------------------------------------
-	#            Functions
+	#            Initialization
 	# --------------------------------------------------
 	def __init__(self):
+		# --------------------------------------------------
+		#            Definitions of variables
+		# --------------------------------------------------
+		self.x = [{}, {}, {}, {}, {}, {}]  # Design variables
+		self.y = [{}, {}]  # Quantities of interest
+		self.p = []
+		self.index = {}
+		self.samples = {"marker": {}}
+		
+		# --------------------------------------------------
+		#            Input variables
+		# --------------------------------------------------
+		self.good_design_color = 'green'  # Color of good designs
+		
+		# Line definition for solution spaces
+		self.solutionspace_line_color = 'black'
+		self.solutionspace_line_width = 2
+		self.solutionspace_line_type = '--'
+		
+		self.legend = ''  # Legend text
+		
+		self.save_as = 'S0002_s_Simple_Transmission.py'  # Filename of saved file
+		
 		self.sampleSize = 300
 		
 		self.diagram = [1, 2]  # Choosing variables to be shown in the diagrams
@@ -65,8 +56,8 @@ class S0002_x_Simple_Transmission:
 		
 		# Quantities of interest
 		quantities_of_interest = [
-			['T_out', '-', [255, 0, 0],  0, 200, 1],
-			['n_out', '-', [0, 0, 255],  0, 200, 1]
+			['T_out', '-', [1, 0, 0],  0, 200, 1],
+			['n_out', '-', [1, 0, 0],  0, 200, 1]
 		]
 		
 		# Quantities of interest 2
@@ -102,6 +93,9 @@ class S0002_x_Simple_Transmission:
 		self.k = 0
 		self.b = 0
 		
+	# --------------------------------------------------
+	#            Functions
+	# --------------------------------------------------
 	# Calculates system response
 	def SystemResponse(self, x):
 		# Importing modules
