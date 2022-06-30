@@ -33,20 +33,16 @@ class gui_main(QDialog):
         self.ProdNames = ["Product 1"]
 
         ## Debugging Start
-        # new_module = importlib.import_module("_100_design_space_projection.temp." + problem)
-        # self.problem_class = getattr(new_module, problem)
         self.p.append(self.problem())
         self.ProdNames.append("Product 2")
         self.p.append(self.problem())
         self.ProdNames.append("Product 3")
-        p2 = self.problem()
 
         self.p[1].x[0]["dsl"] = 500
         self.p[1].x[1]["u"] = 2000
         print("Product 1: ", self.p[0].x[0]["dsl"])
         print("Product 2: ", self.p[1].x[0]["dsl"])
         print("Product 3: ", self.p[2].x[0]["dsl"])
-        print("Product P2: ", p2.x[0]["dsl"])
         ## End
 
         # window title, icon and geometry
@@ -80,6 +76,13 @@ class gui_main(QDialog):
         self.onlyDouble = QDoubleValidator()
         self.sample_size_input.setValidator(self.onlyInt)
         self.sample_size_input.setGeometry(QRect(500, 20, 120, 30))
+
+        # Product Family Call button
+        self.product_family_button = QPushButton("Product Family", self)
+        self.product_family_button.setGeometry(QRect(10, 20, 240, 70))
+        self.product_family_button.setStyleSheet("border-radius: 5px; border-style: outset;"
+                                                 "border-width: 1px; border-color: black;")
+        self.product_family_button.clicked.connect(self.run_product_family)
 
         # Refresh Tab Window call
         self.init_product_data()
@@ -187,9 +190,6 @@ class gui_main(QDialog):
             DV_dsu.setMaximumWidth(DV_Grid_Width * 0.1)
             self.DV_Grid.addWidget(DV_dsu, 2 * i + 1, 5, 2, 1)
             setattr(self.DV_Grid, "dsu" + str(i), DV_dsu)
-
-        # test = getattr(self.DV_Grid, self.p[self.currentProdNum].x[0]["name"])
-        # test.setText("Z_2222")
 
         # Setting dimensions for the Design Variable table
         for i in range(0, x_size):
@@ -461,9 +461,6 @@ class gui_main(QDialog):
             DV_dsu = getattr(self.DV_Grid, "dsu" + str(i))
             DV_dsu.setText(str(self.p[self.currentProdNum].x[i]["dsu"]))
 
-        # print("Current Product = ", self.currentProdNum)
-        # print("Current Product DSL =", self.p[self.currentProdNum].x[0]["dsl"])
-
         # Changing Quantities of Interest Values
         for i in range(0, len(self.p[self.currentProdNum].y)):
             QOI_P_visible = getattr(self.QOI_P_Grid1, "visible" + str(i))
@@ -502,7 +499,7 @@ class gui_main(QDialog):
                 self.p.append(self.problem())
                 Product_element = QRadioButton(self.ProdNames[len(self.p) - 1], self)
                 Product_element.toggled.connect(self.change_prod)
-                self.prods_Grid.addWidget(Product_element, len(self.p), 0, 1, 1)
+                self.prods_Grid.addWidget(Product_element, self.prods_Grid.rowCount() + 1, 0, 1, 1)
                 setattr(self.prods_Grid, str(self.ProdNames[len(self.p) - 1]), Product_element)
 
     def rename_product(self):
@@ -538,9 +535,16 @@ class gui_main(QDialog):
                 self.prods_Grid.removeWidget(Product_element)
                 self.ProdNames.pop(delete_index)
                 self.p.pop(delete_index)
+                Product_element = getattr(self.prods_Grid, str(self.ProdNames[self.currentProdNum]))
+                Product_element.setChecked(True)
 
     def run_gui_main(self):
         print("Need to call SolutionSpace")
+
+    def run_product_family(self):
+        item, ok = QInputDialog.getItem(self, "Select Products", "Please select products to create a family:",
+                                        self.ProdNames, 0, True)
+        print("Need to call Product Family")
 
     def selectColor(self):
         """
