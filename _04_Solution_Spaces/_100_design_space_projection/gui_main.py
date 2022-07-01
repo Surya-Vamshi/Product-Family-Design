@@ -542,8 +542,7 @@ class gui_main(QDialog):
         print("Need to call SolutionSpace")
 
     def run_product_family(self):
-        item, ok = QInputDialog.getItem(self, "Select Products", "Please select products to create a family:",
-                                        self.ProdNames, 0, True)
+        self.PFWindow = ProductFamilyWindow(self)
         print("Need to call Product Family")
 
     def selectColor(self):
@@ -567,6 +566,81 @@ class gui_main(QDialog):
                     self.p[self.currentProdNum].y[i]["color"] = [r, g, b]
                     QOI_color.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
 
+# New Pop-up window for Product Family
+class ProductFamilyWindow(QDialog):
+    def __init__(self, gui):
+        super().__init__()
+        # window title, icon and geometry
+        self.setGeometry(500, 200, 400, 300)
+        self.setFixedSize(400, 300)
+        self.setWindowTitle("Product Family Design")
+        self.setWindowIcon(QIcon(str(Path('../icon.png'))))
+        centerPoint = QGuiApplication.primaryScreen().availableGeometry().center()
+        qtRectangle = self.frameGeometry()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
+
+        self.setWindowIcon(QIcon(str(Path('../../icon.png'))))
+
+        self.tabWidget = QTabWidget(self)
+        self.tabWidget.setGeometry(QRect(10, 10, 380, 220))
+        self.Products = QWidget()
+        self.Products.setEnabled(True)
+        self.tabWidget.addTab(self.Products, "Products List")
+
+        # Products Tab
+        self.Products_toolboxmain = QToolBox(self.Products)
+        self.Products_toolboxmain.setGeometry(QRect(10, 10, 360, 220))
+        self.Products_toolbox = QWidget()
+
+        self.Products_Grid = QGridLayout(self.Products_toolbox)
+        self.Products_Grid.setSpacing(10)
+        self.Products_Grid.setSizeConstraint(QLayout.SetFixedSize)
+
+        # Product List
+        for i in range(0, len(gui.p)):
+            Product_element = QCheckBox(gui.ProdNames[i], self)
+            self.Products_Grid.addWidget(Product_element, i + 1, 0, 1, 1)
+            setattr(self.Products_Grid, str(gui.ProdNames[i]), Product_element)
+
+        self.Products_toolboxmain.addItem(self.Products_toolbox, "Select Products which you want to optimize as a "
+                                                                 "product family:")
+
+        self.error = QLabel(self)
+
+        btn1 = QPushButton("Ok", self)
+        btn1.setGeometry(200, 240, 80, 40)
+        btn1.clicked.connect(self.call_run)
+
+        btn2 = QPushButton("Cancel", self)
+        btn2.setGeometry(300, 240, 80, 40)
+        btn2.clicked.connect(self.close)
+
+        self.selected_list = []
+        self.given_list = gui.ProdNames
+
+        self.show()
+
+    def call_run(self):
+        list = []
+        for i in range(0, len(self.given_list)):
+            Product_element = getattr(self.Products_Grid, str(self.given_list[i]))
+            if Product_element.isChecked():
+                list.append(self.given_list[i])
+
+        if not list:
+            self.error.setText("Please Select Products")
+            self.error.setGeometry(10, 240, 175, 40)
+            self.error.setStyleSheet("border-radius: 5px; background-color: #D92000")
+            self.error.setAlignment(Qt.AlignCenter)
+        else:
+            self.error.setHidden(True)
+            self.selected_list = list
+            print(self.selected_list)
+            self.close()
+
+    def closeEvent(self, event):
+        print("Product family Window is closed")
 
 # Setting up same icon to show on the task bar
 if sys.platform == "win32":  # Need to check this
