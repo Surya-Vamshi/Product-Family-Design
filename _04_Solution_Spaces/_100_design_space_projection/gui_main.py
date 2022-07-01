@@ -77,12 +77,13 @@ class gui_main(QDialog):
         self.sample_size_input.setValidator(self.onlyInt)
         self.sample_size_input.setGeometry(QRect(500, 20, 120, 30))
 
-        # Product Family Call button
-        self.product_family_button = QPushButton("Product Family", self)
-        self.product_family_button.setGeometry(QRect(10, 20, 240, 70))
-        self.product_family_button.setStyleSheet("border-radius: 5px; border-style: outset;"
-                                                 "border-width: 1px; border-color: black;")
-        self.product_family_button.clicked.connect(self.run_product_family)
+        # Error Message
+        self.Error = QLabel(self)
+        self.Error.setText("Error")
+        self.Error.setGeometry(10, 10, width*0.33 - 300, 60)
+        self.Error.setStyleSheet("font-size: 18px; border-radius: 5px; background-color: #D92000")
+        self.Error.setAlignment(Qt.AlignCenter)
+        self.Error.setHidden(True)
 
         # Refresh Tab Window call
         self.init_product_data()
@@ -96,31 +97,32 @@ class gui_main(QDialog):
 
     def init_product_data(self):
         screensize = QGuiApplication.primaryScreen().availableSize()
+        height = screensize.height()
         width = screensize.width()
         # Sample Size input update
         self.sample_size_input.setText(str(self.p[self.currentProdNum].sampleSize))
 
         # Main Tab Windows
         self.tabWidget = QTabWidget(self)
-        self.tabWidget.setGeometry(QRect(10, 100, 0.33 * width - 20, 400))
+        self.tabWidget.setGeometry(QRect(10, 100, 0.33 * width - 20, (height-100)*0.6))
         self.DV = QWidget()
         self.DV.setEnabled(True)
-        self.tabWidget.addTab(self.DV, "Design Variables")
-        self.QOI_P = QWidget()
-        self.tabWidget.addTab(self.QOI_P, "Quantities of Interest and Parameters")
+        self.tabWidget.addTab(self.DV, "Design Variables and Parameters")
+        self.QOI = QWidget()
+        self.tabWidget.addTab(self.QOI, "Quantities of Interest")
         font = QFont()
         font.setPointSize(10)
         self.tabWidget.setFont(font)
 
-        # Design Variables Tab
+        # Design Variables and Parameters Tab
         self.DV_toolboxmain = QToolBox(self.DV)
         DV_Grid_Width = 0.33 * width - 40
-        self.DV_toolboxmain.setGeometry(QRect(10, 10, DV_Grid_Width, 350))
+        self.DV_toolboxmain.setGeometry(QRect(10, 10, DV_Grid_Width, (height-100)*0.6 - 50))
         self.DV_toolbox = QWidget()
+        self.Para_toolbox = QWidget()
 
         self.DV_Grid = QGridLayout(self.DV_toolbox)
         self.DV_Grid.setSpacing(10)
-        self.DV_Grid.setObjectName(u"DV_Grid")
         self.DV_Grid.setSizeConstraint(QLayout.SetFixedSize)
         font.setBold(True)
 
@@ -196,155 +198,153 @@ class gui_main(QDialog):
             self.DV_Grid.setRowMinimumHeight(2 * i + 1, 25)
             self.DV_Grid.setRowMinimumHeight(2 * i + 2, 25)
 
-        # Adding DV_toolbox to toolboxmain
-        self.DV_toolboxmain.addItem(self.DV_toolbox, "Select the Design Variable values as per requirement:")
-        ##  Tab thing to make sure
-
-        # Quantities of Interest and Parameters Tab
-        self.QOI_P_toolboxmain = QToolBox(self.QOI_P)
-        QOI_P_Grid_Width = 0.33 * width - 40
-        self.QOI_P_toolboxmain.setGeometry(QRect(10, 10, QOI_P_Grid_Width, 350))
-        self.QOI_P_toolbox1 = QWidget()
-        self.QOI_P_toolbox2 = QWidget()
-
-        # Creating Quantities of Interest Tab1
-        self.QOI_P_Grid1 = QGridLayout(self.QOI_P_toolbox1)
-        self.QOI_P_Grid1.setSpacing(10)
-        self.QOI_P_Grid1.setSizeConstraint(QLayout.SetFixedSize)
-        font.setBold(True)
-
-        # Headings of the Design variable inputs
-        QOI_P_Header1 = QLabel("Visible", self.QOI_P)
-        QOI_P_Header1.setFont(font)
-        self.QOI_P_Grid1.addWidget(QOI_P_Header1, 0, 0, 1, 1)
-        QOI_P_Header2 = QLabel("Active", self.QOI_P)
-        QOI_P_Header2.setFont(font)
-        self.QOI_P_Grid1.addWidget(QOI_P_Header2, 0, 1, 1, 1)
-        QOI_P_Header3 = QLabel("Name", self.QOI_P)
-        QOI_P_Header3.setFont(font)
-        self.QOI_P_Grid1.addWidget(QOI_P_Header3, 0, 2, 1, 1)
-        QOI_P_Header4 = QLabel("Unit", self.QOI_P)
-        QOI_P_Header4.setFont(font)
-        self.QOI_P_Grid1.addWidget(QOI_P_Header4, 0, 3, 1, 1)
-        QOI_P_Header5 = QLabel("Lower Limit", self.QOI_P)
-        QOI_P_Header5.setAlignment(Qt.AlignCenter)
-        QOI_P_Header5.setFont(font)
-        self.QOI_P_Grid1.addWidget(QOI_P_Header5, 0, 4, 1, 1)
-        QOI_P_Header6 = QLabel("Upper Limit", self.QOI_P)
-        QOI_P_Header6.setAlignment(Qt.AlignCenter)
-        QOI_P_Header6.setFont(font)
-        self.QOI_P_Grid1.addWidget(QOI_P_Header6, 0, 5, 1, 1)
-        QOI_P_Header7 = QLabel("Select Color", self.QOI_P)
-        QOI_P_Header7.setAlignment(Qt.AlignCenter)
-        QOI_P_Header7.setFont(font)
-        self.QOI_P_Grid1.addWidget(QOI_P_Header7, 0, 6, 1, 1)
-
-        # Generating a table with Quantities of Interest as per X-ray file
-        y_size = len(self.p[self.currentProdNum].y)
-
-        for i in range(0, y_size):
-            QOI_P_visible = QCheckBox()
-            QOI_P_visible.setChecked(True)
-            self.QOI_P_Grid1.addWidget(QOI_P_visible, i + 1, 0, 1, 1)
-            setattr(self.QOI_P_Grid1, "visible" + str(i), QOI_P_visible)
-
-        for i in range(0, y_size):
-            QOI_P_active = QCheckBox()
-            if self.p[self.currentProdNum].y[i]["active"] == 1:
-                QOI_P_active.setChecked(True)
-            self.QOI_P_Grid1.addWidget(QOI_P_active, i + 1, 1, 1, 1)
-            setattr(self.QOI_P_Grid1, "active" + str(i), QOI_P_active)
-
-        for i in range(0, y_size):
-            QOI_P_name = QLabel(self.p[self.currentProdNum].y[i]["name"])
-            QOI_P_name.setFixedWidth(QOI_P_Grid_Width * 0.175)
-            self.QOI_P_Grid1.addWidget(QOI_P_name, i + 1, 2, 1, 1)
-            setattr(self.QOI_P_Grid1, self.p[self.currentProdNum].y[i]["name"], QOI_P_name)
-
-        for i in range(0, y_size):
-            QOI_P_unit = QLabel(self.p[self.currentProdNum].y[i]["unit"])
-            QOI_P_unit.setFixedWidth(QOI_P_Grid_Width * 0.075)
-            self.QOI_P_Grid1.addWidget(QOI_P_unit, i + 1, 3, 1, 1)
-            setattr(self.QOI_P_Grid1, "unit" + str(i), QOI_P_unit)
-
-        for i in range(0, y_size):
-            QOI_P_l = QLineEdit(str(self.p[self.currentProdNum].y[i]["l"]))
-            QOI_P_l.setMaximumWidth(QOI_P_Grid_Width * 0.15)
-            self.QOI_P_Grid1.addWidget(QOI_P_l, i + 1, 4, 1, 1)
-            setattr(self.QOI_P_Grid1, "l" + str(i), QOI_P_l)
-
-        for i in range(0, y_size):
-            QOI_P_u = QLineEdit(str(self.p[self.currentProdNum].y[i]["u"]))
-            QOI_P_u.setMaximumWidth(QOI_P_Grid_Width * 0.15)
-            self.QOI_P_Grid1.addWidget(QOI_P_u, i + 1, 5, 1, 1)
-            setattr(self.QOI_P_Grid1, "u" + str(i), QOI_P_u)
-
-        for i in range(0, y_size):
-            [r, b, g] = self.p[self.currentProdNum].y[i]["color"]
-            text = "#%02x%02x%02x" % (r, g, b)
-            QOI_P_colorbtn = QPushButton(text)
-            QOI_P_colorbtn.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
-            QOI_P_colorbtn.clicked.connect(self.selectColor)
-            self.QOI_P_Grid1.addWidget(QOI_P_colorbtn, i + 1, 6, 1, 1)
-            setattr(self.QOI_P_Grid1, "color" + str(i), QOI_P_colorbtn)
-
-        # Setting dimensions for the Quantities of Interest table
-        for i in range(0, y_size):
-            self.QOI_P_Grid1.setRowMinimumHeight(i + 1, 25)
-
         # Creating Parameters Tab2
-        self.QOI_P_Grid2 = QGridLayout(self.QOI_P_toolbox2)
-        self.QOI_P_Grid2.setSpacing(10)
-        self.QOI_P_Grid2.setSizeConstraint(QLayout.SetFixedSize)
+        self.Para_Grid = QGridLayout(self.Para_toolbox)
+        self.Para_Grid.setSpacing(10)
+        self.Para_Grid.setSizeConstraint(QLayout.SetFixedSize)
         font.setBold(True)
 
         # Headings of the Design variable inputs
-        QOI_P_Header1 = QLabel("Name", self.QOI_P)
-        QOI_P_Header1.setFixedWidth(QOI_P_Grid_Width * 0.35)
-        QOI_P_Header1.setFont(font)
-        self.QOI_P_Grid2.addWidget(QOI_P_Header1, 0, 0, 1, 1)
-        QOI_P_Header2 = QLabel("Unit", self.QOI_P)
-        QOI_P_Header2.setFixedWidth(QOI_P_Grid_Width * 0.15)
-        QOI_P_Header2.setFont(font)
-        self.QOI_P_Grid2.addWidget(QOI_P_Header2, 0, 1, 1, 1)
-        QOI_P_Header3 = QLabel("Value", self.QOI_P)
-        QOI_P_Header3.setMaximumWidth(DV_Grid_Width * 0.5)
-        QOI_P_Header3.setFont(font)
-        self.QOI_P_Grid2.addWidget(QOI_P_Header3, 0, 2, 1, 1)
+        Para_Header1 = QLabel("Name", self.DV)
+        Para_Header1.setFixedWidth(DV_Grid_Width * 0.35)
+        Para_Header1.setFont(font)
+        self.Para_Grid.addWidget(Para_Header1, 0, 0, 1, 1)
+        Para_Header2 = QLabel("Unit", self.DV)
+        Para_Header2.setFixedWidth(DV_Grid_Width * 0.15)
+        Para_Header2.setFont(font)
+        self.Para_Grid.addWidget(Para_Header2, 0, 1, 1, 1)
+        Para_Header3 = QLabel("Value", self.DV)
+        Para_Header3.setMaximumWidth(DV_Grid_Width * 0.5)
+        Para_Header3.setFont(font)
+        self.Para_Grid.addWidget(Para_Header3, 0, 2, 1, 1)
 
         # Generating a table with Parameters as per X-ray file
         para_size = len(self.p[self.currentProdNum].p)
 
         for i in range(0, para_size):
-            QOI_P_name = QLabel(self.p[self.currentProdNum].p[i]["name"])
-            QOI_P_name.setFixedWidth(QOI_P_Grid_Width * 0.35)
-            self.QOI_P_Grid2.addWidget(QOI_P_name, i + 1, 0, 1, 1)
-            setattr(self.QOI_P_Grid2, self.p[self.currentProdNum].p[i]["name"], QOI_P_name)
+            Para_name = QLabel(self.p[self.currentProdNum].p[i]["name"])
+            Para_name.setFixedWidth(DV_Grid_Width * 0.35)
+            self.Para_Grid.addWidget(Para_name, i + 1, 0, 1, 1)
+            setattr(self.Para_Grid, self.p[self.currentProdNum].p[i]["name"], Para_name)
 
         for i in range(0, para_size):
-            QOI_P_unit = QLabel(self.p[self.currentProdNum].p[i]["unit"])
-            QOI_P_unit.setFixedWidth(QOI_P_Grid_Width * 0.15)
-            self.QOI_P_Grid2.addWidget(QOI_P_unit, i + 1, 1, 1, 1)
-            setattr(self.QOI_P_Grid2, "unit" + str(i), QOI_P_unit)
+            Para_unit = QLabel(self.p[self.currentProdNum].p[i]["unit"])
+            Para_unit.setFixedWidth(DV_Grid_Width * 0.15)
+            self.Para_Grid.addWidget(Para_unit, i + 1, 1, 1, 1)
+            setattr(self.Para_Grid, "unit" + str(i), Para_unit)
 
         for i in range(0, para_size):
-            QOI_P_value = QLineEdit(str(self.p[self.currentProdNum].p[i]["value"]))
-            QOI_P_value.setMaximumWidth(DV_Grid_Width * 0.5)
-            self.QOI_P_Grid2.addWidget(QOI_P_value, i + 1, 2, 1, 1)
-            setattr(self.QOI_P_Grid2, "value" + str(i), QOI_P_value)
+            Para_value = QLineEdit(str(self.p[self.currentProdNum].p[i]["value"]))
+            Para_value.setMaximumWidth(DV_Grid_Width * 0.5)
+            self.Para_Grid.addWidget(Para_value, i + 1, 2, 1, 1)
+            setattr(self.Para_Grid, "value" + str(i), Para_value)
 
         # Setting dimensions for the Parameters table
         for i in range(0, para_size):
-            self.QOI_P_Grid2.setRowMinimumHeight(i + 1, 25)
+            self.Para_Grid.setRowMinimumHeight(i + 1, 25)
 
-        # Adding both toolboxs to the QOI_P main toolbox
-        self.QOI_P_toolboxmain.addItem(self.QOI_P_toolbox1,
+        # Adding both toolboxs to toolboxmain
+        self.DV_toolboxmain.addItem(self.DV_toolbox, "Select the Design Variable values as per requirement:")
+        self.DV_toolboxmain.addItem(self.Para_toolbox, "Select the Parameters values as per requirement:")
+
+        # Quantities of Interest Tab
+        self.QOI_toolboxmain = QToolBox(self.QOI)
+        QOI_Grid_Width = 0.33 * width - 40
+        self.QOI_toolboxmain.setGeometry(QRect(10, 10, QOI_Grid_Width, (height-100)*0.6 - 50))
+        self.QOI_toolbox1 = QWidget()
+
+        # Creating Quantities of Interest Tab1
+        self.QOI_Grid1 = QGridLayout(self.QOI_toolbox1)
+        self.QOI_Grid1.setSpacing(10)
+        self.QOI_Grid1.setSizeConstraint(QLayout.SetFixedSize)
+        font.setBold(True)
+
+        # Headings of the Design variable inputs
+        QOI_Header1 = QLabel("Visible", self.QOI)
+        QOI_Header1.setFont(font)
+        self.QOI_Grid1.addWidget(QOI_Header1, 0, 0, 1, 1)
+        QOI_Header2 = QLabel("Active", self.QOI)
+        QOI_Header2.setFont(font)
+        self.QOI_Grid1.addWidget(QOI_Header2, 0, 1, 1, 1)
+        QOI_Header3 = QLabel("Name", self.QOI)
+        QOI_Header3.setFont(font)
+        self.QOI_Grid1.addWidget(QOI_Header3, 0, 2, 1, 1)
+        QOI_Header4 = QLabel("Unit", self.QOI)
+        QOI_Header4.setFont(font)
+        self.QOI_Grid1.addWidget(QOI_Header4, 0, 3, 1, 1)
+        QOI_Header5 = QLabel("Lower Limit", self.QOI)
+        QOI_Header5.setAlignment(Qt.AlignCenter)
+        QOI_Header5.setFont(font)
+        self.QOI_Grid1.addWidget(QOI_Header5, 0, 4, 1, 1)
+        QOI_Header6 = QLabel("Upper Limit", self.QOI)
+        QOI_Header6.setAlignment(Qt.AlignCenter)
+        QOI_Header6.setFont(font)
+        self.QOI_Grid1.addWidget(QOI_Header6, 0, 5, 1, 1)
+        QOI_Header7 = QLabel("Select Color", self.QOI)
+        QOI_Header7.setAlignment(Qt.AlignCenter)
+        QOI_Header7.setFont(font)
+        self.QOI_Grid1.addWidget(QOI_Header7, 0, 6, 1, 1)
+
+        # Generating a table with Quantities of Interest as per X-ray file
+        y_size = len(self.p[self.currentProdNum].y)
+
+        for i in range(0, y_size):
+            QOI_visible = QCheckBox()
+            QOI_visible.setChecked(True)
+            self.QOI_Grid1.addWidget(QOI_visible, i + 1, 0, 1, 1)
+            setattr(self.QOI_Grid1, "visible" + str(i), QOI_visible)
+
+        for i in range(0, y_size):
+            QOI_active = QCheckBox()
+            if self.p[self.currentProdNum].y[i]["active"] == 1:
+                QOI_active.setChecked(True)
+            self.QOI_Grid1.addWidget(QOI_active, i + 1, 1, 1, 1)
+            setattr(self.QOI_Grid1, "active" + str(i), QOI_active)
+
+        for i in range(0, y_size):
+            QOI_name = QLabel(self.p[self.currentProdNum].y[i]["name"])
+            QOI_name.setFixedWidth(QOI_Grid_Width * 0.175)
+            self.QOI_Grid1.addWidget(QOI_name, i + 1, 2, 1, 1)
+            setattr(self.QOI_Grid1, self.p[self.currentProdNum].y[i]["name"], QOI_name)
+
+        for i in range(0, y_size):
+            QOI_unit = QLabel(self.p[self.currentProdNum].y[i]["unit"])
+            QOI_unit.setFixedWidth(QOI_Grid_Width * 0.075)
+            self.QOI_Grid1.addWidget(QOI_unit, i + 1, 3, 1, 1)
+            setattr(self.QOI_Grid1, "unit" + str(i), QOI_unit)
+
+        for i in range(0, y_size):
+            QOI_l = QLineEdit(str(self.p[self.currentProdNum].y[i]["l"]))
+            QOI_l.setMaximumWidth(QOI_Grid_Width * 0.15)
+            self.QOI_Grid1.addWidget(QOI_l, i + 1, 4, 1, 1)
+            setattr(self.QOI_Grid1, "l" + str(i), QOI_l)
+
+        for i in range(0, y_size):
+            QOI_u = QLineEdit(str(self.p[self.currentProdNum].y[i]["u"]))
+            QOI_u.setMaximumWidth(QOI_Grid_Width * 0.15)
+            self.QOI_Grid1.addWidget(QOI_u, i + 1, 5, 1, 1)
+            setattr(self.QOI_Grid1, "u" + str(i), QOI_u)
+
+        for i in range(0, y_size):
+            [r, b, g] = self.p[self.currentProdNum].y[i]["color"]
+            text = "#%02x%02x%02x" % (r, g, b)
+            QOI_colorbtn = QPushButton(text)
+            QOI_colorbtn.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
+            QOI_colorbtn.clicked.connect(self.selectColor)
+            self.QOI_Grid1.addWidget(QOI_colorbtn, i + 1, 6, 1, 1)
+            setattr(self.QOI_Grid1, "color" + str(i), QOI_colorbtn)
+
+        # Setting dimensions for the Quantities of Interest table
+        for i in range(0, y_size):
+            self.QOI_Grid1.setRowMinimumHeight(i + 1, 25)
+
+        # Adding toolbox to the QOI main toolbox
+        self.QOI_toolboxmain.addItem(self.QOI_toolbox1,
                                        "Select the Quantities of Interest values as per requirement:")
-        self.QOI_P_toolboxmain.addItem(self.QOI_P_toolbox2, "Select the Parameters values as per requirement:")
 
         # Adding Products Tab to the GUI
         self.tabWidget2 = QTabWidget(self)
-        self.tabWidget2.setGeometry(QRect(10, 590, 0.33 * width - 20, 400))
+        self.tabWidget2.setGeometry(QRect(10, (height-100)*0.6 + 120, 0.33 * width - 20, (height-100)*0.3))
         self.prods = QWidget()
         self.prods.setEnabled(True)
         self.tabWidget2.addTab(self.prods, "Product Menu")
@@ -355,7 +355,7 @@ class gui_main(QDialog):
         # Product Tab
         self.prods_toolboxmain = QToolBox(self.prods)
         prods_Grid_Width = 0.33 * width - 40
-        self.prods_toolboxmain.setGeometry(QRect(10, 10, prods_Grid_Width, 300))
+        self.prods_toolboxmain.setGeometry(QRect(10, 10, prods_Grid_Width, (height-100)*0.3 - 100))
         self.prods_toolbox = QWidget()
 
         self.prods_Grid = QGridLayout(self.prods_toolbox)
@@ -377,21 +377,21 @@ class gui_main(QDialog):
         # Adding DV_toolbox to toolboxmain
         self.prods_toolboxmain.addItem(self.prods_toolbox, "Select or ADD or Delete Products as per requirement:")
 
+        # Product Family Call button
+        self.product_family_button = QPushButton("Product Family", self.prods)
+        self.product_family_button.setGeometry(20, (height-100)*0.3 - 80, prods_Grid_Width * 0.3, 40)
+        self.product_family_button.clicked.connect(self.run_product_family)
+
         # Pushbuttons to manipulate products
         self.add_btn = QPushButton("Add", self.prods)
-        self.add_btn.setGeometry(prods_Grid_Width * 0.4 - 20, 320, prods_Grid_Width * 0.2, 40)
+        self.add_btn.setGeometry(prods_Grid_Width * 0.4 - 20, (height-100)*0.3 - 80, prods_Grid_Width * 0.2, 40)
         self.add_btn.clicked.connect(self.add_product)
         self.rename_btn = QPushButton("Rename", self.prods)
-        self.rename_btn.setGeometry(prods_Grid_Width * 0.6 - 10, 320, prods_Grid_Width * 0.2, 40)
+        self.rename_btn.setGeometry(prods_Grid_Width * 0.6 - 10, (height-100)*0.3 - 80, prods_Grid_Width * 0.2, 40)
         self.rename_btn.clicked.connect(self.rename_product)
         self.delete_btn = QPushButton("Delete", self.prods)
-        self.delete_btn.setGeometry(prods_Grid_Width * 0.8, 320, prods_Grid_Width * 0.2, 40)
+        self.delete_btn.setGeometry(prods_Grid_Width * 0.8, (height-100)*0.3 - 80, prods_Grid_Width * 0.2, 40)
         self.delete_btn.clicked.connect(self.delete_product)
-        self.productError = QLabel(self.prods)
-        self.productError.setGeometry(10, 320, prods_Grid_Width * 0.3, 40)
-        self.productError.setStyleSheet("border-radius: 5px; background-color: #D92000")
-        self.productError.setAlignment(Qt.AlignCenter)
-        self.productError.setHidden(True)
 
         self.show()
 
@@ -415,27 +415,27 @@ class gui_main(QDialog):
 
         # Updating the Quantities of Interest Values from the GUI to the current product details
         for i in range(0, len(self.p[self.currentProdNum].y)):
-            QOI_P_visible = getattr(self.QOI_P_Grid1, "visible" + str(i))
-            self.p[self.currentProdNum].y[i]["visible"] = QOI_P_visible.checkState()
+            QOI_visible = getattr(self.QOI_Grid1, "visible" + str(i))
+            self.p[self.currentProdNum].y[i]["visible"] = QOI_visible.checkState()
 
-            QOI_P_active = getattr(self.QOI_P_Grid1, "active" + str(i))
-            self.p[self.currentProdNum].y[i]["active"] = QOI_P_active.checkState()
+            QOI_active = getattr(self.QOI_Grid1, "active" + str(i))
+            self.p[self.currentProdNum].y[i]["active"] = QOI_active.checkState()
 
-            QOI_P_l = getattr(self.QOI_P_Grid1, "l" + str(i))
-            self.p[self.currentProdNum].y[i]["l"] = QOI_P_l.text()
+            QOI_l = getattr(self.QOI_Grid1, "l" + str(i))
+            self.p[self.currentProdNum].y[i]["l"] = QOI_l.text()
 
-            QOI_P_u = getattr(self.QOI_P_Grid1, "u" + str(i))
-            self.p[self.currentProdNum].y[i]["u"] = QOI_P_u.text()
+            QOI_u = getattr(self.QOI_Grid1, "u" + str(i))
+            self.p[self.currentProdNum].y[i]["u"] = QOI_u.text()
 
-            QOI_P_colorbtn = getattr(self.QOI_P_Grid1, "color" + str(i))
-            h = QOI_P_colorbtn.text().lstrip("#")
+            QOI_colorbtn = getattr(self.QOI_Grid1, "color" + str(i))
+            h = QOI_colorbtn.text().lstrip("#")
             (r, g, b) = tuple(int(h[k:k + 2], 16) for k in (0, 2, 4))
             self.p[self.currentProdNum].y[i]["color"] = [r, g, b]
 
         # Updating the Parameters Values from the GUI to the current product details
         for i in range(0, len(self.p[self.currentProdNum].p)):
-            QOI_P_value = getattr(self.QOI_P_Grid2, "value" + str(i))
-            QOI_P_value.setText(str(self.p[self.currentProdNum].p[i]["value"]))
+            QOI_value = getattr(self.Para_Grid, "value" + str(i))
+            QOI_value.setText(str(self.p[self.currentProdNum].p[i]["value"]))
 
     def change_prod(self):
         for i in range(0, len(self.p)):
@@ -463,38 +463,38 @@ class gui_main(QDialog):
 
         # Changing Quantities of Interest Values
         for i in range(0, len(self.p[self.currentProdNum].y)):
-            QOI_P_visible = getattr(self.QOI_P_Grid1, "visible" + str(i))
-            QOI_P_visible.setChecked(True)
+            QOI_visible = getattr(self.QOI_Grid1, "visible" + str(i))
+            QOI_visible.setChecked(True)
 
-            QOI_P_active = getattr(self.QOI_P_Grid1, "active" + str(i))
+            QOI_active = getattr(self.QOI_Grid1, "active" + str(i))
             if self.p[self.currentProdNum].y[i]["active"] == 1:
-                QOI_P_active.setChecked(True)
+                QOI_active.setChecked(True)
             else:
-                QOI_P_active.setChecked(False)
+                QOI_active.setChecked(False)
 
-            QOI_P_l = getattr(self.QOI_P_Grid1, "l" + str(i))
-            QOI_P_l.setText(str(self.p[self.currentProdNum].y[i]["l"]))
+            QOI_l = getattr(self.QOI_Grid1, "l" + str(i))
+            QOI_l.setText(str(self.p[self.currentProdNum].y[i]["l"]))
 
-            QOI_P_u = getattr(self.QOI_P_Grid1, "u" + str(i))
-            QOI_P_u.setText(str(self.p[self.currentProdNum].y[i]["u"]))
+            QOI_u = getattr(self.QOI_Grid1, "u" + str(i))
+            QOI_u.setText(str(self.p[self.currentProdNum].y[i]["u"]))
 
             [r, b, g] = self.p[self.currentProdNum].y[i]["color"]
-            QOI_P_colorbtn = getattr(self.QOI_P_Grid1, "color" + str(i))
-            QOI_P_colorbtn.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
+            QOI_colorbtn = getattr(self.QOI_Grid1, "color" + str(i))
+            QOI_colorbtn.setStyleSheet("background-color: #%02x%02x%02x" % (r, g, b))
 
         # Changing Parameters Values
         for i in range(0, len(self.p[self.currentProdNum].p)):
-            QOI_P_value = getattr(self.QOI_P_Grid2, "value" + str(i))
-            QOI_P_value.setText(str(self.p[self.currentProdNum].p[i]["value"]))
+            QOI_value = getattr(self.Para_Grid, "value" + str(i))
+            QOI_value.setText(str(self.p[self.currentProdNum].p[i]["value"]))
 
     def add_product(self):
         name, ok = QInputDialog.getText(self, 'Add a new Product', 'Enter the name of the new Product:')
         if ok:
             if name in self.ProdNames:
-                self.productError.setText("Product already exists")
-                self.productError.setHidden(False)
+                self.Error.setText("Product already exists")
+                self.Error.setHidden(False)
             else:
-                self.productError.setHidden(True)
+                self.Error.setHidden(True)
                 self.ProdNames.append(name)
                 self.p.append(self.problem())
                 Product_element = QRadioButton(self.ProdNames[len(self.p) - 1], self)
@@ -509,10 +509,10 @@ class gui_main(QDialog):
             name, ok = QInputDialog.getText(self, 'Rename a Product', 'Enter the new name of the selected Product:')
             if ok:
                 if name in self.ProdNames:
-                    self.productError.setText("Product already exists")
-                    self.productError.setHidden(False)
+                    self.Error.setText("Product already exists")
+                    self.Error.setHidden(False)
                 else:
-                    self.productError.setHidden(True)
+                    self.Error.setHidden(True)
                     rename_index = self.ProdNames.index(item)
                     setattr(self.prods_Grid, str(name), getattr(self.prods_Grid, str(self.ProdNames[rename_index])))
                     delattr(self.prods_Grid, str(self.ProdNames[rename_index]))
@@ -522,10 +522,10 @@ class gui_main(QDialog):
 
     def delete_product(self):
         if not self.ProdNames:
-            self.productError.setText("No Products are left to delete")
-            self.productError.setHidden(False)
+            self.Error.setText("No Products are left to delete")
+            self.Error.setHidden(False)
         else:
-            self.productError.setHidden(True)
+            self.Error.setHidden(True)
             item, ok = QInputDialog.getItem(self, "Delete a Product", "Please select a product to Delete:",
                                             self.ProdNames, 0, False)
             if ok:
@@ -557,7 +557,7 @@ class gui_main(QDialog):
         #     dlg.setCurrentColor(QColor(self._color))
         if dlg.exec():
             for i in range(0, len(self.p[self.currentProdNum].y)):
-                QOI_color = getattr(self.QOI_P_Grid1, "color" + str(i))
+                QOI_color = getattr(self.QOI_Grid1, "color" + str(i))
                 [r, g, b] = self.p[self.currentProdNum].y[i]["color"]
                 text = "#%02x%02x%02x" % (r, g, b)
                 if (QOI_color.text() == text):
