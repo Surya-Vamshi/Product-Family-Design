@@ -43,6 +43,7 @@ class Constraint(Problem):
                          xu=dv_norm)
 
     def _evaluate(self, x, out, *args, **kwargs):
+        return None
         # f1 = x[:, 0] ** 2 + x[:, 1] ** 2
         # f2 = (x[:, 0] - 1) ** 2 + x[:, 1] ** 2
         #
