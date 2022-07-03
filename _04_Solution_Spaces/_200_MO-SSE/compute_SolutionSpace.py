@@ -61,17 +61,17 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
             qoi_norm[i] = 1
 
     # Norming boundaries
-    l = (l-dv_norm_l)/dv_norm
-    u = (u-dv_norm_l)/dv_norm
-    dsl = (dsl-dv_norm_l)/dv_norm
-    dsu = (dsu-dv_norm_l)/dv_norm
+    l = (l - dv_norm_l) / dv_norm
+    u = (u - dv_norm_l) / dv_norm
+    dsl = (dsl - dv_norm_l) / dv_norm
+    dsu = (dsu - dv_norm_l) / dv_norm
 
     """Set first candidate box"""
     # Find best starting point x_init by sampling through the DS
     # Monte Carlo Sampling
-    dv_sample = (u - l)*np.random.rand(1000, dim) + l
+    dv_sample = (u - l) * np.random.rand(1000, dim) + l
 
-    par_sample = np.transpose((parameters[1, :] - parameters[0, :])*np.random.rand(1000, p.d) + parameters[0, :])
+    par_sample = np.transpose((parameters[1, :] - parameters[0, :]) * np.random.rand(1000, p.d) + parameters[0, :])
 
     # Evaluate System Response
     x_sample = dv_sample * dv_norm + dv_norm_l
@@ -81,10 +81,11 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
         elif ind_parameters[i] == 1:
             x_sample = np.append(par_sample[:, ind_parameters(i)], x_sample[:, ind_parameters[i]:])
         else:
-            x_sample = np.append(x_sample[:, 0:ind_parameters(i) - 1], par_sample[:, ind_parameters[i]], x_sample[:, ind_parameters[i]:])
+            x_sample = np.append(x_sample[:, 0:ind_parameters(i) - 1], par_sample[:, ind_parameters[i]],
+                                 x_sample[:, ind_parameters[i]:])
 
     y_sample = np.transpose(p.SystemResponse(np.transpose(x_sample)))
-    c = np.append(y_sample - reqU, reqL - y_sample, axis=1)/qoi_norm
+    c = np.append(y_sample - reqU, reqL - y_sample, axis=1) / qoi_norm
 
     feasible = np.all(c <= 0, axis=1)
 
@@ -100,10 +101,7 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
         print("Need to add this line of code")
     else:
         x0 = x_init
-    x = [[0, 0, 0, 0, 0, 0],
-         [5, 0, 0, 0, 0, 0]]
-    x = np.array(x)
-    print(x[1,0])
+        print(x0)
 
     # End
     [dv_par_box, exitflag] = [0, 0]
@@ -111,7 +109,9 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
 
     return [dv_par_box, exitflag, time_taken]
 
+
 import numpy as np
+
 NaN = np.nan
 problem_call = "S0002_x_Simple_Transmission"  # S0002_x_Simple_Transmission Class as variable
 weight_call = [0.1667, 0.1667, 0.1667, 0.1667, 0.1667, 0.1667]
