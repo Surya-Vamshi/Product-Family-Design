@@ -48,20 +48,6 @@ class superSlider(QtWidgets.QSlider):
         return style.sliderValueFromPosition(self.minimum(), self.maximum(), pos - slider_min, slider_max - slider_min,
                                              opt.upsideDown)
 
-    def low(self):
-        return self.l
-
-    def setLower(self, lower):
-        self.l = lower
-        self.update()
-
-    def upper(self):
-        return self.u
-
-    def setUpper(self, upper):
-        self.u = upper
-        self.update()
-
     def mousePressed(self, event):
         event.accept()
 
@@ -130,3 +116,31 @@ class superSlider(QtWidgets.QSlider):
         self.update()
 
         self.sliderMoved.emit(self.l, self.u)
+
+    def low(self):
+        return self.l
+
+    def setLower(self, lower):
+        self.l = lower
+        self.update()
+
+    def upper(self):
+        return self.u
+
+    def setUpper(self, upper):
+        self.u = upper
+        self.update()
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+        style = QtWidgets.QApplication.style()
+
+        opt = QtWidgets.QStyleOptionSlider()
+        self.initStyleOption(opt)
+        opt.siderValue = 0
+        opt.sliderPosition = 0
+        opt.subControls = QtWidgets.QStyle.SC_SliderGroove
+        if self.tickPosition() != self.NoTicks:
+            opt.subControls |= QtWidgets.QStyle.SC_SliderTickmarks
+        style.drawComplexControl(QtWidgets.QStyle.CC_Slider, opt, painter, self)
+        groove = style.subControlRect(QtWidgets.QStyle.CC_Slider, opt, QtWidgets.QStyle.SC_SliderGroove, self)
