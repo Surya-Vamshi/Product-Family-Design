@@ -10,6 +10,7 @@ import string
 import importlib
 import ctypes
 from pathlib import Path
+import superSlider
 
 from PySide6.QtCore import Qt, QPoint, QRect
 from PySide6.QtGui import QGuiApplication, QIcon, QFont, QIntValidator, QDoubleValidator, QColor
@@ -174,9 +175,15 @@ class gui_main(QDialog):
             setattr(self.DV_Grid, "l" + str(i), DV_l)
 
         for i in range(0, x_size):
-            DV_range = QSlider()
-            DV_range.setOrientation(Qt.Horizontal)
-            # DV_range.
+            DV_range = superSlider.superSlider(Qt.Horizontal)
+            DV_range.setMinimumHeight(30)
+            DV_range.setMinimum(self.p[self.currentProdNum].x[i]["dsl"])
+            DV_range.setMaximum(self.p[self.currentProdNum].x[i]["dsu"])
+            DV_range.setLower(self.p[self.currentProdNum].x[i]["l"])
+            DV_range.setUpper(self.p[self.currentProdNum].x[i]["u"])
+            DV_range.setTickPosition(QSlider.TicksAbove)
+            DV_range.sliderMoved.connect(self.update_ranges)
+
             DV_range.setMaximumWidth(DV_Grid_Width * 0.5)
             self.DV_Grid.addWidget(DV_range, 2 * i + 2, 3, 1, 2)
             setattr(self.DV_Grid, "range" + str(i), DV_range)
@@ -405,13 +412,17 @@ class gui_main(QDialog):
             DV_l = getattr(self.DV_Grid, "l" + str(i))
             self.p[self.currentProdNum].x[i]["l"] = DV_l.text()
 
-            # Need to Add Ranger values later
-
             DV_u = getattr(self.DV_Grid, "u" + str(i))
             self.p[self.currentProdNum].x[i]["u"] = DV_u.text()
 
             DV_dsu = getattr(self.DV_Grid, "dsu" + str(i))
             self.p[self.currentProdNum].x[i]["dsu"] = DV_dsu.text()
+
+            DV_range = getattr(self.DV_Grid, "range" + str(i))
+            DV_range.setMinimum(int(self.p[self.currentProdNum].x[i]["dsl"]))
+            DV_range.setMaximum(int(self.p[self.currentProdNum].x[i]["dsu"]))
+            DV_range.setLower(int(self.p[self.currentProdNum].x[i]["l"]))
+            DV_range.setUpper(int(self.p[self.currentProdNum].x[i]["u"]))
 
         # Updating the Quantities of Interest Values from the GUI to the current product details
         for i in range(0, len(self.p[self.currentProdNum].y)):
@@ -453,7 +464,11 @@ class gui_main(QDialog):
             DV_l = getattr(self.DV_Grid, "l" + str(i))
             DV_l.setText(str(self.p[self.currentProdNum].x[i]["l"]))
 
-            # Need to Add Ranger values later
+            DV_range = getattr(self.DV_Grid, "range" + str(i))
+            DV_range.setMinimum(int(self.p[self.currentProdNum].x[i]["dsl"]))
+            DV_range.setMaximum(int(self.p[self.currentProdNum].x[i]["dsu"]))
+            DV_range.setLower(int(self.p[self.currentProdNum].x[i]["l"]))
+            DV_range.setUpper(int(self.p[self.currentProdNum].x[i]["u"]))
 
             DV_u = getattr(self.DV_Grid, "u" + str(i))
             DV_u.setText(str(self.p[self.currentProdNum].x[i]["u"]))
@@ -486,6 +501,21 @@ class gui_main(QDialog):
         for i in range(0, len(self.p[self.currentProdNum].p)):
             QOI_value = getattr(self.Para_Grid, "value" + str(i))
             QOI_value.setText(str(self.p[self.currentProdNum].p[i]["value"]))
+
+    def update_ranges(self):
+
+        # Updating the Range values from the GUI to the current product details
+        for i in range(0, len(self.p[self.currentProdNum].x)):
+            DV_range = getattr(self.DV_Grid, "range" + str(i))
+            self.p[self.currentProdNum].x[i]["l"] = DV_range.low()
+            self.p[self.currentProdNum].x[i]["u"] = DV_range.upper()
+
+            DV_l = getattr(self.DV_Grid, "l" + str(i))
+            DV_l.setText(str(self.p[self.currentProdNum].x[i]["l"]))
+
+            DV_u = getattr(self.DV_Grid, "u" + str(i))
+            DV_u.setText(str(self.p[self.currentProdNum].x[i]["u"]))
+
 
     def add_product(self):
         name, ok = QInputDialog.getText(self, 'Add a new Product', 'Enter the name of the new Product:')
