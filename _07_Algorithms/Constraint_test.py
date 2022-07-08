@@ -1,9 +1,9 @@
 import importlib
 import numpy as np
-from pymoo.core.problem import Problem
+from pymoo.core.problem import ElementwiseProblem
 
 
-class Constraint(Problem):
+class Constraint(ElementwiseProblem):
     def __init__(self, problem, reqU, reqL, parameters, dv_norm, dv_norm_l, qoi_norm, num_prod, varargin=None):
         # module = importlib.import_module("_03_Design_Problems." + problem)
         # self.problem = getattr(module, problem)
@@ -26,29 +26,17 @@ class Constraint(Problem):
             self.varargin = []
         else:
             self.varargin = varargin
-        size = len(dv_norm)
-        super().__init__(n_var=size,
-                         n_obj=size,
-                         n_constr=size,
+        super().__init__(n_var=len(dv_norm),
+                         n_obj=len(reqU),
+                         n_constr=1,
                          xl=dv_norm_l,
                          xu=dv_norm)
 
     def _evaluate(self, x, out, *args, **kwargs):
-        out["C"] = self.Constraint_fun(x)
-        # return None
-        # f1 = x[:, 0] ** 2 + x[:, 1] ** 2
-        # f2 = (x[:, 0] - 1) ** 2 + x[:, 1] ** 2
-        #
-        # g1 = 2 * (x[:, 0] - 0.1) * (x[:, 0] - 0.9) / 0.18
-        # g2 = - 20 * (x[:, 0] - 0.4) * (x[:, 0] - 0.6) / 4.8
-        #
-        # out["C"] = np.column_stack([f1, f2])
-
-    def Constraint_fun(self, x):
-
+        c = 0
         ind_parameters = np.argwhere(~np.isnan(self.parameters[0]))
 
-        if not self.varargin:
+        if self.varargin:
             N_pop = self.varargin[0]
             if np.size(x, 1) != N_pop:
                 N_pop = np.size(x, 1)
@@ -66,7 +54,7 @@ class Constraint(Problem):
         else:
             for i in range(0, np.size(ind_parameters, 0)):
                 x_vec_temp = x_vec[0:ind_parameters[i] - 1, :]
-                x_vec_temp = x_vec_temp.append(np.transpose(self.parameters[1:2:2*self.num_prod, ind_parameters(i)]))
+                x_vec_temp = x_vec_temp.append(np.transpose(self.parameters[1:2:2 * self.num_prod, ind_parameters(i)]))
                 x_vec_temp = x_vec_temp.append(x_vec[ind_parameters(i):, :])
                 x_vec = x_vec_temp
 
@@ -82,10 +70,24 @@ class Constraint(Problem):
         # Shape into vector form if there are multiple products
         # Elsewise keep matrix form for the population
         if self.num_prod != 1:
-            c = np.array([y - self.reqU, self.reqL - y])
-            c = c / self.qoi_norm
+            c = np.append(y - self.reqU, self.reqL - y)
+            c = np.divide(c, self.qoi_norm)
         else:
-            c = np.array([y - self.reqU, self.reqL - y])
-            c = c / self.qoi_norm
+            c = np.append(y - self.reqU, self.reqL - y)
+            c = np.divide(c, self.qoi_norm)
             # Need to add splitapply but I am not sure what it doesll
+
+        out["F"] = c
+        out["G"] = []
+        # return None
+        # f1 = x[:, 0] ** 2 + x[:, 1] ** 2
+        # f2 = (x[:, 0] - 1) ** 2 + x[:, 1] ** 2
+        #
+        # g1 = 2 * (x[:, 0] - 0.1) * (x[:, 0] - 0.9) / 0.18
+        # g2 = - 20 * (x[:, 0] - 0.4) * (x[:, 0] - 0.6) / 4.8
+        #
+        # out["C"] = np.column_stack([f1, f2])
+
+    def Constraint_fun(self, x):
+        c = 0
         return c
