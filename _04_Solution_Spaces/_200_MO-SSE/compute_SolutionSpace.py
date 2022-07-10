@@ -106,9 +106,28 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     print("x0 : ")
     print(x0)
 
-    # If there is no feasible design exit function
+    # Finding a good point to start with (This is not there in the main MATLAB Code)
     const = Constraint(problem, reqU, reqL, parameters, dv_norm, dv_norm_l, qoi_norm, 1)
-    # print(const.Constraint_fun(x0))
+    from pymoo.algorithms.moo.nsga2 import NSGA2
+    from pymoo.optimize import minimize
+
+    algorithm = NSGA2(pop_size=20)
+
+    res = minimize(const, algorithm, ('n_gen', 20), seed=1, verbose=False)
+
+    x_nsga = x0 * dv_norm + dv_norm_l
+
+    # calculate a hash to show that all executions end with the same result
+    dist_2 = np.sum((res.X - x_nsga) ** 2, axis=1)
+    index = dist_2.argmin()
+    x_final = res.X[index]
+    x_final = (x_final - dv_norm_l) / dv_norm
+    x0 = x_final
+
+    print("x0 : ")
+    print(x0)
+
+    # If there is no feasible design exit function
     if any(const.Constraint_fun(x0) > 0):
         dv_par_box = 0
         exitflag = 0
@@ -118,6 +137,40 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     else:
         print("Inside else condition")
         exitflag = 1
+
+    # If MO-SSE calculate starting point for further optimization using pso
+    if slider_value != 1:
+        N_pop = 3*dim
+        from pymoo.algorithms.soo.nonconvex.pso import PSO
+        algorithm = PSO()
+
+        res = minimize(const, algorithm, seed=1, verbose=False)
+
+        print(res.X)
+
+        # [initPop] = set_up_initPop(problem, parameters, N_pop, dim, 1,dsl, dsu,...
+        #     reqL.*1.01, reqU.*0.99, dv_norm, dv_norm_l, dv_sample, feasible)
+        #
+        # prob.fitnessfcn = @(x) sum((weight'.*(x'-dsl)).^2,1)'
+        # prob.nonlcon = @(x) Constraint(problem, x', reqU.*0.99, reqL.*1.01,...
+        #     parameters, dv_norm, dv_norm_l, qoi_norm, 1, N_pop)
+        # prob.nvars = length(dsl)
+        # prob.Aeq = []
+        # prob.beq = []
+        # prob.Aineq = []
+        # prob.bineq = []
+        # prob.LB = dsl
+        # prob.UB = dsu
+        # prob.options.PopulationSize = N_pop
+        # prob.options.StallGenLimit = 100
+        # prob.options.TolFun = 1e-6
+        # prob.options.TolCon = 1e-6
+        # prob.options.InitialPopulation = initPop
+        # prob.options.Vectorized = 'on'
+        # prob.options.Display = 'off'
+        #
+        # x0 = pso(prob)
+        # x0 = x0'
 
     # End
     [dv_par_box, exitflag] = [0, 0]

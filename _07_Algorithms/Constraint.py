@@ -50,7 +50,7 @@ class Constraint(ElementwiseProblem):
                          xu=dv_norm)
 
     def _evaluate(self, x, out, *args, **kwargs):
-        out["F"] = []
+        out["F"] = [0]
         out["G"] = self.Constraint_fun(x)
 
     def Constraint_fun(self, x):
@@ -87,8 +87,6 @@ class Constraint(ElementwiseProblem):
             if y[i] == "-inf":
                 y[i] = - np.iinfo(y[i].dtype).max
 
-        print(x_vec)
-        print(y)
         # Shape into vector form if there are multiple products
         # Elsewise keep matrix form for the population
         if self.num_prod != 1:

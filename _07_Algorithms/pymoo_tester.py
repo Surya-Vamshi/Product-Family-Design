@@ -27,7 +27,7 @@ for i in range(0, len(qoi_norm)):
 module = importlib.import_module("_03_Design_Problems." + problem)
 problem = getattr(module, problem)
 p = problem()
-const = Constraint_test(problem, reqU_call, reqL_call, parameters_call, dv_norm, dv_norm_l, qoi_norm, 1)
+const = Constraint(problem, reqU_call, reqL_call, parameters_call, dv_norm, dv_norm_l, qoi_norm, 1)
 
 x = np.array([0.84760726, 0.10843993, 0.00252505, 0.24770135, 0.45374032, 0.55195826])
 print(x)
@@ -36,7 +36,7 @@ print(x)
 from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.optimize import minimize
 
-algorithm = NSGA2(pop_size=100)
+algorithm = NSGA2(pop_size=20)
 
 res = minimize(const,
                algorithm,
@@ -53,8 +53,15 @@ index = dist_2.argmin()
 x_final = res.X[index]
 x_final = (x_final - dv_norm_l) / dv_norm
 
+const1 = Constraint_test(problem, reqU_call* 0.99, reqL_call* 1.01, parameters_call, dv_norm, dv_norm_l, qoi_norm, 1)
 
-const1 = Constraint(problem, reqU_call, reqL_call, parameters_call, dv_norm, dv_norm_l, qoi_norm, 1)
+N_pop = 3*10
+from pymoo.algorithms.soo.nonconvex.pso import PSO
+algorithm = PSO(pop_size=N_pop, adaptive=True, max_velocity_rate=0.020)
+
+res = minimize(const1, algorithm, seed=1, verbose=False)
+
+print(res.X)
 
 if any(const1.Constraint_fun(x_final) > 0):
     dv_par_box = 0

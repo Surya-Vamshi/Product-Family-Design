@@ -50,7 +50,9 @@ class Constraint_test(ElementwiseProblem):
                          xu=dv_norm)
 
     def _evaluate(self, x, out, *args, **kwargs):
-        out["F"] = []
+        # out["F"] = np.sum(self.p.SystemResponse(x))
+        # out["F"] = []
+        out["F"] = [0]
         out["G"] = self.Constraint_fun(x)
 
     def Constraint_fun(self, x):
