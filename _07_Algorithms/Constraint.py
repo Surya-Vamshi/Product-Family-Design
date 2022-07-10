@@ -79,7 +79,7 @@ class Constraint(ElementwiseProblem):
                 x_vec_temp = x_vec_temp.append(x_vec[ind_parameters(i):, :])
                 x_vec = x_vec_temp
 
-        y = self.p.SystemResponse(x)
+        y = self.p.SystemResponse(x_vec)
 
         for i in range(0, len(y)):
             if y[i] == "inf":
@@ -87,6 +87,8 @@ class Constraint(ElementwiseProblem):
             if y[i] == "-inf":
                 y[i] = - np.iinfo(y[i].dtype).max
 
+        print(x_vec)
+        print(y)
         # Shape into vector form if there are multiple products
         # Elsewise keep matrix form for the population
         if self.num_prod != 1:

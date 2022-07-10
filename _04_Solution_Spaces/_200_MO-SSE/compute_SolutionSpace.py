@@ -26,6 +26,7 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     import importlib
     import time
     import numpy as np
+    from _07_Algorithms.Constraint import Constraint
 
     module = importlib.import_module("_03_Design_Problems." + problem)
     problem = getattr(module, problem)
@@ -98,12 +99,25 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     Need to add code from matlab file from line 76 to 91
     """
     if not any(feasible):
+        x0 = x_init
         print("Need to add this line of code")
     else:
         x0 = x_init
-        print(x0)
+    print("x0 : ")
+    print(x0)
 
-
+    # If there is no feasible design exit function
+    const = Constraint(problem, reqU, reqL, parameters, dv_norm, dv_norm_l, qoi_norm, 1)
+    # print(const.Constraint_fun(x0))
+    if any(const.Constraint_fun(x0) > 0):
+        dv_par_box = 0
+        exitflag = 0
+        time_taken = time.time() - time_start
+        print("Inside if condition")
+        return [dv_par_box, exitflag, time_taken]
+    else:
+        print("Inside else condition")
+        exitflag = 1
 
     # End
     [dv_par_box, exitflag] = [0, 0]

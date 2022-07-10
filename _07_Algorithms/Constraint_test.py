@@ -1,13 +1,30 @@
-import importlib
 import numpy as np
 from pymoo.core.problem import ElementwiseProblem
 
+"""
+    Description : Constraint function for optimization of initial point for Solution Space
+    Optimization
 
-class Constraint(ElementwiseProblem):
+    Input variables :
+    problem: Object of the problem (x-file)
+    x: DVs
+    reqL: Lower bound requirements
+    reqU: Upper bound requirements
+    parameters: Parameters of the optimization
+    dv_norm: Norming factor of the DVs
+    qoi_norm: Norming factor of the QOIs
+    num_prod: Number of products
+    varargin: Calculating with whole population or not
+
+    Output variables :
+    c: Inequality constraints
+    ceq: Equality constraints
+"""
+
+class Constraint_test(ElementwiseProblem):
     def __init__(self, problem, reqU, reqL, parameters, dv_norm, dv_norm_l, qoi_norm, num_prod, varargin=None):
-        # module = importlib.import_module("_03_Design_Problems." + problem)
-        # self.problem = getattr(module, problem)
         self.problem = problem
+        self.p = self.problem()
         self.reqU = reqU
         self.reqL = reqL
         self.parameters = parameters
@@ -33,7 +50,11 @@ class Constraint(ElementwiseProblem):
                          xu=dv_norm)
 
     def _evaluate(self, x, out, *args, **kwargs):
-        c = 0
+        out["F"] = []
+        out["G"] = self.Constraint_fun(x)
+
+    def Constraint_fun(self, x):
+
         ind_parameters = np.argwhere(~np.isnan(self.parameters[0]))
 
         if self.varargin:
@@ -54,12 +75,11 @@ class Constraint(ElementwiseProblem):
         else:
             for i in range(0, np.size(ind_parameters, 0)):
                 x_vec_temp = x_vec[0:ind_parameters[i] - 1, :]
-                x_vec_temp = x_vec_temp.append(np.transpose(self.parameters[1:2:2 * self.num_prod, ind_parameters(i)]))
+                x_vec_temp = x_vec_temp.append(np.transpose(self.parameters[1:2:2*self.num_prod, ind_parameters(i)]))
                 x_vec_temp = x_vec_temp.append(x_vec[ind_parameters(i):, :])
                 x_vec = x_vec_temp
 
-        p = self.problem()
-        y = p.SystemResponse(x)
+        y = self.p.SystemResponse(x_vec)
 
         for i in range(0, len(y)):
             if y[i] == "inf":
@@ -76,18 +96,4 @@ class Constraint(ElementwiseProblem):
             c = np.append(y - self.reqU, self.reqL - y)
             c = np.divide(c, self.qoi_norm)
             # Need to add splitapply but I am not sure what it doesll
-
-        out["F"] = c
-        out["G"] = []
-        # return None
-        # f1 = x[:, 0] ** 2 + x[:, 1] ** 2
-        # f2 = (x[:, 0] - 1) ** 2 + x[:, 1] ** 2
-        #
-        # g1 = 2 * (x[:, 0] - 0.1) * (x[:, 0] - 0.9) / 0.18
-        # g2 = - 20 * (x[:, 0] - 0.4) * (x[:, 0] - 0.6) / 4.8
-        #
-        # out["C"] = np.column_stack([f1, f2])
-
-    def Constraint_fun(self, x):
-        c = 0
         return c
