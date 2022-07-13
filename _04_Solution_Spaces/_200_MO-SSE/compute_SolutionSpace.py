@@ -27,6 +27,7 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     import time
     import numpy as np
     from _07_Algorithms.Constraint import Constraint
+    from max_SolutionSpace_for_fixed_lower_bounds import max_SolutionSpace_for_fixed_lower_bounds
 
     module = importlib.import_module("_03_Design_Problems." + problem)
     problem = getattr(module, problem)
@@ -140,13 +141,16 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
 
     # If MO-SSE calculate starting point for further optimization using pso
     if slider_value != 1:
-        N_pop = 3*dim
+        N_pop = 3 * dim
         from pymoo.algorithms.soo.nonconvex.pso import PSO
-        algorithm = PSO()
+        algorithm = PSO(pop_size=N_pop, adaptive=True, max_velocity_rate=0.020)
+
+        const = Constraint(problem, reqU * 0.99, reqL * 1.01, parameters, dv_norm, dv_norm_l, qoi_norm, 1)
 
         res = minimize(const, algorithm, seed=1, verbose=False)
 
-        print(res.X)
+        [x0] = res.X
+        x0 = (x0 - dv_norm_l) / dv_norm
 
         # [initPop] = set_up_initPop(problem, parameters, N_pop, dim, 1,dsl, dsu,...
         #     reqL.*1.01, reqU.*0.99, dv_norm, dv_norm_l, dv_sample, feasible)
@@ -171,6 +175,32 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
         #
         # x0 = pso(prob)
         # x0 = x0'
+
+    print("x0 After: ")
+    print(x0)
+
+    # If there is no feasible design exit function
+    const = Constraint(problem, reqU, reqL, parameters, dv_norm, dv_norm_l, qoi_norm, 1)
+    if any(const.Constraint_fun(x0) > 0):
+        dv_par_box = 0
+        exitflag = 0
+        time_taken = time.time() - time_start
+        print("No Feasible design. Therefore Exiting")
+        return [dv_par_box, exitflag, time_taken]
+
+    """Optimization"""
+    x0 = np.array([7.66525702584259e-08, 2.32959203246324e-07, 1.65262881277549e-07, 9.58144093041209e-07,
+                   4.69727300467816e-08, 2.84453468770917e-08])
+
+    # Optimization
+    g = 0.2  # Initial growth rate
+    N = 200  # Sample size
+    dvbox = np.concatenate(([x0], [x0]), axis=0)  # Initial candidate box
+    mu = 0  # Initial candidate box is just a point
+
+    if slider_value != 1:
+        [dvbox, mu] = max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, dsl, dsu, reqL, reqU,
+                                                               dv_norm, dv_norm_l, qoi_norm, weight, N, dim)
 
     # End
     [dv_par_box, exitflag] = [0, 0]
