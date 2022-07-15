@@ -27,6 +27,7 @@ def max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, 
     # Importing Modules
     import warnings
     import numpy as np
+    from MonteCarlo import MonteCarlo
     from _07_Algorithms.Constraint import Constraint
 
     print("Testing of max_SolutionSpace_for_fixed_lower_bounds:")
@@ -104,8 +105,8 @@ def max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, 
             dvbox_new[1, :] = np.minimum(dvbox_new[1, :], dsu)
 
             # Monte Carlo Sampling
-            m = 0
-            """need to add monte carlo sampling"""
+            [Points_A, m, Points_B, dv_sample] = MonteCarlo(problem, dvbox_new, parameters, reqL, reqU, dv_norm,
+                                                            dv_norm_l, ind_parameters, N, dim)
 
             # 50% of the samples in the candidate box have to be good designs to
             # end the growing process. Otherwise, the growth rate must be set
