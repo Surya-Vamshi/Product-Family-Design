@@ -26,7 +26,6 @@ def MonteCarlo(problem, dvbox, parameters, reqL, reqU, dv_norm, dv_norm_l, ind_p
 
     # Importing Modules
     import numpy as np
-    from _07_Algorithms.Constraint import Constraint
 
     p = problem()
     # Create sample points
@@ -47,6 +46,7 @@ def MonteCarlo(problem, dvbox, parameters, reqL, reqU, dv_norm, dv_norm_l, ind_p
 
     y_sample = np.transpose(p.SystemResponse(np.transpose(x_sample)))  # Evaluate sample points
 
+    # The commented code below needs to written in python format if it is needs to be used
     # Points_A = all(y_sample >= reqL & y_sample <= reqU, 1)  # Indicates the good designs of candidate box
     # m = sum(Points_A)                                       # Quantity of good points
     # Points_B = ~Points_A                                    # Indicates the bad designs of candidate box
@@ -56,12 +56,12 @@ def MonteCarlo(problem, dvbox, parameters, reqL, reqU, dv_norm, dv_norm_l, ind_p
     c_max = np.max(c, axis=1)
 
     # Sort samples in descending order
-    ind_sort = np.argsort(c_max)
+    ind_sort = np.flip(np.argsort(c_max))
     c_max_sorted = c_max[ind_sort]
     dv_sample_sorted = dv_sample[ind_sort]
 
-    Points_A_sorted = [c_max_sorted <= 0]  # c_max_sorted <= 0  # Indicates the good designs of candidate box
+    Points_A_sorted = np.array([c_max_sorted <= 0])  # c_max_sorted <= 0  # Indicates the good designs of candidate box
     m = sum(sum(Points_A_sorted))  # Quantity of good points
-    Points_B_sorted = np.invert(Points_A_sorted)  # Indicates the bad designs of candidate box
+    Points_B_sorted = np.array(np.invert(Points_A_sorted))  # Indicates the bad designs of candidate box
 
     return [Points_A_sorted, m, Points_B_sorted, dv_sample_sorted]

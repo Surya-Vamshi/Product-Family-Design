@@ -28,6 +28,7 @@ def max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, 
     import warnings
     import numpy as np
     from MonteCarlo import MonteCarlo
+    from StepA_modified_upper_bounds import StepA_modified_upper_bounds
     from _07_Algorithms.Constraint import Constraint
 
     print("Testing of max_SolutionSpace_for_fixed_lower_bounds:")
@@ -136,7 +137,8 @@ def max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, 
             Iter_Phase_I = Iter_Phase_I + 1
 
             # Step A
-            """need to add StepA_modified_upper_bounds"""
+            [dvbox, mu] = StepA_modified_upper_bounds(dvbox, dv_sample, Points_A, Points_B, dim, weight)
+            mu_vec = np.append(mu_vec, mu)
 
             # Stop phase I if mu doesn't change significantly from step to step
             # or if the maximal iteration is reached

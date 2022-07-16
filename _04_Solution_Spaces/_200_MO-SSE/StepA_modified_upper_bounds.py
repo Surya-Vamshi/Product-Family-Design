@@ -22,28 +22,28 @@ def StepA_modified_upper_bounds(dvbox, dv_sample, Points_A, Points_B, dim, weigh
     # Importing Modules
     import numpy as np
 
-    N_i = np.zeros(1, dim)
+    N_i = np.zeros(dim)
 
-    dvbox_A = dvbox * np.ones((1, 1, sum(Points_A)))
-    mu_A = np.zeros(sum(Points_A), 1)
+    dvbox_A = np.repeat(dvbox[:, :, np.newaxis], sum(sum(Points_A)), axis=2)
+    mu_A = np.zeros((sum(sum(Points_A)), 1))
 
-    ind_B = np.nonzero(Points_B)
+    ind_B = np.where(Points_B == True)[1]
 
-    for A in range(0, sum(Points_A)):
-        for B in range(0, sum(Points_B)):
+    for A in range(0, sum(sum(Points_A))):
+        for B in range(0, sum(sum(Points_B))):
             for i in range(0, dim):
-                N_i[i] = sum(dv_sample[i, Points_A] > dv_sample[i, ind_B[B]])
+                N_i[i] = sum(dv_sample[Points_A.astype(bool)[0, :], i] > dv_sample[ind_B[B], i])
 
             arr = weight * N_i
             j = np.where(arr == np.amin(arr))
 
-            dvbox_A[j, 1, A] = np.minimum(dvbox_A[j, 1, A], dv_sample[j, ind_B[B]] - np.finfo(float))
+            dvbox_A[1, j, A] = np.minimum(dvbox_A[1, j, A], dv_sample[ind_B[B], j] - np.finfo(float).eps)
 
-        arr = np.transpose(weight) * (dvbox_A[:, 1, A] - dvbox_A[:, 0, A])
+        arr = np.transpose(weight) * (dvbox_A[1, :, A] - dvbox_A[0, :, A])
         mu_A[A] = arr.prod()
 
     mu = np.amax(mu_A)
-    ind_mu_A_max = np.where(mu_A == np.amax(mu_A))
+    ind_mu_A_max = np.where(mu_A == mu)[0][0]
     dvbox = dvbox_A[:, :, ind_mu_A_max]
 
     return [dvbox, mu]
