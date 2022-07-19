@@ -142,10 +142,9 @@ def max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, 
 
             # Stop phase I if mu doesn't change significantly from step to step
             # or if the maximal iteration is reached
-            if abs(0) < tol_Phase_I:
-                """Need to edit this"""
+            if abs((mu_vec[-1]-mu_vec[-2])/mu_vec[-1]) < tol_Phase_I:
                 if anisotropic_expandation == 0:
-                    # When isotropic expandation converges, expand anisotropic
+                    # When isotropic expansion converges, expand anisotropic
                     # with lower tolerance
                     anisotropic_expandation = 1
                     tol_Phase_I = 1e-2
@@ -163,6 +162,39 @@ def max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, 
 
     """Intermediate Phase  for initial Point"""
     # Monte Carlo Sampling
+    [Points_A, m, Points_B, dv_sample] = MonteCarlo(problem, dvbox, parameters, reqL, reqU, dv_norm, dv_norm_l,
+                                                    ind_parameters, N, dim)
+
+    """Phase II  for initial Point"""
+    Iter_Phase_II = 0
+    while True:
+        # If all designs are good (m==N) step A is not necessary
+        if m!= N:
+            # Step A
+            [dvbox, non] = StepA_modified_upper_bounds(dvbox, dv_sample, Points_A, Points_B, dim, weight)
+
+        # Monte Carlo Sampling
+        [Points_A, m, Points_B, dv_sample] = MonteCarlo(problem, dvbox, parameters, reqL, reqU, dv_norm, dv_norm_l,
+                                                        ind_parameters, N, dim)
+        Iter_Phase_II = Iter_Phase_II + 1
+
+        # Stop optimization if all sampled points are good points
+        if m == N:
+            break
+        elif Iter_Phase_II > 1000:
+            warnings.warn("Warning! Phase II stopped due to reaching the maximal iteration counter! Solution may "
+                          "not be the maximal Solution Space!")
+            break
+
+    """Post processing"""
+    # Write DVs which were not expandable back into dvbox
+    dvbox[:, expandable_dv == 1] = dvbox
+    for i in range(0, len(expandable_dv)):
+        if not expandable_dv[i]:
+            dvbox[:, i] = (np.transpose(parameters[:, ind_dv_in_par_vector[i]]) - dv_norm_l_initial[i]) / dv_norm_initial[i]
+
+    arr = np.transpose(weight_initial) * (dvbox[1, :] - dvbox[0, :])
+    mu = arr.prod()
 
     return [dvbox, mu]
 
