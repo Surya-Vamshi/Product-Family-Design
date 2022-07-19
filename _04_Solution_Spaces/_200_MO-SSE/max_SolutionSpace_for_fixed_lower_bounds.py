@@ -31,8 +31,6 @@ def max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, 
     from StepA_modified_upper_bounds import StepA_modified_upper_bounds
     from _07_Algorithms.Constraint import Constraint
 
-    print("Testing of max_SolutionSpace_for_fixed_lower_bounds:")
-
     # Pre-processing
 
     # Save initial values of outputs when they are put in

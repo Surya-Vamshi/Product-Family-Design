@@ -24,10 +24,13 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
     # Importing Modules
     from pathlib import Path
     import importlib
+    import warnings
     import time
     import numpy as np
-    from _07_Algorithms.Constraint import Constraint
+    from MonteCarlo import MonteCarlo
+    from StepA_modified_upper_bounds import StepA_modified_upper_bounds
     from max_SolutionSpace_for_fixed_lower_bounds import max_SolutionSpace_for_fixed_lower_bounds
+    from _07_Algorithms.Constraint import Constraint
 
     module = importlib.import_module("_03_Design_Problems." + problem)
     problem = getattr(module, problem)
@@ -202,6 +205,108 @@ def compute_SolutionSpace(problem, weight, dsl, dsu, l, u, reqU, reqL, parameter
         [dvbox, mu] = max_SolutionSpace_for_fixed_lower_bounds(problem, dvbox, parameters, mu, g, dsl, dsu, reqL, reqU,
                                                                dv_norm, dv_norm_l, qoi_norm, weight, N, dim)
 
+    # If slider value is 0 the user wants the minimal DVs which are calculated
+    # via fgoalattain. Therefore, further evaluation is not necessary.
+    if slider_value != 0:
+        # Phase I
+        dvbox_old = dvbox
+
+        Iter_Phase_I = 0
+        mu_vec = mu
+
+        # At first expand dvbox isotropy in all directions
+        anisotropic_expandation = 0
+        tol_Phase_I = 1e-2
+
+        pareto_samples = {}
+        pareto_samples["dvbox"] = dvbox
+        pareto_samples["phi_1"] = - mu_vec
+        pareto_samples["phi_2"] = np.linalg.norm(np.transpose(weight) * (dvbox[0, :] - x0))
+
+        while True:
+            Iter_StepB = 0
+            while True:
+                Iter_StepB = Iter_StepB + 1
+
+                # Step B
+                if ~anisotropic_expandation:
+                    # Expand dvbox in upper sides of each interval isotroply
+                    dvbox_new = dvbox_old + g * (dsu - dsl) * [[-1], [1]]
+                else:
+                    # Expand dvbox in upper sides of each interval anisotroply
+                    dvbox_new = dvbox_old + g * (dvbox_old[1, :] - dvbox_old[0, :]) * [[-1], [1]]
+
+                # Expend maximal to DS bounds
+                dvbox_new[0, :] = np.maximum(dvbox_new[0, :], dsl)
+                dvbox_new[1, :] = np.minimum(dvbox_new[1, :], dsu)
+
+                # Monte Carlo Sampling
+                [Points_A, m, Points_B, dv_sample] = MonteCarlo(problem, dvbox_new, parameters, reqL, reqU, dv_norm,
+                                                                dv_norm_l, ind_parameters, N, dim)
+
+                # 50% of the samples in the candidate box have to be good designs to
+                # end the growing process. Otherwise, the growth rate must be set
+                # smaller and the growing reruns. End also with maximal Iterations
+                if m / N >= 0.5 or Iter_StepB >= 100:
+                    dvbox = dvbox_new
+
+                    # Step size control only for maximal Solution Space.
+                    # Otherwise, the points are necessary for pareto front.
+
+                    # Change step size to a bigger value if there were enough good
+                    # design points in the step
+                    g = 2 * m / N * g
+                    break
+                else:
+                    # Change step size to a smaller value if there were not enough
+                    # good design points in the step and repeat step
+                    g = 2 * m / N * g
+
+                    # If m is zero, then g is zero in every following step ==>
+                    # further expansion is not possible ==> g has to have at least
+                    # a small, nonzero and positive value
+                    if g <= 0:
+                        g = 0.006
+
+            if m != 0:
+                Iter_Phase_I = Iter_Phase_I + 1
+
+                # Step A
+                """Need to change this to Step A"""
+                [dvbox, mu] = StepA_modified_upper_bounds(dvbox, dv_sample, Points_A, Points_B, dim, weight)
+                mu_vec = np.append(mu_vec, mu)
+
+                if slider_value != 1:
+                    # Calculate pareto samples
+                    """Need to change this to pareto_samples"""
+                    pareto_samples["dvbox"] = dvbox
+                    pareto_samples["phi_1"] = - mu_vec
+                    pareto_samples["phi_2"] = np.linalg.norm(np.transpose(weight) * (dvbox[0, :] - x0))
+
+                # Stop phase I if mu doesn't change significantly from step to step
+                # or if the maximal iteration is reached
+                if abs((mu_vec[-1] - mu_vec[-2]) / mu_vec[-1]) < tol_Phase_I:
+                    if anisotropic_expandation == 0:
+                        # When isotropic expansion converges, expand anisotropic
+                        # with lower tolerance
+                        anisotropic_expandation = 1
+                        tol_Phase_I = 1e-2
+                    else:
+                        break
+                elif Iter_Phase_I > 1000:
+                    warnings.warn(
+                        "Warning! Phase I stopped due to reaching the maximal iteration counter! Solution may "
+                        "not be the maximal Solution Space!")
+                    break
+            else:
+                dv_par_box = 0
+                exitflag = 0
+                time_taken = time.time() - time_start
+                return [dv_par_box, exitflag, time_taken]
+            dvbox_old = dvbox
+    """
+    Need to add line between 256 to 339
+    """
     # End
     [dv_par_box, exitflag] = [0, 0]
     time_taken = time.time() - time_start
